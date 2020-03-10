@@ -41,6 +41,31 @@ public class Client extends NamedEntity {
 	@NotEmpty
 	private String identification;
 
+	public void setIdentification(String identification) {
+		this.identification = identification;
+	}
+
+
+	public void setBirthDate(LocalDate birthDate) {
+		this.birthDate = birthDate;
+	}
+
+
+	public void setPhone(String phone) {
+		this.phone = phone;
+	}
+
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+
+	public void setUser(User user) {
+		this.user = user;
+	}
+
+
 	@Column(name = "birth_date")        
 	@DateTimeFormat(pattern = "yyyy/MM/dd")
 	private LocalDate birthDate;
@@ -64,6 +89,41 @@ public class Client extends NamedEntity {
     @JoinColumn(name = "username", referencedColumnName = "username")
 	private User user;
 	//
+
+
+	public String getIdentification() {
+		return identification;
+	}
+
+
+	public void setCreationDate(LocalDate creationDate) {
+		this.creationDate = creationDate;
+	}
+
+
+	public LocalDate getBirthDate() {
+		return birthDate;
+	}
+
+
+	public String getPhone() {
+		return phone;
+	}
+
+
+	public String getEmail() {
+		return email;
+	}
+
+
+	public LocalDate getCreationDate() {
+		return creationDate;
+	}
+
+
+	public User getUser() {
+		return user;
+	}
 	
 
 }

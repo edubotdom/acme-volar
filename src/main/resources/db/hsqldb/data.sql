@@ -8,6 +8,15 @@ INSERT INTO authorities VALUES ('owner1','owner');
 INSERT INTO users(username,password,enabled) VALUES ('vet1','v3t',TRUE);
 INSERT INTO authorities VALUES ('vet1','veterinarian');
 
+INSERT INTO users(username,password,enabled) VALUES ('client1','client1',TRUE);
+INSERT INTO authorities VALUES ('client1','client');
+INSERT INTO clients(id,name, identification, birth_date, phone, email, creation_date, username) VALUES (1,'Sergio Pérez','53933261-P', '1994-09-07', '644584458', 'checoperez@gmail.com', '2005-09-07','client1');
+
+INSERT INTO users(username,password,enabled) VALUES ('airline1','airline1',TRUE);
+INSERT INTO authorities VALUES ('airline1','airline');
+INSERT INTO airlines(id,name, identification, country, phone, email, creation_date, reference, username) 
+VALUES (1,'Sevilla Este Airways','61333744-N', 'Sevilla Este', '644584458', 'aerosevillaeste@gmail.com', '2010-11-07', 'SEA-001','airline1');
+
 INSERT INTO vets VALUES (1, 'James', 'Carter');
 INSERT INTO vets VALUES (2, 'Helen', 'Leary');
 INSERT INTO vets VALUES (3, 'Linda', 'Douglas');

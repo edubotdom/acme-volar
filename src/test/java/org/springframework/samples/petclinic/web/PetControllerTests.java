@@ -32,16 +32,19 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
-import org.springframework.samples.petclinic.configuration.SecurityConfiguration;
-import org.springframework.samples.petclinic.model.Owner;
-import org.springframework.samples.petclinic.model.Pet;
-import org.springframework.samples.petclinic.model.PetType;
-import org.springframework.samples.petclinic.service.OwnerService;
-import org.springframework.samples.petclinic.service.PetService;
-import org.springframework.samples.petclinic.service.VetService;
 import org.springframework.security.config.annotation.web.WebSecurityConfigurer;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
+
+import acmevolar.configuration.SecurityConfiguration;
+import acmevolar.model.Owner;
+import acmevolar.model.Pet;
+import acmevolar.model.PetType;
+import acmevolar.service.OwnerService;
+import acmevolar.service.PetService;
+import acmevolar.service.VetService;
+import acmevolar.web.PetController;
+import acmevolar.web.PetTypeFormatter;
 
 /**
  * Test class for the {@link PetController}

@@ -7,8 +7,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.samples.petclinic.model.PetType;
-import org.springframework.samples.petclinic.service.VetService;
 
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -17,7 +15,11 @@ import java.util.Locale;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.samples.petclinic.service.PetService;
+
+import acmevolar.model.PetType;
+import acmevolar.service.PetService;
+import acmevolar.service.VetService;
+import acmevolar.web.PetTypeFormatter;
 
 /**
  * Test class for {@link PetTypeFormatter}

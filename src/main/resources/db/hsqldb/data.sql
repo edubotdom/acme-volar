@@ -62,3 +62,8 @@ INSERT INTO visits(id,pet_id,visit_date,description) VALUES (2, 8, '2013-01-02',
 INSERT INTO visits(id,pet_id,visit_date,description) VALUES (3, 8, '2013-01-03', 'neutered');
 INSERT INTO visits(id,pet_id,visit_date,description) VALUES (4, 7, '2013-01-04', 'spayed');
 
+INSERT INTO flight_status_type VALUES (1, 'on-time');
+INSERT INTO flight_status_type VALUES (2, 'delayed');
+INSERT INTO flight_status_type VALUES (3, 'cancelled');
+
+INSERT INTO flights(id, reference, seats, price, flight_status_id, published) VALUES (1, 'R-14', 250, 150, 1, TRUE);

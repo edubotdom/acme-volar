@@ -28,19 +28,21 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.dao.DataAccessException;
-import org.springframework.samples.petclinic.model.Owner;
-import org.springframework.samples.petclinic.model.Pet;
-import org.springframework.samples.petclinic.model.PetType;
-import org.springframework.samples.petclinic.model.Vet;
-import org.springframework.samples.petclinic.model.Visit;
-import org.springframework.samples.petclinic.model.User;
-import org.springframework.samples.petclinic.model.Authorities;
-import org.springframework.samples.petclinic.service.exceptions.DuplicatedPetNameException;
-import org.springframework.samples.petclinic.util.EntityUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
+
+import acmevolar.model.Authorities;
+import acmevolar.model.Owner;
+import acmevolar.model.Pet;
+import acmevolar.model.PetType;
+import acmevolar.model.User;
+import acmevolar.model.Vet;
+import acmevolar.model.Visit;
+import acmevolar.service.VetService;
+import acmevolar.service.exceptions.DuplicatedPetNameException;
+import acmevolar.util.EntityUtils;
 
 /**
  * Integration test of the Service and the Repository layer.

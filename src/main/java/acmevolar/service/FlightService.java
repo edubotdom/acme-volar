@@ -71,5 +71,10 @@ public class FlightService {
 	public Collection<Flight> findPublishedFlight() {
 		return this.springDataFlightRepository.findPublishedFlight();
 	}
+	
+	@Transactional(readOnly = true)
+	public Collection<Flight> findAirlineFlight(String username) {
+		return this.springDataFlightRepository.findAirlineFlight(username);
+	}
 
 }

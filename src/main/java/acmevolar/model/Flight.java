@@ -46,6 +46,18 @@ public class Flight extends BaseEntity {
 	@NotNull
 	@Column(name = "published")
 	private Boolean published;
+	
+	@ManyToOne
+	@JoinColumn(name = "airline_id")
+	private Airline airline;
+
+	public Airline getAirline() {
+		return airline;
+	}
+
+	public void setAirline(Airline airline) {
+		this.airline = airline;
+	}
 
 	public String getReference() {
 		return reference;

@@ -20,19 +20,27 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import acmevolar.model.Airline;
 import acmevolar.model.Flight;
 import acmevolar.service.FlightService;
 
 @Controller
 public class FlightController {
 
-	private final FlightService flightService;
+	private final FlightService	flightService;
+
+	private static final String	VIEWS_FLIGHT_CREATE_FORM	= "flights/createFlightForm";
 
 
 	@Autowired
@@ -51,13 +59,27 @@ public class FlightController {
 		return "flights/flightList";
 	}
 
-	/**
-	 * Custom handler for displaying an owner.
-	 *
-	 * @param flightId
-	 *            the ID of the owner to display
-	 * @return a ModelMap with the model attributes for the view
-	 */
+	@GetMapping(value = "/flights/new")
+	public String initCreationForm(final Map<String, Object> model) {
+		Flight flight = new Flight();
+		model.put("flight", flight);
+		return FlightController.VIEWS_FLIGHT_CREATE_FORM;
+	}
+
+	@PostMapping(value = "/flights/new")
+	public String processCreationForm(@Valid final Flight flight, final BindingResult result) {
+		if (result.hasErrors()) {
+			return FlightController.VIEWS_FLIGHT_CREATE_FORM;
+		} else {
+			String username = SecurityContextHolder.getContext().getAuthentication().getName();
+			Airline airline = this.flightService.findAirlineByUsername(username);
+			flight.setAirline(airline);
+			this.flightService.saveFlight(flight);
+
+			return "redirect:/flights/" + flight.getId();
+		}
+	}
+
 	@GetMapping("/flights/{flightId}")
 	public ModelAndView showFlight(@PathVariable("flightId") final int flightId) {
 		ModelAndView mav = new ModelAndView("flights/flightDetails");

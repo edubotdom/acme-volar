@@ -1,11 +1,15 @@
 
 package acmevolar.repository;
 
+import java.util.Collection;
+
 import org.springframework.dao.DataAccessException;
 
 import acmevolar.model.Airport;
 
 public interface AirportRepository {
+
+	Collection<Airport> findAll() throws DataAccessException;
 
 	/**
 	 * Retrieve a <code>Airport</code> from the data store by id.

@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package acmevolar.web;
 
 import java.util.ArrayList;
@@ -32,8 +33,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import acmevolar.model.Client;
-import acmevolar.model.Flight;
-import acmevolar.model.Vets;
 import acmevolar.service.AuthoritiesService;
 import acmevolar.service.ClientService;
 import acmevolar.service.UserService;
@@ -47,56 +46,60 @@ import acmevolar.service.UserService;
 @Controller
 public class ClientController {
 
-	private static final String VIEWS_CLIENT_CREATE_FORM = "clients/createClientForm";
+	private static final String	VIEWS_CLIENT_CREATE_FORM	= "clients/createClientForm";
 
-	private final ClientService clientService;
+	private final ClientService	clientService;
+
 
 	@Autowired
-	public ClientController(ClientService clientService, UserService userService, AuthoritiesService authoritiesService) {
+	public ClientController(final ClientService clientService, final UserService userService, final AuthoritiesService authoritiesService) {
 		this.clientService = clientService;
 	}
 
 	@InitBinder
-	public void setAllowedFields(WebDataBinder dataBinder) {
+	public void setAllowedFields(final WebDataBinder dataBinder) {
 		dataBinder.setDisallowedFields("id");
 	}
 
 	@GetMapping(value = "/clients/new")
-	public String initCreationForm(Map<String, Object> model) {
+	public String initCreationForm(final Map<String, Object> model) {
 		Client client = new Client();
 		model.put("client", client);
-		return VIEWS_CLIENT_CREATE_FORM;
+		return ClientController.VIEWS_CLIENT_CREATE_FORM;
 	}
 
 	@PostMapping(value = "/clients/new")
-	public String processCreationForm(@Valid Client client, BindingResult result) {
+	public String processCreationForm(@Valid final Client client, final BindingResult result) {
 		if (result.hasErrors()) {
-			return VIEWS_CLIENT_CREATE_FORM;
-		}
-		else {
+			return ClientController.VIEWS_CLIENT_CREATE_FORM;
+		} else {
 			//creating owner, user and authorities
 			this.clientService.saveClient(client);
-			
+
 			return "redirect:/clients/" + client.getId();
 		}
 	}
-	
-	@GetMapping(value = { "/clients" })
-	public String showFlightList(Map<String, Object> model) {
+
+	@GetMapping(value = {
+		"/clients"
+	})
+	public String showClientList(final Map<String, Object> model) {
 
 		Collection<Client> clients = new ArrayList<Client>();
 		clients.addAll(this.clientService.findClients());
 		model.put("clients", clients);
 		return "clients/clientsList";
 	}
-	
+
 	/**
 	 * Custom handler for displaying an owner.
-	 * @param ownerId the ID of the owner to display
+	 *
+	 * @param ownerId
+	 *            the ID of the owner to display
 	 * @return a ModelMap with the model attributes for the view
 	 */
 	@GetMapping("/clients/{clientId}")
-	public ModelAndView showClient(@PathVariable("clientId") int clientId) {
+	public ModelAndView showClient(@PathVariable("clientId") final int clientId) {
 		ModelAndView mav = new ModelAndView("clients/clientDetails");
 		mav.addObject(this.clientService.findClientById(clientId));
 		return mav;

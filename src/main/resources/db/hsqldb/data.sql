@@ -14,8 +14,13 @@ INSERT INTO clients(id,name, identification, birth_date, phone, email, creation_
 
 INSERT INTO users(username,password,enabled) VALUES ('airline1','airline1',TRUE);
 INSERT INTO authorities VALUES ('airline1','airline');
+INSERT INTO users(username,password,enabled) VALUES ('airline2','airline2',TRUE);
+INSERT INTO authorities VALUES ('airline2','airline');
+
 INSERT INTO airlines(id,name, identification, country, phone, email, creation_date, reference, username) 
-VALUES (1,'Sevilla Este Airways','61333744-N', 'Sevilla Este', '644584458', 'aerosevillaeste@gmail.com', '2010-11-07', 'SEA-001','airline1');
+VALUES (1,'Sevilla Este Airways','61333744-N', 'Spain', '644584458', 'minardi@gmail.com', '2010-11-07', 'SEA-001','airline1');
+INSERT INTO airlines(id,name, identification, country, phone, email, creation_date, reference, username) 
+VALUES (2,'Montellano Airways','61333778-N', 'Spain', '654789321', 'arrows@gmail.com', '2010-11-07', 'MA-002','airline2');
 
 INSERT INTO vets VALUES (1, 'James', 'Carter');
 INSERT INTO vets VALUES (2, 'Helen', 'Leary');
@@ -75,4 +80,5 @@ INSERT INTO flight_status_type VALUES (1, 'on-time');
 INSERT INTO flight_status_type VALUES (2, 'delayed');
 INSERT INTO flight_status_type VALUES (3, 'cancelled');
 
-INSERT INTO flights(id, reference, seats, price, flight_status_id, published) VALUES (1, 'R-14', 250, 150, 1, TRUE);
+INSERT INTO flights(id, reference, seats, price, flight_status_id, published, airline_id) VALUES (1, 'R-14', 250, 150, 1, TRUE, 1);
+INSERT INTO flights(id, reference, seats, price, flight_status_id, published, airline_id) VALUES (2, 'R-15', 200, 100, 2, TRUE, 2);

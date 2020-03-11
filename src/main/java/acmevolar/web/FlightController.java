@@ -21,6 +21,8 @@ import java.util.Collection;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -51,6 +53,18 @@ public class FlightController {
 		return "flights/flightList";
 	}
 
+	@GetMapping(value = {
+			"/flights/my_flights"
+		})
+		public String showAirlineFlightList(final Map<String, Object> model) {
+
+			String username = SecurityContextHolder.getContext().getAuthentication().getName();
+			Collection<Flight> flights = new ArrayList<Flight>();
+			flights.addAll(this.flightService.findAirlineFlight(username));
+			model.put("flights", flights);
+			return "flights/flightList";
+		}
+	
 	/**
 	 * Custom handler for displaying an owner.
 	 *
@@ -65,33 +79,4 @@ public class FlightController {
 		return mav;
 	}
 
-	/*
-	 * private final VetService vetService;
-	 *
-	 * @Autowired
-	 * public FlightController(VetService clinicService) {
-	 * this.vetService = clinicService;
-	 * }
-	 *
-	 * @GetMapping(value = { "/vets" })
-	 * public String showVetList(Map<String, Object> model) {
-	 * // Here we are returning an object of type 'Vets' rather than a collection of Vet
-	 * // objects
-	 * // so it is simpler for Object-Xml mapping
-	 * Vets vets = new Vets();
-	 * vets.getVetList().addAll(this.vetService.findVets());
-	 * model.put("vets", vets);
-	 * return "vets/vetList";
-	 * }
-	 *
-	 * @GetMapping(value = { "/vets.xml"})
-	 * public @ResponseBody Vets showResourcesVetList() {
-	 * // Here we are returning an object of type 'Vets' rather than a collection of Vet
-	 * // objects
-	 * // so it is simpler for JSon/Object mapping
-	 * Vets vets = new Vets();
-	 * vets.getVetList().addAll(this.vetService.findVets());
-	 * return vets;
-	 * }
-	 */
 }

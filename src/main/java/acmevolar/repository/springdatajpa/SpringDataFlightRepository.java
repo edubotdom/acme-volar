@@ -16,11 +16,13 @@
 
 package acmevolar.repository.springdatajpa;
 
+import java.util.Collection;
 import java.util.List;
 
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.Repository;
+import org.springframework.data.repository.query.Param;
 
 import acmevolar.model.Flight;
 import acmevolar.model.FlightStatusType;
@@ -41,4 +43,8 @@ public interface SpringDataFlightRepository extends FlightRepository, Repository
 	@Override
 	@Query("SELECT flight FROM Flight flight WHERE flight.published = '1' ")
 	List<Flight> findPublishedFlight() throws DataAccessException;
+	
+	@Override
+	@Query("SELECT flight FROM Flight flight WHERE flight.airline.user.username =:username ")
+	List<Flight> findAirlineFlight(@Param("username") String username) throws DataAccessException;
 }

@@ -76,3 +76,5 @@ INSERT INTO flight_status_type VALUES (2, 'delayed');
 INSERT INTO flight_status_type VALUES (3, 'cancelled');
 
 INSERT INTO flights(id, reference, seats, price, flight_status_id, published) VALUES (1, 'R-14', 250, 150, 1, TRUE);
+
+INSERT INTO airports(id, name, max_number_of_planes, max_number_of_clients, latitude, longitude, code, city ) VALUES (1, 'Sevilla Airport', 50, 600, 37.4180000, -5.8931100, 'SVQ', 'Sevilla');

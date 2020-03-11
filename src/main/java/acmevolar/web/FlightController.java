@@ -46,14 +46,14 @@ public class FlightController {
 	public String showFlightList(final Map<String, Object> model) {
 
 		Collection<Flight> flights = new ArrayList<Flight>();
-		flights.addAll(this.flightService.findFlights());
+		flights.addAll(this.flightService.findPublishedFlight());
 		model.put("flights", flights);
 		return "flights/flightList";
 	}
 
 	/**
 	 * Custom handler for displaying an owner.
-	 * 
+	 *
 	 * @param flightId
 	 *            the ID of the owner to display
 	 * @return a ModelMap with the model attributes for the view
@@ -67,12 +67,12 @@ public class FlightController {
 
 	/*
 	 * private final VetService vetService;
-	 * 
+	 *
 	 * @Autowired
 	 * public FlightController(VetService clinicService) {
 	 * this.vetService = clinicService;
 	 * }
-	 * 
+	 *
 	 * @GetMapping(value = { "/vets" })
 	 * public String showVetList(Map<String, Object> model) {
 	 * // Here we are returning an object of type 'Vets' rather than a collection of Vet
@@ -83,7 +83,7 @@ public class FlightController {
 	 * model.put("vets", vets);
 	 * return "vets/vetList";
 	 * }
-	 * 
+	 *
 	 * @GetMapping(value = { "/vets.xml"})
 	 * public @ResponseBody Vets showResourcesVetList() {
 	 * // Here we are returning an object of type 'Vets' rather than a collection of Vet

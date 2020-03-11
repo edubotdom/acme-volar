@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package acmevolar.model;
 
 import java.time.LocalDate;
@@ -39,35 +40,91 @@ public class Airline extends NamedEntity {
 
 	@Column(name = "identification")
 	@NotEmpty
-	private String identification;
-	
+	private String		identification;
+
 	@Column(name = "country")
 	@NotEmpty
-	private String country;
+	private String		country;
 
 	@Column(name = "phone")
 	@NotEmpty
 	@Digits(fraction = 0, integer = 10)
-	private String phone;
-	
+	private String		phone;
+
 	@Column(name = "email")
 	@NotEmpty
-	private String email;
-	
-	@Column(name = "creation_date")        
+	private String		email;
+
+	@Column(name = "creation_date")
 	@DateTimeFormat(pattern = "yyyy/MM/dd")
-	private LocalDate creationDate;
-	
+	private LocalDate	creationDate;
+
 	@Column(name = "reference")
 	@NotEmpty
-	private String reference;
-	
-	
+	private String		reference;
+
+
+	public String getIdentification() {
+		return this.identification;
+	}
+
+	public void setIdentification(final String identification) {
+		this.identification = identification;
+	}
+
+	public String getCountry() {
+		return this.country;
+	}
+
+	public void setCountry(final String country) {
+		this.country = country;
+	}
+
+	public String getPhone() {
+		return this.phone;
+	}
+
+	public void setPhone(final String phone) {
+		this.phone = phone;
+	}
+
+	public String getEmail() {
+		return this.email;
+	}
+
+	public void setEmail(final String email) {
+		this.email = email;
+	}
+
+	public LocalDate getCreationDate() {
+		return this.creationDate;
+	}
+
+	public void setCreationDate(final LocalDate creationDate) {
+		this.creationDate = creationDate;
+	}
+
+	public String getReference() {
+		return this.reference;
+	}
+
+	public void setReference(final String reference) {
+		this.reference = reference;
+	}
+
+	public User getUser() {
+		return this.user;
+	}
+
+	public void setUser(final User user) {
+		this.user = user;
+	}
+
+
 	//
 	@OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "username", referencedColumnName = "username")
+	@JoinColumn(name = "username", referencedColumnName = "username")
 	private User user;
 	//
-	
 
 }

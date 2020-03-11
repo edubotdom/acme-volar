@@ -42,31 +42,95 @@ public class Flight extends BaseEntity {
 	@ManyToOne
 	@JoinColumn(name = "flight_status_id")
 	private FlightStatusType flightStatus;
+	
+	@ManyToOne
+	@JoinColumn(name = "plane")
+	private Plane plane;
 
 	@NotNull
 	@Column(name = "published")
 	private Boolean published;
+	
+	@NotNull
+	@ManyToOne
+	@Column(name = "departes")
+	private Runaway departes;
+	
+	@NotNull
+	@ManyToOne
+	@Column(name = "lands")
+	private Runaway lands;
 
 	public String getReference() {
 		return reference;
+	}
+
+	public void setReference(String reference) {
+		this.reference = reference;
 	}
 
 	public Integer getSeats() {
 		return seats;
 	}
 
+	public void setSeats(Integer seats) {
+		this.seats = seats;
+	}
+
 	public Double getPrice() {
 		return price;
+	}
+
+	public void setPrice(Double price) {
+		this.price = price;
 	}
 
 	public FlightStatusType getFlightStatus() {
 		return flightStatus;
 	}
 
+	public void setFlightStatus(FlightStatusType flightStatus) {
+		this.flightStatus = flightStatus;
+	}
+
+	public Plane getPlane() {
+		return plane;
+	}
+
+	public void setPlane(Plane plane) {
+		this.plane = plane;
+	}
+
 	public Boolean getPublished() {
 		return published;
 	}
-	
+
+	public void setPublished(Boolean published) {
+		this.published = published;
+	}
+
+	public Runaway getDepartes() {
+		return departes;
+	}
+
+	public void setDepartes(Runaway departes) {
+		this.departes = departes;
+	}
+
+	public Runaway getLands() {
+		return lands;
+	}
+
+	public void setLands(Runaway lands) {
+		this.lands = lands;
+	}
+
+	@Override
+	public String toString() {
+		return "Flight [reference=" + reference + ", seats=" + seats + ", price=" + price + ", flightStatus="
+				+ flightStatus + ", plane=" + plane + ", published=" + published + ", departes=" + departes + ", lands="
+				+ lands + "]";
+	}	
 	
 	
 /*	

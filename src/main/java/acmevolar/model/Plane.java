@@ -15,13 +15,15 @@
  */
 package acmevolar.model;
 
+import java.time.LocalDate;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Past;
+
+import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
 @Table(name = "planes")
@@ -32,31 +34,97 @@ public class Plane extends BaseEntity {
 	private String reference;
 	
 	@NotNull
-	@Column(name = "maxSeats")
+	@Column(name = "max_seats")
 	private Integer maxSeats;
 	
-	@NotNull
+	@NotEmpty
 	@Column(name = "description")
 	private String description;
 	
-	@ManyToOne
-	@JoinColumn(name = "manufacter")
+	@NotEmpty
+	@Column(name = "manufacter")
 	private String manufacter;
 
-	@NotNull
+	@NotEmpty
 	@Column(name = "model")
 	private String model;
 	
 	@NotNull
-	@Column(name = "numberOfKm")
+	@Column(name = "number_of_km")
 	private Double numberOfKm;
 	
 	@NotNull
-	@Column(name = "maxDistance")
+	@Column(name = "max_distance")
 	private Double maxDistance;
 	
-	@NotNull
-	@Column(name = "lastMaintenance")
-	private Double lastMaintenance;
+	@Column(name = "last_maintenance")        
+	@DateTimeFormat(pattern = "yyyy/MM/dd")
+	private LocalDate lastMaintenance;
+
+	public String getReference() {
+		return reference;
+	}
+
+	public void setReference(String reference) {
+		this.reference = reference;
+	}
+
+	public Integer getMaxSeats() {
+		return maxSeats;
+	}
+
+	public void setMaxSeats(Integer maxSeats) {
+		this.maxSeats = maxSeats;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public String getManufacter() {
+		return manufacter;
+	}
+
+	public void setManufacter(String manufacter) {
+		this.manufacter = manufacter;
+	}
+
+	public String getModel() {
+		return model;
+	}
+
+	public void setModel(String model) {
+		this.model = model;
+	}
+
+	public Double getNumberOfKm() {
+		return numberOfKm;
+	}
+
+	public void setNumberOfKm(Double numberOfKm) {
+		this.numberOfKm = numberOfKm;
+	}
+
+	public Double getMaxDistance() {
+		return maxDistance;
+	}
+
+	public void setMaxDistance(Double maxDistance) {
+		this.maxDistance = maxDistance;
+	}
+
+	public LocalDate getLastMaintenance() {
+		return lastMaintenance;
+	}
+
+	public void setLastMaintenance(LocalDate lastMaintenance) {
+		this.lastMaintenance = lastMaintenance;
+	}
+	
+	
 	
 }

@@ -23,9 +23,9 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Past;
 
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.lang.Nullable;
 
 @Entity
 @Table(name = "planes")
@@ -59,9 +59,9 @@ public class Plane extends BaseEntity {
 	@Column(name = "max_distance")
 	private Double	maxDistance;
 
-	@Nullable
-	@Column(name = "last_maintenance", nullable = true)
-	@DateTimeFormat(pattern = "yyyy/MM/dd")
+	@Past
+	@Column(name = "last_maintenance", nullable = false)
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date	lastMaintenance;
 
 

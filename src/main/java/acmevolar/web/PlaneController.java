@@ -1,3 +1,4 @@
+
 package acmevolar.web;
 
 import java.util.ArrayList;
@@ -17,30 +18,35 @@ import acmevolar.service.PlaneService;
 public class PlaneController {
 
 	private final PlaneService planeService;
-	
+
+
 	@Autowired
-	public PlaneController(PlaneService planeService) {
+	public PlaneController(final PlaneService planeService) {
 		this.planeService = planeService;
 	}
-	
-	@GetMapping(value = { "/planes" })
-	public String showPlaneList(Map<String, Object> model) {
+
+	@GetMapping(value = {
+		"/planes"
+	})
+	public String showPlaneList(final Map<String, Object> model) {
 		Collection<Plane> planes = new ArrayList<Plane>();
 		planes.addAll(this.planeService.findPlanes());
 		model.put("planes", planes);
 		return "planes/planesList";
 	}
-	
+
 	/**
 	 * Custom handler for displaying an owner.
-	 * @param flightId the ID of the owner to display
+	 *
+	 * @param flightId
+	 *            the ID of the owner to display
 	 * @return a ModelMap with the model attributes for the view
 	 */
 	@GetMapping("/planes/{planeId}")
-	public ModelAndView showPlane(@PathVariable("planeId") int planeId) {
+	public ModelAndView showPlane(@PathVariable("planeId") final int planeId) {
 		ModelAndView mav = new ModelAndView("planes/planeDetails");
 		mav.addObject(this.planeService.findPlaneById(planeId));
-		return mav;	
+		return mav;
 	}
-	
+
 }

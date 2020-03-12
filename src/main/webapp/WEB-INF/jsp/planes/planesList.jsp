@@ -18,11 +18,11 @@
             <th>Model</th>
             <th>Number of Kilometers</th>
             <th>Max Distance</th>
-            <%-- <th>Last maintenance</th> --%>
+            <th>Last maintenance</th>
         </tr>
         </thead>
         <tbody>
-        <c:forEach items="${planes}" var="planes">
+        <c:forEach items="${planes}" var="plane">
             <tr>
                 <td>
                 	<spring:url value="/planes/{planeId}" var="planeUrl">
@@ -48,11 +48,9 @@
                 <td>
                     <c:out value="${plane.maxDistance}"/>
                 </td>
-                <%--
                 <td>
                     <c:out value="${plane.lastMaintenance}"/>
                 </td> 
-                --%>
             </tr>
         </c:forEach>
         </tbody>

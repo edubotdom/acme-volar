@@ -1,10 +1,11 @@
+
 package acmevolar.repository.springdatajpa;
 
-import org.aspectj.apache.bcel.util.Repository;
+import org.springframework.data.repository.Repository;
 
 import acmevolar.model.Plane;
 import acmevolar.repository.PlaneRepository;
 
-public interface SpringDataPlaneRepository extends PlaneRepository, Repository<Plane,Integer> {
+public interface SpringDataPlaneRepository extends PlaneRepository, Repository<Plane, Integer> {
 
 }

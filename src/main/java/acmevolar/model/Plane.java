@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -13,17 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package acmevolar.model;
 
-import java.time.LocalDate;
+import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Past;
 
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.lang.Nullable;
 
 @Entity
 @Table(name = "planes")
@@ -31,100 +33,106 @@ public class Plane extends BaseEntity {
 
 	@NotEmpty
 	@Column(name = "reference")
-	private String reference;
-	
+	private String	reference;
+
 	@NotNull
 	@Column(name = "max_seats")
-	private Integer maxSeats;
-	
+	private Integer	maxSeats;
+
 	@NotEmpty
 	@Column(name = "description")
-	private String description;
-	
+	private String	description;
+
 	@NotEmpty
 	@Column(name = "manufacter")
-	private String manufacter;
+	private String	manufacter;
 
 	@NotEmpty
 	@Column(name = "model")
-	private String model;
-	
+	private String	model;
+
 	@NotNull
 	@Column(name = "number_of_km")
-	private Double numberOfKm;
-	
+	private Double	numberOfKm;
+
 	@NotNull
 	@Column(name = "max_distance")
-	private Double maxDistance;
-	
-	@Column(name = "last_maintenance")        
+	private Double	maxDistance;
+
+	@Nullable
+	@Column(name = "last_maintenance", nullable = true)
 	@DateTimeFormat(pattern = "yyyy/MM/dd")
-	private LocalDate lastMaintenance;
+	private Date	lastMaintenance;
+
 
 	public String getReference() {
-		return reference;
+		return this.reference;
 	}
 
-	public void setReference(String reference) {
+	public void setReference(final String reference) {
 		this.reference = reference;
 	}
 
 	public Integer getMaxSeats() {
-		return maxSeats;
+		return this.maxSeats;
 	}
 
-	public void setMaxSeats(Integer maxSeats) {
+	public void setMaxSeats(final Integer maxSeats) {
 		this.maxSeats = maxSeats;
 	}
 
 	public String getDescription() {
-		return description;
+		return this.description;
 	}
 
-	public void setDescription(String description) {
+	public void setDescription(final String description) {
 		this.description = description;
 	}
 
 	public String getManufacter() {
-		return manufacter;
+		return this.manufacter;
 	}
 
-	public void setManufacter(String manufacter) {
+	public void setManufacter(final String manufacter) {
 		this.manufacter = manufacter;
 	}
 
 	public String getModel() {
-		return model;
+		return this.model;
 	}
 
-	public void setModel(String model) {
+	public void setModel(final String model) {
 		this.model = model;
 	}
 
 	public Double getNumberOfKm() {
-		return numberOfKm;
+		return this.numberOfKm;
 	}
 
-	public void setNumberOfKm(Double numberOfKm) {
+	public void setNumberOfKm(final Double numberOfKm) {
 		this.numberOfKm = numberOfKm;
 	}
 
 	public Double getMaxDistance() {
-		return maxDistance;
+		return this.maxDistance;
 	}
 
-	public void setMaxDistance(Double maxDistance) {
+	public void setMaxDistance(final Double maxDistance) {
 		this.maxDistance = maxDistance;
 	}
 
-	public LocalDate getLastMaintenance() {
-		return lastMaintenance;
+	public Date getLastMaintenance() {
+		return this.lastMaintenance;
 	}
 
-	public void setLastMaintenance(LocalDate lastMaintenance) {
+	public void setLastMaintenance(final Date lastMaintenance) {
 		this.lastMaintenance = lastMaintenance;
 	}
-	
-	
-	
+
+	@Override
+	public String toString() {
+		return "Plane [reference=" + this.reference + ", maxSeats=" + this.maxSeats + ", description=" + this.description + ", manufacter=" + this.manufacter + ", model=" + this.model + ", numberOfKm=" + this.numberOfKm + ", maxDistance="
+			+ this.maxDistance + ", lastMaintenance=" + this.lastMaintenance + "]";
+	}
+
 }

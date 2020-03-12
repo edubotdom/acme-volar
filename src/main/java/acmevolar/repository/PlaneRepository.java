@@ -12,6 +12,8 @@ public interface PlaneRepository {
 	void save(Plane plane) throws DataAccessException;
 	
 	Collection<Plane> findAll() throws DataAccessException;
+
+	void deleteById(int id);
 	
 	//void deleteById(int id) throws DataAccessException;
 

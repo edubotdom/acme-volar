@@ -31,8 +31,8 @@ public class PlaneService {
 	public void savePlane(Plane plane) throws DataAccessException, DuplicatedPetNameException {
 		planeRepository.save(plane);                
 	}
-	/*
-	public void deletePlaneById(int id) throws DataAccessException{
+	
+	public void deleteById(int id) throws DataAccessException{
 		planeRepository.deleteById(id);
 	}
 	
@@ -46,7 +46,7 @@ public class PlaneService {
 		deletePlane(plane2);					// we delete the original
 		planeRepository.save(plane);			// we replace with the updated version
 	}
-	*/
+	
 	@Transactional(readOnly = true)	
 	public Collection<Plane> findPlanes() throws DataAccessException {
 		return planeRepository.findAll();

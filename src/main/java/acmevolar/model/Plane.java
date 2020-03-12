@@ -28,7 +28,7 @@ import javax.validation.constraints.Past;
 import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
-@Table(name = "planes")
+@Table(name = "planess")
 public class Plane extends BaseEntity {
 
 	@NotEmpty

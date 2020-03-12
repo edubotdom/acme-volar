@@ -31,5 +31,10 @@
             <td><c:out value="${flight.published}"/></td>
         </tr>
     </table>
+    
+    <spring:url value="{flightId}/edit" var="editUrl">
+        <spring:param name="flightId" value="${flight.id}"/>
+    </spring:url>
+    <a href="${fn:escapeXml(editUrl)}" class="btn btn-default">Edit Flight</a>
 
 </petclinic:layout>

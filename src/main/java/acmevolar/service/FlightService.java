@@ -23,22 +23,25 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import acmevolar.model.Airline;
 import acmevolar.model.Flight;
 import acmevolar.repository.FlightRepository;
+import acmevolar.repository.springdatajpa.SpringDataAirlineRepository;
 import acmevolar.repository.springdatajpa.SpringDataFlightRepository;
-import acmevolar.service.exceptions.DuplicatedPetNameException;
 
 @Service
 public class FlightService {
 
 	private FlightRepository			flightRepository;
 	private SpringDataFlightRepository	springDataFlightRepository;
+	private SpringDataAirlineRepository	springDataAirlineRepository;
 
 
 	@Autowired
-	public FlightService(final FlightRepository flightRepository, final SpringDataFlightRepository springDataFlightRepository) {
+	public FlightService(final FlightRepository flightRepository, final SpringDataFlightRepository springDataFlightRepository, final SpringDataAirlineRepository springDataAirlineRepository) {
 		this.flightRepository = flightRepository;
 		this.springDataFlightRepository = springDataFlightRepository;
+		this.springDataAirlineRepository = springDataAirlineRepository;
 	}
 
 	/*
@@ -52,14 +55,14 @@ public class FlightService {
 		return this.flightRepository.findById(id);
 	}
 
-	@Transactional(rollbackFor = DuplicatedPetNameException.class)
-	public void saveFlight(final Flight flight) throws DataAccessException, DuplicatedPetNameException {
-		/*
-		 * Pet otherPet=flight.getOwner().getPetwithIdDifferent(pet.getName(), pet.getId());
-		 * if (StringUtils.hasLength(pet.getName()) && (otherPet!= null && otherPet.getId()!=pet.getId())) {
-		 * throw new DuplicatedPetNameException();
-		 * }else
-		 */ this.flightRepository.save(flight);
+	@Transactional(readOnly = true)
+	public Airline findAirlineByUsername(final String username) throws DataAccessException {
+		return this.springDataAirlineRepository.findByUsername(username);
+	}
+
+	@Transactional
+	public void saveFlight(final Flight flight) throws DataAccessException {
+		this.flightRepository.save(flight);
 	}
 
 	@Transactional(readOnly = true)

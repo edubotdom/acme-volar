@@ -36,4 +36,8 @@ public interface SpringDataAirlineRepository extends AirlineRepository, Reposito
 	@Query("SELECT airline FROM Airline airline WHERE airline.id =:id")
 	Airline findById(@Param("id") int id);
 
+	@Override
+	@Query("SELECT airline FROM Airline airline WHERE airline.user.username =:username")
+	Airline findByUsername(@Param("username") String username);
+
 }

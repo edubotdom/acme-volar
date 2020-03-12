@@ -25,6 +25,8 @@ import javax.validation.Valid;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -93,6 +95,20 @@ public class FlightController {
 		}
 	}
 
+
+	@GetMapping(value = {
+			"/flights/my_flights"
+		})
+		public String showAirlineFlightList(final Map<String, Object> model) {
+
+			String username = SecurityContextHolder.getContext().getAuthentication().getName();
+			Collection<Flight> flights = new ArrayList<Flight>();
+			flights.addAll(this.flightService.findAirlineFlight(username));
+			model.put("flights", flights);
+			return "flights/flightList";
+		}
+	
+
 	@GetMapping("/flights/{flightId}")
 	public ModelAndView showFlight(@PathVariable("flightId") final int flightId) {
 		ModelAndView mav = new ModelAndView("flights/flightDetails");
@@ -130,4 +146,5 @@ public class FlightController {
 		}
 	}
 	
+
 

@@ -46,6 +46,7 @@ public class Flight extends BaseEntity {
 
 	@NotNull
 	@Column(name = "published")
+  
 	private Boolean				published;
 
 	@ManyToOne

@@ -36,6 +36,14 @@
 				</petclinic:menuItem>
 				</sec:authorize>
 				
+				<sec:authorize access="hasAuthority('airline')">
+				<petclinic:menuItem active="${name eq 'my_flights'}" url="/flights/my_flights/"
+					title="List my flights">
+					<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+					<span>My flights</span>
+				</petclinic:menuItem>
+				</sec:authorize>
+				
 				<petclinic:menuItem active="${name eq 'airlines'}" url="/airlines/"
 					title="List airlines">
 					<span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>

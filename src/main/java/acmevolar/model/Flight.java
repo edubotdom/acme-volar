@@ -40,9 +40,9 @@ public class Flight extends BaseEntity {
 	@Column(name = "price")
 	private Double				price;
 
-	@ManyToOne
-	@JoinColumn(name = "flight_status_id")
-	private FlightStatusType	flightStatus;
+	@NotEmpty
+	@JoinColumn(name = "flight_status")
+	private String	flightStatus;
 
 	@NotNull
 	@Column(name = "published")
@@ -65,6 +65,24 @@ public class Flight extends BaseEntity {
 		return this.reference;
 	}
 
+	public void setReference(String reference) {
+		this.reference = reference;
+	}
+
+	public void setSeats(Integer seats) {
+		this.seats = seats;
+	}
+
+	public void setPrice(Double price) {
+		this.price = price;
+	}
+
+
+
+	public void setPublished(Boolean published) {
+		this.published = published;
+	}
+
 	public Integer getSeats() {
 		return this.seats;
 	}
@@ -73,44 +91,18 @@ public class Flight extends BaseEntity {
 		return this.price;
 	}
 
-	public FlightStatusType getFlightStatus() {
-		return this.flightStatus;
+
+
+	public String getFlightStatus() {
+		return flightStatus;
+	}
+
+	public void setFlightStatus(String flightStatus) {
+		this.flightStatus = flightStatus;
 	}
 
 	public Boolean getPublished() {
 		return this.published;
 	}
 
-	/*
-	 * 
-	 * public void setBirthDate(LocalDate birthDate) {
-	 * this.birthDate = birthDate;
-	 * }
-	 * 
-	 * protected void setOwner(Owner owner) {
-	 * this.owner = owner;
-	 * }
-	 * 
-	 * protected Set<Visit> getVisitsInternal() {
-	 * if (this.visits == null) {
-	 * this.visits = new HashSet<>();
-	 * }
-	 * return this.visits;
-	 * }
-	 * 
-	 * protected void setVisitsInternal(Set<Visit> visits) {
-	 * this.visits = visits;
-	 * }
-	 * 
-	 * public List<Visit> getVisits() {
-	 * List<Visit> sortedVisits = new ArrayList<>(getVisitsInternal());
-	 * PropertyComparator.sort(sortedVisits, new MutableSortDefinition("date", false, false));
-	 * return Collections.unmodifiableList(sortedVisits);
-	 * }
-	 * 
-	 * public void addVisit(Visit visit) {
-	 * getVisitsInternal().add(visit);
-	 * visit.setPet(this);
-	 * }
-	 */
 }

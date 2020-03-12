@@ -18,6 +18,7 @@ package acmevolar.web;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 
 import javax.validation.Valid;
@@ -62,7 +63,14 @@ public class FlightController {
 	@GetMapping(value = "/flights/new")
 	public String initCreationForm(final Map<String, Object> model) {
 		Flight flight = new Flight();
+		
+		List<String> estados = new ArrayList<String>();
+		estados.add("cancelled");
+		estados.add("delayed");
+		estados.add("on_time");
+		model.put("estados", estados);
 		model.put("flight", flight);
+		
 		return FlightController.VIEWS_FLIGHT_CREATE_FORM;
 	}
 
@@ -87,33 +95,5 @@ public class FlightController {
 		return mav;
 	}
 
-	/*
-	 * private final VetService vetService;
-	 *
-	 * @Autowired
-	 * public FlightController(VetService clinicService) {
-	 * this.vetService = clinicService;
-	 * }
-	 *
-	 * @GetMapping(value = { "/vets" })
-	 * public String showVetList(Map<String, Object> model) {
-	 * // Here we are returning an object of type 'Vets' rather than a collection of Vet
-	 * // objects
-	 * // so it is simpler for Object-Xml mapping
-	 * Vets vets = new Vets();
-	 * vets.getVetList().addAll(this.vetService.findVets());
-	 * model.put("vets", vets);
-	 * return "vets/vetList";
-	 * }
-	 *
-	 * @GetMapping(value = { "/vets.xml"})
-	 * public @ResponseBody Vets showResourcesVetList() {
-	 * // Here we are returning an object of type 'Vets' rather than a collection of Vet
-	 * // objects
-	 * // so it is simpler for JSon/Object mapping
-	 * Vets vets = new Vets();
-	 * vets.getVetList().addAll(this.vetService.findVets());
-	 * return vets;
-	 * }
-	 */
+	
 }

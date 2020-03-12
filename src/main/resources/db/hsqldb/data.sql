@@ -75,4 +75,4 @@ INSERT INTO flight_status_type VALUES (1, 'on-time');
 INSERT INTO flight_status_type VALUES (2, 'delayed');
 INSERT INTO flight_status_type VALUES (3, 'cancelled');
 
-INSERT INTO flights(id, reference, seats, price, flight_status_id, published) VALUES (1, 'R-14', 250, 150, 1, TRUE);
+INSERT INTO flights(id, reference, seats, price, flight_status, published) VALUES (1, 'R-14', 250, 150, 'on_time', TRUE);

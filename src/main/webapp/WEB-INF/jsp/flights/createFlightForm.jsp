@@ -17,6 +17,7 @@
             <petclinic:inputField label="Seats" name="seats" />
             <petclinic:inputField label="Price" name="price" />
             <petclinic:inputField label="Published" name="published" />
+            <petclinic:selectField label="Status" name="flightStatus" size="3" names="${estados}"/>
         </div>
         <div class="form-group">
             <div class="col-sm-offset-2 col-sm-10">

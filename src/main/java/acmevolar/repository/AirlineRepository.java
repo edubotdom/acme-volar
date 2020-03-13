@@ -58,4 +58,6 @@ public interface AirlineRepository {
 	 */
 	void save(Airline airline) throws DataAccessException;
 
+	Airline findByUsername(String username) throws DataAccessException;
+
 }

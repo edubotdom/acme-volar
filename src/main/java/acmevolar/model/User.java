@@ -13,6 +13,7 @@ import lombok.Data;
 public class User {
 
 	@Id
+
 	String	username;
 
 	String	password;
@@ -29,10 +30,12 @@ public class User {
 	}
 
 	public String getPassword() {
+
 		return this.password;
 	}
 
 	public void setPassword(final String password) {
+
 		this.password = password;
 	}
 
@@ -43,4 +46,5 @@ public class User {
 	public void setEnabled(final boolean enabled) {
 		this.enabled = enabled;
 	}
+
 }

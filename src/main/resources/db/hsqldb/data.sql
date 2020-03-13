@@ -80,5 +80,6 @@ INSERT INTO flight_status_type VALUES (1, 'on-time');
 INSERT INTO flight_status_type VALUES (2, 'delayed');
 INSERT INTO flight_status_type VALUES (3, 'cancelled');
 
-INSERT INTO flights(id, reference, seats, price, flight_status, published) VALUES (1, 'R-14', 250, 150, 'on_time', TRUE);
+INSERT INTO aeroplanes(id, reference, max_seats, description, manufacter, model, number_of_km, max_distance, last_maintenance) VALUES (1, 'V14-5', 150, 'This is a description', 'Boeing', 'B747', 500000.23, 2000000.0, '2011-04-17');
 
+--INSERT INTO flights(id, reference, seats, price, flight_status, published) VALUES (1, 'R-14', 250, 150, 'on_time', TRUE);

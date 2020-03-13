@@ -38,16 +38,31 @@ public class Flight extends BaseEntity {
 
 	@NotNull
 	@Column(name = "price")
-	private Double				price;
 
-	@NotEmpty
-	@JoinColumn(name = "flight_status")
-	private String	flightStatus;
+	private Double price;
+	
+	@ManyToOne
+	@JoinColumn(name = "flight_status_id")
+	private FlightStatusType flightStatus;
+	
+	@ManyToOne
+	@JoinColumn(name = "plane")
+	private Plane plane;
 
 	@NotNull
 	@Column(name = "published")
-  
-	private Boolean				published;
+	private Boolean published;
+	
+	@NotNull
+	@ManyToOne
+	@JoinColumn(name = "departes")
+	private Runaway departes;
+	
+	@NotNull
+	@ManyToOne
+	@JoinColumn(name = "lands")
+	private Runaway lands;
+
 
 	@ManyToOne
 	@JoinColumn(name = "airline_id")
@@ -58,52 +73,99 @@ public class Flight extends BaseEntity {
 		return this.airline;
 	}
 
-	public void setAirline(final Airline airline) {
-		this.airline = airline;
-	}
-
-	public String getReference() {
-		return this.reference;
-	}
-
 	public void setReference(String reference) {
 		this.reference = reference;
+	}
+
+	public Integer getSeats() {
+		return seats;
 	}
 
 	public void setSeats(Integer seats) {
 		this.seats = seats;
 	}
 
+	public Double getPrice() {
+		return price;
+	}
+
 	public void setPrice(Double price) {
 		this.price = price;
 	}
 
+	public FlightStatusType getFlightStatus() {
+		return flightStatus;
+	}
 
+	public void setFlightStatus(FlightStatusType flightStatus) {
+		this.flightStatus = flightStatus;
+	}
+
+	public Plane getPlane() {
+		return plane;
+	}
+
+	public void setPlane(Plane plane) {
+		this.plane = plane;
+	}
+
+	public Boolean getPublished() {
+		return published;
+	}
 
 	public void setPublished(Boolean published) {
 		this.published = published;
 	}
 
-	public Integer getSeats() {
-		return this.seats;
+	public Runaway getDepartes() {
+		return departes;
 	}
 
-	public Double getPrice() {
-		return this.price;
+	public void setDepartes(Runaway departes) {
+		this.departes = departes;
 	}
 
-
-
-	public String getFlightStatus() {
-		return flightStatus;
+	public Runaway getLands() {
+		return lands;
 	}
 
-	public void setFlightStatus(String flightStatus) {
-		this.flightStatus = flightStatus;
+	public void setLands(Runaway lands) {
+		this.lands = lands;
 	}
 
-	public Boolean getPublished() {
-		return this.published;
+	@Override
+	public String toString() {
+		return "Flight [reference=" + reference + ", seats=" + seats + ", price=" + price + ", flightStatus="
+				+ flightStatus + ", plane=" + plane + ", published=" + published + ", departes=" + departes + ", lands="
+				+ lands + "]";
+	}	
+	
+	
+/*	
+	public void setBirthDate(LocalDate birthDate) {
+		this.birthDate = birthDate;
 	}
-
+	protected void setOwner(Owner owner) {
+		this.owner = owner;
+	}
+	protected Set<Visit> getVisitsInternal() {
+		if (this.visits == null) {
+			this.visits = new HashSet<>();
+		}
+		return this.visits;
+	}
+	protected void setVisitsInternal(Set<Visit> visits) {
+		this.visits = visits;
+	}
+	public List<Visit> getVisits() {
+		List<Visit> sortedVisits = new ArrayList<>(getVisitsInternal());
+		PropertyComparator.sort(sortedVisits, new MutableSortDefinition("date", false, false));
+		return Collections.unmodifiableList(sortedVisits);
+	}
+	public void addVisit(Visit visit) {
+		getVisitsInternal().add(visit);
+		visit.setPet(this);
+	}
+*/
 }
+

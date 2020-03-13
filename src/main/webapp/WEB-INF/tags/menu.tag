@@ -50,6 +50,12 @@
 					<span>Airlines</span>
 				</petclinic:menuItem>
 				
+
+				<petclinic:menuItem active="${name eq 'airports'}" url="/airports/"
+					title="Airports">
+					<span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
+					<span>Airports</span>
+        </petclinic:menuItem>
 				<petclinic:menuItem active="${name eq 'flights'}" url="/flights/"
 					title="List flights">
 					<span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
@@ -74,7 +80,7 @@
 				</sec:authorize>
 				<sec:authorize access="isAuthenticated()">
 					<li class="dropdown"><a href="#" class="dropdown-toggle"
-						data-toggle="dropdown"> <span class="glyphicon glyphicon-user"></span> 
+						data-toggle="dropdown"> <span class="glyphicon glyphicon-user"></span>Â 
 							<strong><sec:authentication property="name" /></strong> <span
 							class="glyphicon glyphicon-chevron-down"></span>
 					</a>

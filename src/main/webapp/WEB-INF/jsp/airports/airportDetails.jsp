@@ -39,5 +39,10 @@
             <td><c:out value="${airport.city}"/></td>
         </tr>
     </table>
+    
+    <spring:url value="/airports/{airportId}/edit" var="airportEditUrl">
+       <spring:param name="airportId" value="${airport.id}"/>
+    </spring:url>
+    <button class="btn btn-default" onclick="window.location.href='${fn:escapeXml(airportEditUrl)}'">Edit</button>
 
 </petclinic:layout>

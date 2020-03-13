@@ -18,6 +18,7 @@
             <th>Longitude</th>
             <th>Code</th>
             <th>City</th>
+            <th>Delete</th>
         </tr>
         </thead>
         <tbody>
@@ -47,9 +48,17 @@
                 <td>
                     <c:out value="${airport.city}"/>
                 </td>
+                <td>
+                    <spring:url value="/airports/{airportId}/delete" var="airportDeleteUrl">
+                	    <spring:param name="airportId" value="${airport.id}"/>
+                    </spring:url>
+                    <a href="${fn:escapeXml(airportDeleteUrl)}"><c:out value="Delete"/></a>
+                </td>
             </tr>
         </c:forEach>
         </tbody>
     </table>
+    
+    <button class="btn btn-default" onclick="window.location.href='/airports/new'">New</button>
 
 </petclinic:layout>

@@ -6,6 +6,7 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 @Entity
 @Table(name = "airports")
@@ -32,7 +33,8 @@ public class Airport extends NamedEntity {
 	private Double	longitude;
 
 	@NotEmpty
-	@Column(name = "code")
+	@Size(min = 3, max = 3)
+	@Column(name = "code", unique = true)
 	private String	code;
 
 	@NotEmpty
@@ -67,6 +69,35 @@ public class Airport extends NamedEntity {
 
 	public String getCity() {
 		return this.city;
+	}
+
+	@Override
+	public void setName(final String name) {
+		this.name = name;
+	}
+
+	public void setMaxNumberOfPlanes(final Integer maxNumberOfPlanes) {
+		this.maxNumberOfPlanes = maxNumberOfPlanes;
+	}
+
+	public void setMaxNumberOfClients(final Integer maxNumberOfClients) {
+		this.maxNumberOfClients = maxNumberOfClients;
+	}
+
+	public void setLatitude(final Double latitude) {
+		this.latitude = latitude;
+	}
+
+	public void setLongitude(final Double longitude) {
+		this.longitude = longitude;
+	}
+
+	public void setCode(final String code) {
+		this.code = code;
+	}
+
+	public void setCity(final String city) {
+		this.city = city;
 	}
 
 }

@@ -4,11 +4,13 @@ package acmevolar.repository;
 import java.util.Collection;
 
 import org.springframework.dao.DataAccessException;
+import org.springframework.data.repository.CrudRepository;
 
 import acmevolar.model.Airport;
 
-public interface AirportRepository {
+public interface AirportRepository extends CrudRepository<Airport, Integer> {
 
+	@Override
 	Collection<Airport> findAll() throws DataAccessException;
 
 	/**
@@ -20,6 +22,6 @@ public interface AirportRepository {
 	 * @throws org.springframework.dao.DataRetrievalFailureException
 	 *             if not found
 	 */
-	Airport findById(int id) throws DataAccessException;
+	Airport findAirportById(int id) throws DataAccessException;
 
 }

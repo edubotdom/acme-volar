@@ -12,6 +12,6 @@ public interface SpringDataAirportRepository extends AirportRepository, Reposito
 
 	@Override
 	@Query("SELECT airport FROM Airport airport WHERE airport.id =:id")
-	Airport findById(@Param("id") int id);
+	Airport findAirportById(@Param("id") int id);
 
 }

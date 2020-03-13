@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package acmevolar.model;
 
 import javax.persistence.Column;
@@ -29,14 +30,15 @@ public class Flight extends BaseEntity {
 
 	@NotEmpty
 	@Column(name = "reference")
-	private String reference;
-	
+	private String				reference;
+
 	@NotNull
 	@Column(name = "seats")
-	private Integer seats;
-	
+	private Integer				seats;
+
 	@NotNull
 	@Column(name = "price")
+
 	private Double price;
 	
 	@ManyToOne
@@ -61,8 +63,14 @@ public class Flight extends BaseEntity {
 	@JoinColumn(name = "lands")
 	private Runaway lands;
 
-	public String getReference() {
-		return reference;
+
+	@ManyToOne
+	@JoinColumn(name = "airline_id")
+	private Airline				airline;
+
+
+	public Airline getAirline() {
+		return this.airline;
 	}
 
 	public void setReference(String reference) {
@@ -160,3 +168,4 @@ public class Flight extends BaseEntity {
 	}
 */
 }
+

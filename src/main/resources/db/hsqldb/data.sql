@@ -8,6 +8,20 @@ INSERT INTO authorities VALUES ('owner1','owner');
 INSERT INTO users(username,password,enabled) VALUES ('vet1','v3t',TRUE);
 INSERT INTO authorities VALUES ('vet1','veterinarian');
 
+INSERT INTO users(username,password,enabled) VALUES ('client1','client1',TRUE);
+INSERT INTO authorities VALUES ('client1','client');
+INSERT INTO clients(id,name, identification, birth_date, phone, email, creation_date, username) VALUES (1,'Sergio Pérez','53933261-P', '1994-09-07', '644584458', 'checoperez@gmail.com', '2005-09-07','client1');
+
+INSERT INTO users(username,password,enabled) VALUES ('airline1','airline1',TRUE);
+INSERT INTO authorities VALUES ('airline1','airline');
+INSERT INTO users(username,password,enabled) VALUES ('airline2','airline2',TRUE);
+INSERT INTO authorities VALUES ('airline2','airline');
+
+INSERT INTO airlines(id,name, identification, country, phone, email, creation_date, reference, username) 
+VALUES (1,'Sevilla Este Airways','61333744-N', 'Spain', '644584458', 'minardi@gmail.com', '2010-11-07', 'SEA-001','airline1');
+INSERT INTO airlines(id,name, identification, country, phone, email, creation_date, reference, username) 
+VALUES (2,'Montellano Airways','61333778-N', 'Spain', '654789321', 'arrows@gmail.com', '2010-11-07', 'MA-002','airline2');
+
 INSERT INTO vets VALUES (1, 'James', 'Carter');
 INSERT INTO vets VALUES (2, 'Helen', 'Leary');
 INSERT INTO vets VALUES (3, 'Linda', 'Douglas');
@@ -66,10 +80,6 @@ INSERT INTO flight_status_type VALUES (1, 'on-time');
 INSERT INTO flight_status_type VALUES (2, 'delayed');
 INSERT INTO flight_status_type VALUES (3, 'cancelled');
 
---INSERT INTO flights(id, reference, seats, price, flight_status_id, published) VALUES (1, 'R-14', 250, 150, 1, TRUE);
-
 INSERT INTO aeroplanes(id, reference, max_seats, description, manufacter, model, number_of_km, max_distance, last_maintenance) VALUES (1, 'V14-5', 150, 'This is a description', 'Boeing', 'B747', 500000.23, 2000000.0, '2011-04-17');
 
---INSERT INTO planes(id, reference, max_seats, description, manufacter, model, number_of_km, max_distance) 
---	VALUES (1, 'V14-5', 150, 'This is a description', 'Boeing', 'B747', 500000.23, 2000000.0);
-
+--INSERT INTO flights(id, reference, seats, price, flight_status, published) VALUES (1, 'R-14', 250, 150, 'on_time', TRUE);

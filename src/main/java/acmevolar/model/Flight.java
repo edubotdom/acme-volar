@@ -32,6 +32,10 @@ public class Flight extends BaseEntity {
 	@Column(name = "reference")
 	private String				reference;
 
+	public String getReference() {
+		return reference;
+	}
+
 	@NotNull
 	@Column(name = "seats")
 	private Integer				seats;
@@ -118,7 +122,7 @@ public class Flight extends BaseEntity {
 	public void setPublished(final Boolean published) {
 		this.published = published;
 	}
-
+  
 	public Runaway getDepartes() {
 		return this.departes;
 	}

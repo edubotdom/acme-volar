@@ -30,7 +30,7 @@ import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "runaway")
-public class Runaway extends BaseEntity {
+public class Runway extends BaseEntity {
 
 	@NotEmpty
 	@Column(name = "name")
@@ -84,7 +84,7 @@ public class Runaway extends BaseEntity {
 
 	@Override
 	public String toString() {
-		return "Runaway [name=" + name + ", date=" + date + ", type=" + type + ", airport=" + airport + "]";
+		return "Runway [name=" + name + ", date=" + date + ", type=" + type + ", airport=" + airport + "]";
 	}
 	
 	

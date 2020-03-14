@@ -38,7 +38,6 @@ public class Flight extends BaseEntity {
 
 	@NotNull
 	@Column(name = "price")
-
 	private Double price;
 	
 	@ManyToOne
@@ -46,7 +45,7 @@ public class Flight extends BaseEntity {
 	private FlightStatusType flightStatus;
 	
 	@ManyToOne
-	@JoinColumn(name = "plane")
+	@JoinColumn(name = "plane_id")
 	private Plane plane;
 
 	@NotNull
@@ -55,12 +54,12 @@ public class Flight extends BaseEntity {
 	
 	@NotNull
 	@ManyToOne
-	@JoinColumn(name = "departes")
+	@JoinColumn(name = "departes_id")
 	private Runaway departes;
 	
 	@NotNull
 	@ManyToOne
-	@JoinColumn(name = "lands")
+	@JoinColumn(name = "lands_id")
 	private Runaway lands;
 
 
@@ -132,13 +131,17 @@ public class Flight extends BaseEntity {
 	public void setLands(Runaway lands) {
 		this.lands = lands;
 	}
+	
+	public void setAirline(Airline airline) {
+		this.airline = airline;
+	}
 
 	@Override
 	public String toString() {
 		return "Flight [reference=" + reference + ", seats=" + seats + ", price=" + price + ", flightStatus="
 				+ flightStatus + ", plane=" + plane + ", published=" + published + ", departes=" + departes + ", lands="
 				+ lands + "]";
-	}	
+	}
 	
 	
 /*	

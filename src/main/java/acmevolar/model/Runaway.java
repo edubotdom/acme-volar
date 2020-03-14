@@ -22,12 +22,14 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 @Entity
-@Table(name = "planes")
+@Table(name = "runaway")
 public class Runaway extends BaseEntity {
 
 	@NotEmpty
@@ -43,9 +45,48 @@ public class Runaway extends BaseEntity {
 	@Column(name = "type")
 	private RunwayType type;
 	
-//	@ManyToOne
-//	@NotNull
-//	@Column(name = "airport")
-//	private Airport airport;
+	@ManyToOne
+	@NotNull
+	@JoinColumn(name = "airport_id")
+	private Airport airport;
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public Date getDate() {
+		return date;
+	}
+
+	public void setDate(Date date) {
+		this.date = date;
+	}
+
+	public RunwayType getType() {
+		return type;
+	}
+
+	public void setType(RunwayType type) {
+		this.type = type;
+	}
+
+	public Airport getAirport() {
+		return airport;
+	}
+
+	public void setAirport(Airport airport) {
+		this.airport = airport;
+	}
+
+	@Override
+	public String toString() {
+		return "Runaway [name=" + name + ", date=" + date + ", type=" + type + ", airport=" + airport + "]";
+	}
+	
+	
 	
 }

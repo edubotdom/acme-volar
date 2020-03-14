@@ -16,6 +16,8 @@
 
 package acmevolar.model;
 
+import java.time.LocalDateTime;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
@@ -24,6 +26,8 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 @Entity
 @Table(name = "flights")
 public class Flight extends BaseEntity {
@@ -31,10 +35,6 @@ public class Flight extends BaseEntity {
 	@NotEmpty
 	@Column(name = "reference")
 	private String				reference;
-
-	public String getReference() {
-		return reference;
-	}
 
 	@NotNull
 	@Column(name = "seats")
@@ -59,120 +59,121 @@ public class Flight extends BaseEntity {
 	@NotNull
 	@ManyToOne
 	@JoinColumn(name = "departes_id")
-	private Runaway				departes;
+	private Runway				departes;
 
 	@NotNull
 	@ManyToOne
 	@JoinColumn(name = "lands_id")
-	private Runaway				lands;
+	private Runway				lands;
 
+	@NotNull
 	@ManyToOne
 	@JoinColumn(name = "airline_id")
 	private Airline				airline;
 
-
-	public Airline getAirline() {
-		return this.airline;
-	}
+	@NotNull
+	@Column(name = "land_date")
+	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
+	private LocalDateTime landDate;
+	
+	@NotNull
+	@Column(name = "depart_date")
+	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
+	private LocalDateTime departDate;
 
 	public String getReference() {
-		return this.reference;
+		return reference;
 	}
 
-	public void setReference(final String reference) {
+	public void setReference(String reference) {
 		this.reference = reference;
 	}
 
 	public Integer getSeats() {
-		return this.seats;
+		return seats;
 	}
 
-	public void setSeats(final Integer seats) {
+	public void setSeats(Integer seats) {
 		this.seats = seats;
 	}
 
 	public Double getPrice() {
-		return this.price;
+		return price;
 	}
 
-	public void setPrice(final Double price) {
+	public void setPrice(Double price) {
 		this.price = price;
 	}
 
 	public FlightStatusType getFlightStatus() {
-		return this.flightStatus;
+		return flightStatus;
 	}
 
-	public void setFlightStatus(final FlightStatusType flightStatus) {
+	public void setFlightStatus(FlightStatusType flightStatus) {
 		this.flightStatus = flightStatus;
 	}
 
 	public Plane getPlane() {
-		return this.plane;
+		return plane;
 	}
 
-	public void setPlane(final Plane plane) {
+	public void setPlane(Plane plane) {
 		this.plane = plane;
 	}
 
 	public Boolean getPublished() {
-		return this.published;
+		return published;
 	}
 
-	public void setPublished(final Boolean published) {
+	public void setPublished(Boolean published) {
 		this.published = published;
 	}
-  
-	public Runaway getDepartes() {
-		return this.departes;
+
+	public Runway getDepartes() {
+		return departes;
 	}
 
-	public void setDepartes(final Runaway departes) {
+	public void setDepartes(Runway departes) {
 		this.departes = departes;
 	}
 
-	public Runaway getLands() {
-		return this.lands;
+	public Runway getLands() {
+		return lands;
 	}
 
-	public void setLands(final Runaway lands) {
+	public void setLands(Runway lands) {
 		this.lands = lands;
 	}
 
-	public void setAirline(final Airline airline) {
+	public Airline getAirline() {
+		return airline;
+	}
+
+	public void setAirline(Airline airline) {
 		this.airline = airline;
+	}
+
+	public LocalDateTime getLandDate() {
+		return landDate;
+	}
+
+	public void setLandDate(LocalDateTime landDate) {
+		this.landDate = landDate;
+	}
+
+	public LocalDateTime getDepartDate() {
+		return departDate;
+	}
+
+	public void setDepartDate(LocalDateTime departDate) {
+		this.departDate = departDate;
 	}
 
 	@Override
 	public String toString() {
-		return "Flight [reference=" + this.reference + ", seats=" + this.seats + ", price=" + this.price + ", flightStatus=" + this.flightStatus + ", plane=" + this.plane + ", published=" + this.published + ", departes=" + this.departes + ", lands="
-			+ this.lands + "]";
+		return "Flight [reference=" + reference + ", seats=" + seats + ", price=" + price + ", flightStatus="
+				+ flightStatus + ", plane=" + plane + ", published=" + published + ", departes=" + departes + ", lands="
+				+ lands + ", airline=" + airline + ", landDate=" + landDate + ", departDate=" + departDate + "]";
 	}
 
-	/*
-	 * public void setBirthDate(LocalDate birthDate) {
-	 * this.birthDate = birthDate;
-	 * }
-	 * protected void setOwner(Owner owner) {
-	 * this.owner = owner;
-	 * }
-	 * protected Set<Visit> getVisitsInternal() {
-	 * if (this.visits == null) {
-	 * this.visits = new HashSet<>();
-	 * }
-	 * return this.visits;
-	 * }
-	 * protected void setVisitsInternal(Set<Visit> visits) {
-	 * this.visits = visits;
-	 * }
-	 * public List<Visit> getVisits() {
-	 * List<Visit> sortedVisits = new ArrayList<>(getVisitsInternal());
-	 * PropertyComparator.sort(sortedVisits, new MutableSortDefinition("date", false, false));
-	 * return Collections.unmodifiableList(sortedVisits);
-	 * }
-	 * public void addVisit(Visit visit) {
-	 * getVisitsInternal().add(visit);
-	 * visit.setPet(this);
-	 * }
-	 */
 }

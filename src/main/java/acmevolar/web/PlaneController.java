@@ -21,7 +21,6 @@ import org.springframework.web.servlet.ModelAndView;
 import acmevolar.model.Airline;
 import acmevolar.model.Flight;
 import acmevolar.model.Plane;
-import acmevolar.model.Visit;
 import acmevolar.service.AirlineService;
 import acmevolar.service.FlightService;
 import acmevolar.service.PlaneService;
@@ -120,8 +119,15 @@ public class PlaneController {
 		if (result.hasErrors()) {
 			return PlaneController.VIEWS_PLANES_CREATE_OR_UPDATE_FORM;
 		} else {
+			
+			//String username = SecurityContextHolder.getContext().getAuthentication().getName();
+			//Airline airline = this.flightService.findAirlineByUsername(username);
+			
 			String username = SecurityContextHolder.getContext().getAuthentication().getName();
-			Airline airline = this.flightService.findAirlineByUsername(username);
+			Airline airline = airlineService.findAirlines().stream()
+					.filter(x->x.getUser().getUsername().equals(username))
+					.findFirst()
+					.get();
 			plane.setAirline(airline);
 			this.planeService.savePlane(plane);
 

@@ -16,7 +16,6 @@ INSERT INTO users(username,password,enabled) VALUES ('airline1','airline1',TRUE)
 INSERT INTO authorities VALUES ('airline1','airline');
 INSERT INTO users(username,password,enabled) VALUES ('airline2','airline2',TRUE);
 INSERT INTO authorities VALUES ('airline2','airline');
-
 INSERT INTO airlines(id,name, identification, country, phone, email, creation_date, reference, username) 
 VALUES (1,'Sevilla Este Airways','61333744-N', 'Spain', '644584458', 'minardi@gmail.com', '2010-11-07', 'SEA-001','airline1');
 INSERT INTO airlines(id,name, identification, country, phone, email, creation_date, reference, username) 
@@ -76,7 +75,7 @@ INSERT INTO visits(id,pet_id,visit_date,description) VALUES (2, 8, '2013-01-02',
 INSERT INTO visits(id,pet_id,visit_date,description) VALUES (3, 8, '2013-01-03', 'neutered');
 INSERT INTO visits(id,pet_id,visit_date,description) VALUES (4, 7, '2013-01-04', 'spayed');
 
-INSERT INTO flight_status_type VALUES (1, 'on-time');
+INSERT INTO flight_status_type VALUES (1, 'on_time');
 INSERT INTO flight_status_type VALUES (2, 'delayed');
 INSERT INTO flight_status_type VALUES (3, 'cancelled');
 
@@ -92,7 +91,7 @@ INSERT INTO runaway(id,name,date,type,airport_id) VALUES (1,'A-01','2012-06-08',
 INSERT INTO runaway(id,name,date,type,airport_id) VALUES (2,'A-02','2012-06-08','LANDING',1);
 
 INSERT INTO flights(id, reference, seats, price, flight_status_id, plane_id, published, departes_id, lands_id, airline_id) 
-	VALUES (1, 'R-14', 250, 150.0, 1, 1, TRUE, 1, 1, 1);
+	VALUES (1, 'R-14', 250, 150.0, 1, 1, TRUE, 1, 2, 1);
 
 
 

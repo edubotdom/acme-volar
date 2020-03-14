@@ -15,37 +15,65 @@
  */
 package acmevolar.model;
 
-import java.util.Date;
-
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 @Entity
-@Table(name = "planes")
-public class Runaway extends BaseEntity {
+@Table(name = "runaway")
+public class Runway extends BaseEntity {
 
 	@NotEmpty
 	@Column(name = "name")
 	private String name;
-	
-	@NotNull
-	@Column(name = "date")
-	private Date date;
 
 	@NotNull
 	@Enumerated(value=EnumType.STRING)
 	@Column(name = "type")
 	private RunwayType type;
 	
-//	@ManyToOne
-//	@NotNull
-//	@Column(name = "airport")
-//	private Airport airport;
+	@ManyToOne
+	@NotNull
+	@JoinColumn(name = "airport_id")
+	private Airport airport;
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public RunwayType getType() {
+		return type;
+	}
+
+	public void setType(RunwayType type) {
+		this.type = type;
+	}
+
+	public Airport getAirport() {
+		return airport;
+	}
+
+	public void setAirport(Airport airport) {
+		this.airport = airport;
+	}
+
+	@Override
+	public String toString() {
+		return "Runway [name=" + name + ", type=" + type + ", airport=" + airport + "]";
+	}
+
+	
+	
+	
 	
 }

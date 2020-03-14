@@ -16,6 +16,8 @@
 
 package acmevolar.model;
 
+import java.time.LocalDateTime;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
@@ -23,6 +25,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+
+import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
 @Table(name = "flights")
@@ -38,39 +42,47 @@ public class Flight extends BaseEntity {
 
 	@NotNull
 	@Column(name = "price")
+	private Double				price;
 
-	private Double price;
-	
 	@ManyToOne
 	@JoinColumn(name = "flight_status_id")
-	private FlightStatusType flightStatus;
-	
+	private FlightStatusType	flightStatus;
+
 	@ManyToOne
-	@JoinColumn(name = "plane")
-	private Plane plane;
+	@JoinColumn(name = "plane_id")
+	private Plane				plane;
 
 	@NotNull
 	@Column(name = "published")
-	private Boolean published;
-	
+	private Boolean				published;
+
 	@NotNull
 	@ManyToOne
-	@JoinColumn(name = "departes")
-	private Runaway departes;
-	
+	@JoinColumn(name = "departes_id")
+	private Runway				departes;
+
 	@NotNull
 	@ManyToOne
-	@JoinColumn(name = "lands")
-	private Runaway lands;
+	@JoinColumn(name = "lands_id")
+	private Runway				lands;
 
-
+	@NotNull
 	@ManyToOne
 	@JoinColumn(name = "airline_id")
 	private Airline				airline;
 
+	@NotNull
+	@Column(name = "land_date")
+	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
+	private LocalDateTime landDate;
+	
+	@NotNull
+	@Column(name = "depart_date")
+	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
+	private LocalDateTime departDate;
 
-	public Airline getAirline() {
-		return this.airline;
+	public String getReference() {
+		return reference;
 	}
 
 	public void setReference(String reference) {
@@ -117,55 +129,51 @@ public class Flight extends BaseEntity {
 		this.published = published;
 	}
 
-	public Runaway getDepartes() {
+	public Runway getDepartes() {
 		return departes;
 	}
 
-	public void setDepartes(Runaway departes) {
+	public void setDepartes(Runway departes) {
 		this.departes = departes;
 	}
 
-	public Runaway getLands() {
+	public Runway getLands() {
 		return lands;
 	}
 
-	public void setLands(Runaway lands) {
+	public void setLands(Runway lands) {
 		this.lands = lands;
+	}
+
+	public Airline getAirline() {
+		return airline;
+	}
+
+	public void setAirline(Airline airline) {
+		this.airline = airline;
+	}
+
+	public LocalDateTime getLandDate() {
+		return landDate;
+	}
+
+	public void setLandDate(LocalDateTime landDate) {
+		this.landDate = landDate;
+	}
+
+	public LocalDateTime getDepartDate() {
+		return departDate;
+	}
+
+	public void setDepartDate(LocalDateTime departDate) {
+		this.departDate = departDate;
 	}
 
 	@Override
 	public String toString() {
 		return "Flight [reference=" + reference + ", seats=" + seats + ", price=" + price + ", flightStatus="
 				+ flightStatus + ", plane=" + plane + ", published=" + published + ", departes=" + departes + ", lands="
-				+ lands + "]";
-	}	
-	
-	
-/*	
-	public void setBirthDate(LocalDate birthDate) {
-		this.birthDate = birthDate;
+				+ lands + ", airline=" + airline + ", landDate=" + landDate + ", departDate=" + departDate + "]";
 	}
-	protected void setOwner(Owner owner) {
-		this.owner = owner;
-	}
-	protected Set<Visit> getVisitsInternal() {
-		if (this.visits == null) {
-			this.visits = new HashSet<>();
-		}
-		return this.visits;
-	}
-	protected void setVisitsInternal(Set<Visit> visits) {
-		this.visits = visits;
-	}
-	public List<Visit> getVisits() {
-		List<Visit> sortedVisits = new ArrayList<>(getVisitsInternal());
-		PropertyComparator.sort(sortedVisits, new MutableSortDefinition("date", false, false));
-		return Collections.unmodifiableList(sortedVisits);
-	}
-	public void addVisit(Visit visit) {
-		getVisitsInternal().add(visit);
-		visit.setPet(this);
-	}
-*/
-}
 
+}

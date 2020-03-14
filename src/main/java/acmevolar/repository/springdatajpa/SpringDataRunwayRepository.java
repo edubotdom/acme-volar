@@ -16,16 +16,16 @@
 
 package acmevolar.repository.springdatajpa;
 
-import java.util.List;
+import java.util.Collection;
 
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.Repository;
-import org.springframework.data.repository.query.Param;
 
-import acmevolar.model.Flight;
-import acmevolar.model.FlightStatusType;
+import acmevolar.model.Airport;
+import acmevolar.model.Runway;
 import acmevolar.repository.FlightRepository;
+import acmevolar.repository.RunwayRepository;
 
 /**
  * Spring Data JPA specialization of the {@link FlightRepository} interface
@@ -33,17 +33,18 @@ import acmevolar.repository.FlightRepository;
  * @author Michael Isvy
  * @since 15.1.2013
  */
-public interface SpringDataFlightRepository extends FlightRepository, Repository<Flight, Integer> {
-
+public interface SpringDataRunwayRepository extends RunwayRepository, Repository<Runway, Integer> {
+	
 	@Override
-	@Query("SELECT fstype.name FROM FlightStatusType fstype ORDER BY fstype.name")
-	List<FlightStatusType> findFlightStatusTypes() throws DataAccessException;
-
+	@Query("SELECT a FROM Airport a where a.id=:airportId")
+	Airport findAirportById(Integer airportId) throws DataAccessException;
+	
 	@Override
-	@Query("SELECT flight FROM Flight flight WHERE flight.published = '1' ")
-	List<Flight> findPublishedFlight() throws DataAccessException;
-
+	@Query("SELECT r FROM Runway r where r.id=:runwayId")
+	Runway findById(int runwayId) throws DataAccessException;
+	
 	@Override
-	@Query("SELECT flight FROM Flight flight WHERE flight.airline.user.username =:username ")
-	List<Flight> findAirlineFlight(@Param("username") String username) throws DataAccessException;
+	@Query("SELECT a FROM Airport a")
+	Collection<Runway> findAll() throws DataAccessException;
+
 }

@@ -42,30 +42,29 @@ public class Flight extends BaseEntity {
 
 	@NotNull
 	@Column(name = "price")
-	private Double price;
-	
+	private Double				price;
+
 	@ManyToOne
 	@JoinColumn(name = "flight_status_id")
-	private FlightStatusType flightStatus;
-	
+	private FlightStatusType	flightStatus;
+
 	@ManyToOne
 	@JoinColumn(name = "plane_id")
-	private Plane plane;
+	private Plane				plane;
 
 	@NotNull
 	@Column(name = "published")
-	private Boolean published;
-	
+	private Boolean				published;
+
 	@NotNull
 	@ManyToOne
 	@JoinColumn(name = "departes_id")
-	private Runway departes;
-	
+	private Runaway				departes;
+
 	@NotNull
 	@ManyToOne
 	@JoinColumn(name = "lands_id")
-	private Runway lands;
-
+	private Runaway				lands;
 
 	@ManyToOne
 	@JoinColumn(name = "airline_id")
@@ -76,103 +75,104 @@ public class Flight extends BaseEntity {
 		return this.airline;
 	}
 
-	public void setReference(String reference) {
+	public String getReference() {
+		return this.reference;
+	}
+
+	public void setReference(final String reference) {
 		this.reference = reference;
 	}
 
 	public Integer getSeats() {
-		return seats;
+		return this.seats;
 	}
 
-	public void setSeats(Integer seats) {
+	public void setSeats(final Integer seats) {
 		this.seats = seats;
 	}
 
 	public Double getPrice() {
-		return price;
+		return this.price;
 	}
 
-	public void setPrice(Double price) {
+	public void setPrice(final Double price) {
 		this.price = price;
 	}
 
 	public FlightStatusType getFlightStatus() {
-		return flightStatus;
+		return this.flightStatus;
 	}
 
-	public void setFlightStatus(FlightStatusType flightStatus) {
+	public void setFlightStatus(final FlightStatusType flightStatus) {
 		this.flightStatus = flightStatus;
 	}
 
 	public Plane getPlane() {
-		return plane;
+		return this.plane;
 	}
 
-	public void setPlane(Plane plane) {
+	public void setPlane(final Plane plane) {
 		this.plane = plane;
 	}
 
 	public Boolean getPublished() {
-		return published;
+		return this.published;
 	}
 
-	public void setPublished(Boolean published) {
+	public void setPublished(final Boolean published) {
 		this.published = published;
 	}
-
-	public Runway getDepartes() {
-		return departes;
+  
+	public Runaway getDepartes() {
+		return this.departes;
 	}
 
-	public void setDepartes(Runway departes) {
+	public void setDepartes(final Runaway departes) {
 		this.departes = departes;
 	}
 
-	public Runway getLands() {
-		return lands;
+	public Runaway getLands() {
+		return this.lands;
 	}
 
-	public void setLands(Runway lands) {
+	public void setLands(final Runaway lands) {
 		this.lands = lands;
 	}
-	
-	public void setAirline(Airline airline) {
+
+	public void setAirline(final Airline airline) {
 		this.airline = airline;
 	}
 
 	@Override
 	public String toString() {
-		return "Flight [reference=" + reference + ", seats=" + seats + ", price=" + price + ", flightStatus="
-				+ flightStatus + ", plane=" + plane + ", published=" + published + ", departes=" + departes + ", lands="
-				+ lands + "]";
+		return "Flight [reference=" + this.reference + ", seats=" + this.seats + ", price=" + this.price + ", flightStatus=" + this.flightStatus + ", plane=" + this.plane + ", published=" + this.published + ", departes=" + this.departes + ", lands="
+			+ this.lands + "]";
 	}
-	
-	
-/*	
-	public void setBirthDate(LocalDate birthDate) {
-		this.birthDate = birthDate;
-	}
-	protected void setOwner(Owner owner) {
-		this.owner = owner;
-	}
-	protected Set<Visit> getVisitsInternal() {
-		if (this.visits == null) {
-			this.visits = new HashSet<>();
-		}
-		return this.visits;
-	}
-	protected void setVisitsInternal(Set<Visit> visits) {
-		this.visits = visits;
-	}
-	public List<Visit> getVisits() {
-		List<Visit> sortedVisits = new ArrayList<>(getVisitsInternal());
-		PropertyComparator.sort(sortedVisits, new MutableSortDefinition("date", false, false));
-		return Collections.unmodifiableList(sortedVisits);
-	}
-	public void addVisit(Visit visit) {
-		getVisitsInternal().add(visit);
-		visit.setPet(this);
-	}
-*/
-}
 
+	/*
+	 * public void setBirthDate(LocalDate birthDate) {
+	 * this.birthDate = birthDate;
+	 * }
+	 * protected void setOwner(Owner owner) {
+	 * this.owner = owner;
+	 * }
+	 * protected Set<Visit> getVisitsInternal() {
+	 * if (this.visits == null) {
+	 * this.visits = new HashSet<>();
+	 * }
+	 * return this.visits;
+	 * }
+	 * protected void setVisitsInternal(Set<Visit> visits) {
+	 * this.visits = visits;
+	 * }
+	 * public List<Visit> getVisits() {
+	 * List<Visit> sortedVisits = new ArrayList<>(getVisitsInternal());
+	 * PropertyComparator.sort(sortedVisits, new MutableSortDefinition("date", false, false));
+	 * return Collections.unmodifiableList(sortedVisits);
+	 * }
+	 * public void addVisit(Visit visit) {
+	 * getVisitsInternal().add(visit);
+	 * visit.setPet(this);
+	 * }
+	 */
+}

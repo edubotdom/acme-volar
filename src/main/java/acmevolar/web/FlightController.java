@@ -25,8 +25,6 @@ import javax.validation.Valid;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -38,10 +36,8 @@ import org.springframework.web.servlet.ModelAndView;
 
 import acmevolar.model.Airline;
 import acmevolar.model.Flight;
-import acmevolar.model.Owner;
-import acmevolar.model.Pet;
+import acmevolar.model.FlightStatusType;
 import acmevolar.service.FlightService;
-import acmevolar.service.exceptions.DuplicatedPetNameException;
 
 @Controller
 public class FlightController {
@@ -70,14 +66,17 @@ public class FlightController {
 	@GetMapping(value = "/flights/new")
 	public String initCreationForm(final Map<String, Object> model) {
 		Flight flight = new Flight();
-		
+
 		List<String> estados = new ArrayList<String>();
 		estados.add("cancelled");
 		estados.add("delayed");
 		estados.add("on_time");
+
+		//List<String> estados = this.flightService.findFlightStatusTypes().stream().map(s -> s.getName()).collect(Collectors.toList());
+
 		model.put("estados", estados);
 		model.put("flight", flight);
-		
+
 		return FlightController.VIEWS_FLIGHT_CREATE_FORM;
 	}
 
@@ -95,19 +94,17 @@ public class FlightController {
 		}
 	}
 
-
 	@GetMapping(value = {
-			"/flights/my_flights"
-		})
-		public String showAirlineFlightList(final Map<String, Object> model) {
+		"/flights/my_flights"
+	})
+	public String showAirlineFlightList(final Map<String, Object> model) {
 
-			String username = SecurityContextHolder.getContext().getAuthentication().getName();
-			Collection<Flight> flights = new ArrayList<Flight>();
-			flights.addAll(this.flightService.findAirlineFlight(username));
-			model.put("flights", flights);
-			return "flights/flightList";
-		}
-	
+		String username = SecurityContextHolder.getContext().getAuthentication().getName();
+		Collection<Flight> flights = new ArrayList<Flight>();
+		flights.addAll(this.flightService.findAirlineFlight(username));
+		model.put("flights", flights);
+		return "flights/flightList";
+	}
 
 	@GetMapping("/flights/{flightId}")
 	public ModelAndView showFlight(@PathVariable("flightId") final int flightId) {
@@ -116,35 +113,39 @@ public class FlightController {
 		return mav;
 	}
 
+	//@Secured("hasRole('airline')")
 	@GetMapping(value = "/flights/{flightId}/edit")
-	public String initUpdateForm(@PathVariable("flightId") int flightId, ModelMap model) {
+	public String initUpdateForm(@PathVariable("flightId") final int flightId, final ModelMap model) {
 		Flight flight = this.flightService.findFlightById(flightId);
-		
-		List<String> estados = new ArrayList<String>();
-		estados.add("cancelled");
-		estados.add("delayed");
-		estados.add("on_time");
+
+		/*
+		 * List<String> estados = new ArrayList<String>();
+		 * estados.add("cancelled");
+		 * estados.add("delayed");
+		 * estados.add("on_time");
+		 */
+
+		List<FlightStatusType> estados = this.flightService.findFlightStatusTypes();
+
 		model.put("estados", estados);
-		
+
 		model.put("flight", flight);
-		return VIEWS_FLIGHT_CREATE_FORM;
+		return FlightController.VIEWS_FLIGHT_CREATE_FORM;
 	}
 
-        @PostMapping(value = "/flights/{flightId}/edit")
-	public String processUpdateForm(@Valid Flight flight, BindingResult result, @PathVariable("flightId") int flightId, ModelMap model) {
+	//@Secured("hasRole('airline')")
+	@PostMapping(value = "/flights/{flightId}/edit")
+	public String processUpdateForm(@Valid final Flight flight, final BindingResult result, @PathVariable("flightId") final int flightId, final ModelMap model) {
 		if (result.hasErrors()) {
 			model.put("flight", flight);
-			return VIEWS_FLIGHT_CREATE_FORM;
-		}
-		else {
-			Flight flightToUpdate=this.flightService.findFlightById(flightId);
-			BeanUtils.copyProperties(flightToUpdate, flight, "reference", "seats", "price", "flightStatus", "published");                                                                                  
-                             
-			this.flightService.saveFlight(flight);                   
+			return FlightController.VIEWS_FLIGHT_CREATE_FORM;
+		} else {
+
+			Flight flightToUpdate = this.flightService.findFlightById(flightId);
+			BeanUtils.copyProperties(flightToUpdate, flight, "reference", "seats", "price", "flightStatus", "published");
+
+			this.flightService.saveFlight(flight);
 			return "redirect:/flights/" + flight.getId();
-                    }
 		}
 	}
-	
-
-
+}

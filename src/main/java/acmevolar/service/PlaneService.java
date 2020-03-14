@@ -2,6 +2,7 @@ package acmevolar.service;
 
 import java.util.Collection;
 
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
@@ -9,7 +10,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import acmevolar.model.Plane;
 import acmevolar.repository.PlaneRepository;
-import acmevolar.service.exceptions.DuplicatedPetNameException;
 import acmevolar.service.exceptions.DuplicatedPlaneReferenceException;
 
 @Service
@@ -28,7 +28,7 @@ public class PlaneService {
 	}
 	
 	@Transactional(rollbackFor = DuplicatedPlaneReferenceException.class)
-	public void savePlane(Plane plane) throws DataAccessException, DuplicatedPetNameException {
+	public void savePlane(Plane plane) throws DataAccessException, DuplicatedPlaneReferenceException {
 		planeRepository.save(plane);                
 	}
 	

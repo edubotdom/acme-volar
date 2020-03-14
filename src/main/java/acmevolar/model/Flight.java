@@ -32,6 +32,10 @@ public class Flight extends BaseEntity {
 	@Column(name = "reference")
 	private String				reference;
 
+	public String getReference() {
+		return reference;
+	}
+
 	@NotNull
 	@Column(name = "seats")
 	private Integer				seats;
@@ -55,12 +59,12 @@ public class Flight extends BaseEntity {
 	@NotNull
 	@ManyToOne
 	@JoinColumn(name = "departes_id")
-	private Runaway departes;
+	private Runway departes;
 	
 	@NotNull
 	@ManyToOne
 	@JoinColumn(name = "lands_id")
-	private Runaway lands;
+	private Runway lands;
 
 
 	@ManyToOne
@@ -116,19 +120,19 @@ public class Flight extends BaseEntity {
 		this.published = published;
 	}
 
-	public Runaway getDepartes() {
+	public Runway getDepartes() {
 		return departes;
 	}
 
-	public void setDepartes(Runaway departes) {
+	public void setDepartes(Runway departes) {
 		this.departes = departes;
 	}
 
-	public Runaway getLands() {
+	public Runway getLands() {
 		return lands;
 	}
 
-	public void setLands(Runaway lands) {
+	public void setLands(Runway lands) {
 		this.lands = lands;
 	}
 	

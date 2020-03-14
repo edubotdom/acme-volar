@@ -1,8 +1,6 @@
 package acmevolar.service;
 
 import java.util.Collection;
-
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
@@ -10,7 +8,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import acmevolar.model.Plane;
 import acmevolar.repository.PlaneRepository;
-import acmevolar.service.exceptions.DuplicatedPlaneReferenceException;
 
 @Service
 public class PlaneService {
@@ -27,8 +24,8 @@ public class PlaneService {
 		return planeRepository.findById(id);
 	}
 	
-	@Transactional(rollbackFor = DuplicatedPlaneReferenceException.class)
-	public void savePlane(Plane plane) throws DataAccessException, DuplicatedPlaneReferenceException {
+	@Transactional()
+	public void savePlane(Plane plane) throws DataAccessException {
 		planeRepository.save(plane);                
 	}
 	

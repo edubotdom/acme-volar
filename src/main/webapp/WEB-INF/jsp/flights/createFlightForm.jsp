@@ -18,10 +18,12 @@
             <petclinic:inputField label="Price" name="price" />
             <petclinic:inputField label="Published" name="published" />
             <petclinic:selectField label="Status" name="flightStatus" size="3" names="${estados}"/>
+
+            
+            <input type="hidden" name="id" value="${estados}"/>
         </div>
         <div class="form-group">
             <div class="col-sm-offset-2 col-sm-10">
-                        <!--<button class="btn btn-default" type="submit">Persist flight</button>-->
              <c:choose>
                     <c:when test="${flight['new']}">
                         <button class="btn btn-default" type="submit">Register flight</button>

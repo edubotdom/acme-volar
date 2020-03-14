@@ -35,16 +35,32 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	protected void configure(final HttpSecurity http) throws Exception {
 		http.authorizeRequests()
 
-		.antMatchers("/resources/**", "/webjars/**", "/h2-console/**", "/flights/**").permitAll()
+		.antMatchers("/resources/**", "/webjars/**", "/h2-console/**").permitAll()
 		.antMatchers(HttpMethod.GET, "/", "/oups").permitAll()
 		.antMatchers("/users/new").permitAll()
-		.antMatchers("/clients/**").permitAll()
-		.antMatchers("/airports/").hasAnyAuthority("airline")
-		.antMatchers("/airports/new").hasAnyAuthority("airline")
-		.antMatchers("/airports/**/edit").hasAnyAuthority("airline")
-		.antMatchers("/airports/**/delete").hasAnyAuthority("airline")
-		.antMatchers("/airports/**").permitAll()
-		.antMatchers("/airlines/**").permitAll()
+		
+		.antMatchers("/clients/").hasAuthority("airline")
+		.antMatchers("/clients/**/").hasAuthority("airline")
+		
+		.antMatchers("/airlines/").permitAll()
+		.antMatchers("/airlines/**/").permitAll()
+		.antMatchers("/airlines/new/").hasAuthority("airline")
+		
+		.antMatchers("/airports/").permitAll()
+		.antMatchers("/airports/**/").permitAll()
+		.antMatchers("/airports/new").hasAuthority("airline")
+		.antMatchers("/airports/**/edit").hasAuthority("airline")
+		.antMatchers("/airports/**/delete").hasAuthority("airline")
+		
+		.antMatchers("/flights/").permitAll()
+		.antMatchers("/flights/**/").permitAll()
+		.antMatchers("/flights/new").hasAuthority("airline")
+		.antMatchers("/flights/**/edit").hasAuthority("airline")
+		.antMatchers("/flights/**/delete").hasAuthority("airline")
+		
+		.antMatchers("/planes/").hasAuthority("airline")
+		.antMatchers("/planes/**/").hasAuthority("airline")
+		
 		.antMatchers("/admin/**").hasAnyAuthority("admin")
 		.antMatchers("/owners/**").hasAnyAuthority("owner", "admin")
 		.antMatchers("/vets/**").authenticated().anyRequest().denyAll().and().formLogin()

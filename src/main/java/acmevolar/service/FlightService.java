@@ -17,6 +17,7 @@
 package acmevolar.service;
 
 import java.util.Collection;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -25,6 +26,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import acmevolar.model.Airline;
 import acmevolar.model.Flight;
+import acmevolar.model.FlightStatusType;
 import acmevolar.repository.FlightRepository;
 import acmevolar.repository.springdatajpa.SpringDataAirlineRepository;
 import acmevolar.repository.springdatajpa.SpringDataFlightRepository;
@@ -44,12 +46,11 @@ public class FlightService {
 		this.springDataAirlineRepository = springDataAirlineRepository;
 	}
 
-	/*
-	 * @Transactional(readOnly = true)
-	 * public List<FlightStatusType> findPetTypes() throws DataAccessException {
-	 * return flightRepository.findFlightStatusTypes();
-	 * }
-	 */
+	@Transactional(readOnly = true)
+	public List<FlightStatusType> findFlightStatusTypes() throws DataAccessException {
+		return this.flightRepository.findFlightStatusTypes();
+	}
+
 	@Transactional(readOnly = true)
 	public Flight findFlightById(final int id) throws DataAccessException {
 		return this.flightRepository.findById(id);
@@ -74,9 +75,9 @@ public class FlightService {
 	public Collection<Flight> findPublishedFlight() {
 		return this.springDataFlightRepository.findPublishedFlight();
 	}
-	
+
 	@Transactional(readOnly = true)
-	public Collection<Flight> findAirlineFlight(String username) {
+	public Collection<Flight> findAirlineFlight(final String username) {
 		return this.springDataFlightRepository.findAirlineFlight(username);
 	}
 

@@ -20,6 +20,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
@@ -37,19 +39,28 @@ import org.springframework.web.servlet.ModelAndView;
 import acmevolar.model.Airline;
 import acmevolar.model.Flight;
 import acmevolar.model.FlightStatusType;
+import acmevolar.model.Plane;
+import acmevolar.model.Runway;
+import acmevolar.model.RunwayType;
 import acmevolar.service.FlightService;
+import acmevolar.service.PlaneService;
+import acmevolar.service.RunwayService;
 
 @Controller
 public class FlightController {
 
 	private final FlightService	flightService;
+	private final PlaneService planeService;
+	private final RunwayService runwayService;
 
 	private static final String	VIEWS_FLIGHT_CREATE_FORM	= "flights/createFlightForm";
 
 
 	@Autowired
-	public FlightController(final FlightService flightService) {
+	public FlightController(final FlightService flightService, final PlaneService planeService, final RunwayService runwayService) {
 		this.flightService = flightService;
+		this.planeService = planeService;
+		this.runwayService = runwayService;
 	}
 
 	@GetMapping(value = {
@@ -66,6 +77,23 @@ public class FlightController {
 	@GetMapping(value = "/flights/new")
 	public String initCreationForm(final Map<String, Object> model) {
 		Flight flight = new Flight();
+		
+		String username = SecurityContextHolder.getContext().getAuthentication().getName();
+		Airline airline = this.flightService.findAirlineByUsername(username);
+		
+		List<Plane> planes = this.planeService.findPlanes().stream()
+				.filter(x->x.getAirline().equals(airline))
+				.collect(Collectors.toList());
+		
+		List<Runway> runways = this.runwayService.findAllRunway();
+		
+		List<Runway> departuresList = runways.stream()
+				.filter(x->x.getType().equals(RunwayType.LANDING))
+				.collect(Collectors.toList());
+		
+		List<Runway> landsList = runways.stream()
+				.filter(x->x.getType().equals(RunwayType.TAKE_OFF))
+				.collect(Collectors.toList());
 
 		List<String> estados = new ArrayList<String>();
 		estados.add("cancelled");
@@ -74,6 +102,9 @@ public class FlightController {
 
 		//List<String> estados = this.flightService.findFlightStatusTypes().stream().map(s -> s.getName()).collect(Collectors.toList());
 
+		model.put("planes",planes);
+		model.put("departuresList", departuresList);
+		model.put("landsList", landsList);
 		model.put("estados", estados);
 		model.put("flight", flight);
 
@@ -136,6 +167,7 @@ public class FlightController {
 	//@Secured("hasRole('airline')")
 	@PostMapping(value = "/flights/{flightId}/edit")
 	public String processUpdateForm(@Valid final Flight flight, final BindingResult result, @PathVariable("flightId") final int flightId, final ModelMap model) {
+		
 		if (result.hasErrors()) {
 			model.put("flight", flight);
 			return FlightController.VIEWS_FLIGHT_CREATE_FORM;

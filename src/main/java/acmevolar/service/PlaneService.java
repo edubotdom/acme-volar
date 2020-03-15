@@ -24,7 +24,7 @@ public class PlaneService {
 		return planeRepository.findById(id);
 	}
 	
-	@Transactional()
+	@Transactional
 	public void savePlane(Plane plane) throws DataAccessException {
 		planeRepository.save(plane);                
 	}

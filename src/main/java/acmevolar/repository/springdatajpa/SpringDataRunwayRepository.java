@@ -42,9 +42,5 @@ public interface SpringDataRunwayRepository extends RunwayRepository, Repository
 	@Override
 	@Query("SELECT r FROM Runway r where r.id=:runwayId")
 	Runway findById(int runwayId) throws DataAccessException;
-	
-	@Override
-	@Query("SELECT a FROM Airport a")
-	Collection<Runway> findAll() throws DataAccessException;
 
 }

@@ -21,6 +21,7 @@
         Register a Plane!
     </h2>
     <form:form modelAttribute="plane" class="form-horizontal" id="add-plane-form">
+    	<input type="hidden" name="id" value="${plane.id}"/>
         <div class="form-group has-feedback">
             <petclinic:inputField label="Reference" name="reference" />
             <petclinic:inputField label="Max seats" name="maxSeats" />

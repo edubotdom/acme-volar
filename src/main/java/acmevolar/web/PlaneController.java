@@ -76,10 +76,7 @@ public class PlaneController {
 		
 		// first, we get the airline role
 		String username = SecurityContextHolder.getContext().getAuthentication().getName();
-		Airline airline = airlineService.findAirlines().stream()
-				.filter(x->x.getUser().getUsername().equals(username))
-				.findFirst()
-				.get();
+		Airline airline = this.flightService.findAirlineByUsername(username);
 		
 		// now, we substract the planes created by the same airline
 		Collection<Plane> planes = new ArrayList<Plane>();
@@ -116,19 +113,26 @@ public class PlaneController {
 
 	@PostMapping(value = "/planes/new")
 	public String processCreationForm(@Valid final Plane plane, final BindingResult result) {
+
+		
 		if (result.hasErrors()) {
 			return PlaneController.VIEWS_PLANES_CREATE_OR_UPDATE_FORM;
 		} else {
 			
-			//String username = SecurityContextHolder.getContext().getAuthentication().getName();
-			//Airline airline = this.flightService.findAirlineByUsername(username);
+			String username = SecurityContextHolder.getContext().getAuthentication().getName();
+			Airline airline = this.flightService.findAirlineByUsername(username);
 			
+			/* OTRA FORMA */
+			/*
 			String username = SecurityContextHolder.getContext().getAuthentication().getName();
 			Airline airline = airlineService.findAirlines().stream()
 					.filter(x->x.getUser().getUsername().equals(username))
 					.findFirst()
 					.get();
+			*/
+			
 			plane.setAirline(airline);
+			
 			this.planeService.savePlane(plane);
 
 			return "redirect:/planes/" + plane.getId();

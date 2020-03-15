@@ -3,10 +3,7 @@ package acmevolar.web;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
-
 import javax.validation.Valid;
 
 import org.springframework.beans.BeanUtils;
@@ -24,27 +21,21 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import acmevolar.model.Airline;
-import acmevolar.model.Airport;
-import acmevolar.model.Flight;
 import acmevolar.model.Plane;
-import acmevolar.service.AirlineService;
 import acmevolar.service.FlightService;
 import acmevolar.service.PlaneService;
-import acmevolar.service.exceptions.DuplicatedPetNameException;
 
 @Controller
 public class PlaneController {
 
 	private final PlaneService planeService;
-	private final AirlineService airlineService;
 	private final FlightService flightService;
 	
 	private static final String VIEWS_PLANES_CREATE_OR_UPDATE_FORM = "planes/createPlaneForm";
 
 	@Autowired
-	public PlaneController(final PlaneService planeService, final AirlineService airlineService, final FlightService flightService) {
+	public PlaneController(final PlaneService planeService, final FlightService flightService) {
 		this.planeService = planeService;
-		this.airlineService = airlineService;
 		this.flightService = flightService;
 	}
 
@@ -98,14 +89,6 @@ public class PlaneController {
 	@GetMapping(value = "/planes/new")
 	public String initCreationForm(final Map<String, Object> model) {
 		Plane plane = new Plane();
-		
-		/*
-		String username = SecurityContextHolder.getContext().getAuthentication().getName();
-		Airline airline = airlineService.findAirlines().stream()
-				.filter(x->x.getUser().getUsername().equals(username))
-				.findFirst()
-				.get();
-		*/
 		
 		String username = SecurityContextHolder.getContext().getAuthentication().getName();
 		Airline airline = this.flightService.findAirlineByUsername(username);

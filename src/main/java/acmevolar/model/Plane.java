@@ -66,7 +66,6 @@ public class Plane extends BaseEntity {
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date	lastMaintenance;
 	
-	//@NotNull
 	@ManyToOne
 	@JoinColumn(name = "airline_id")
 	private Airline	airline;

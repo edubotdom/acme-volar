@@ -17,6 +17,7 @@
 package acmevolar.service;
 
 import java.util.Collection;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -44,7 +45,7 @@ private RunwayRepository runwayRepository;
 	}
 	
 	@Transactional(readOnly = true)
-	public Collection<Runway> findAllRunway() throws DataAccessException {
+	public List<Runway> findAllRunway() throws DataAccessException {
 		return runwayRepository.findAll();
 	}
 	

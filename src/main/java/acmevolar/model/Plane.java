@@ -71,75 +71,85 @@ public class Plane extends BaseEntity {
 	@JoinColumn(name = "airline_id")
 	private Airline	airline;
 
-
 	public String getReference() {
-		return this.reference;
+		return reference;
 	}
 
-	public void setReference(final String reference) {
+	public void setReference(String reference) {
 		this.reference = reference;
 	}
 
 	public Integer getMaxSeats() {
-		return this.maxSeats;
+		return maxSeats;
 	}
 
-	public void setMaxSeats(final Integer maxSeats) {
+	public void setMaxSeats(Integer maxSeats) {
 		this.maxSeats = maxSeats;
 	}
 
 	public String getDescription() {
-		return this.description;
+		return description;
 	}
 
-	public void setDescription(final String description) {
+	public void setDescription(String description) {
 		this.description = description;
 	}
 
 	public String getManufacter() {
-		return this.manufacter;
+		return manufacter;
 	}
 
-	public void setManufacter(final String manufacter) {
+	public void setManufacter(String manufacter) {
 		this.manufacter = manufacter;
 	}
 
 	public String getModel() {
-		return this.model;
+		return model;
 	}
 
-	public void setModel(final String model) {
+	public void setModel(String model) {
 		this.model = model;
 	}
 
 	public Double getNumberOfKm() {
-		return this.numberOfKm;
+		return numberOfKm;
 	}
 
-	public void setNumberOfKm(final Double numberOfKm) {
+	public void setNumberOfKm(Double numberOfKm) {
 		this.numberOfKm = numberOfKm;
 	}
 
 	public Double getMaxDistance() {
-		return this.maxDistance;
+		return maxDistance;
 	}
 
-	public void setMaxDistance(final Double maxDistance) {
+	public void setMaxDistance(Double maxDistance) {
 		this.maxDistance = maxDistance;
 	}
 
 	public Date getLastMaintenance() {
-		return this.lastMaintenance;
+		return lastMaintenance;
 	}
 
-	public void setLastMaintenance(final Date lastMaintenance) {
+	public void setLastMaintenance(Date lastMaintenance) {
 		this.lastMaintenance = lastMaintenance;
+	}
+
+	public Airline getAirline() {
+		return airline;
+	}
+
+	public void setAirline(Airline airline) {
+		this.airline = airline;
 	}
 
 	@Override
 	public String toString() {
-		return "Plane [reference=" + this.reference + ", maxSeats=" + this.maxSeats + ", description=" + this.description + ", manufacter=" + this.manufacter + ", model=" + this.model + ", numberOfKm=" + this.numberOfKm + ", maxDistance="
-			+ this.maxDistance + ", lastMaintenance=" + this.lastMaintenance + "]";
+		return "Plane [reference=" + reference + ", maxSeats=" + maxSeats + ", description=" + description
+				+ ", manufacter=" + manufacter + ", model=" + model + ", numberOfKm=" + numberOfKm + ", maxDistance="
+				+ maxDistance + ", lastMaintenance=" + lastMaintenance + ", airline=" + airline + "]";
 	}
+
+	
 
 }

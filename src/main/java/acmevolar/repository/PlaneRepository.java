@@ -14,7 +14,6 @@ public interface PlaneRepository {
 	Collection<Plane> findAll() throws DataAccessException;
 
 	void deleteById(int id);
-	
-	//void deleteById(int id) throws DataAccessException;
+
 
 }

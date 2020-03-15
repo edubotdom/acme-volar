@@ -55,5 +55,9 @@
         </c:forEach>
         </tbody>
     </table>
+    
+    <form method="get" action="/planes/new">
+    	<button class="btn btn-default" type="submit">Create</button>
+	</form>
 
 </petclinic:layout>

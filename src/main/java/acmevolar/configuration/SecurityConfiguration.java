@@ -59,8 +59,13 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 		.antMatchers("/flights/**/edit").hasAuthority("airline")
 		.antMatchers("/flights/**/delete").hasAuthority("airline")
 		
-		.antMatchers("/planes").hasAuthority("airline")
+		.antMatchers("/planes").permitAll()
+		.antMatchers("/my_planes").hasAuthority("airline")
+      
 		.antMatchers("/planes/**/").hasAuthority("airline")
+		.antMatchers("/planes/new").hasAuthority("airline")
+		.antMatchers("/planes/**/edit").hasAuthority("airline")
+		.antMatchers("/planes/**/delete").hasAuthority("airline")
 		
 		.antMatchers("/admin/**").hasAnyAuthority("admin")
 		.antMatchers("/owners/**").hasAnyAuthority("owner", "admin")

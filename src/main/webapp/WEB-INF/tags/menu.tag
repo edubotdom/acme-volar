@@ -19,11 +19,6 @@
 		<div class="navbar-collapse collapse" id="main-navbar">
 			<ul class="nav navbar-nav">
 
-				<petclinic:menuItem active="${name eq 'home'}" url="/" title="home page">
-					<span class="glyphicon glyphicon-home" aria-hidden="true"></span>
-					<span>Home</span>
-				</petclinic:menuItem>
-
 				<sec:authorize access="hasAuthority('airline')">
 					<petclinic:menuItem active="${name eq 'clients'}" url="/clients" title="List clients">
 						<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
@@ -45,17 +40,17 @@
 					</petclinic:menuItem>
 				</sec:authorize>
 				
-				<sec:authorize access="hasAnyAuthority('client','airline')">
-				<petclinic:menuItem active="${name eq 'flights'}" url="/flights" title="List flights">
+				<petclinic:menuItem active="${name eq 'flights'}" url="/flights/" title="List flights">
 					<span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
 					<span>Flights</span>
 				</petclinic:menuItem>
-				</sec:authorize>
+				
+				<petclinic:menuItem active="${name eq 'planes'}" url="/my_planes" title="List flights">
+					<span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
+					<span>Planes</span>
 
-				<petclinic:menuItem active="${name eq 'error'}" url="/oups" title="trigger a RuntimeException to see how it is handled">
-					<span class="glyphicon glyphicon-warning-sign" aria-hidden="true"></span>
-					<span>Error</span>
 				</petclinic:menuItem>
+
 
 			</ul>
 
@@ -66,7 +61,7 @@
 				</sec:authorize>
 				<sec:authorize access="isAuthenticated()">
 					<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown"> <span
-							class="glyphicon glyphicon-user"></span>  <strong><sec:authentication property="name" /></strong> <span
+							class="glyphicon glyphicon-user"></span>� <strong><sec:authentication property="name" /></strong> <span
 							class="glyphicon glyphicon-chevron-down"></span>
 					</a>
 						<ul class="dropdown-menu">

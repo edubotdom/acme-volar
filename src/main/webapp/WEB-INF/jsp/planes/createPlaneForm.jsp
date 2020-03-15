@@ -11,7 +11,7 @@
 	<jsp:attribute name="customScript">
         <script>
             $(function () {
-                $("#lastMaintenance").datepicker({dateFormat: 'yyyy-mm-dd'});
+                $("#lastMaintenance").datepicker({dateFormat: 'yy-mm-dd'});
             });
         </script>
     </jsp:attribute>

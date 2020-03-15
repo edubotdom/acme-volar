@@ -40,12 +40,12 @@
 					</petclinic:menuItem>
 				</sec:authorize>
 				
-				<petclinic:menuItem active="${name eq 'flights'}" url="/flights/" title="List flights">
+				<petclinic:menuItem active="${name eq 'flights'}" url="/flights" title="List flights">
 					<span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
 					<span>Flights</span>
 				</petclinic:menuItem>
 				
-				<petclinic:menuItem active="${name eq 'planes'}" url="/my_planes" title="List flights">
+				<petclinic:menuItem active="${name eq 'planes'}" url="/planes" title="List planes">
 					<span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
 					<span>Planes</span>
 

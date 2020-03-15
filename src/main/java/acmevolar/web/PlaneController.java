@@ -47,22 +47,6 @@ public class PlaneController {
 		this.airlineService = airlineService;
 		this.flightService = flightService;
 	}
-	
-	public List<Flight> getAllFlightsFromPlane(Plane plane) {
-		List<Flight> res = flightService.findFlights().stream()
-				.filter(x->x.getPlane().getId().equals(plane.getId()))
-				.collect(Collectors.toList());
-		return res;
-	}
-	
-	public List<Plane> getAllPlanesFromAirline(Airline airline){
-		List<Plane> res = planeService.findPlanes().stream()
-				.filter(x->x.getAirline().equals(airline))
-				.collect(Collectors.toList());
-		return res;
-	}
-	
-	
 
 	@GetMapping(value = {
 		"/planes"
@@ -85,7 +69,7 @@ public class PlaneController {
 		
 		// now, we substract the planes created by the same airline
 		Collection<Plane> planes = new ArrayList<Plane>();
-		planes.addAll(getAllPlanesFromAirline(airline));
+		planes.addAll(this.planeService.getAllPlanesFromAirline(airline));
 		model.put("planes", planes);
 		return "planes/planesList";
 	}
@@ -115,11 +99,16 @@ public class PlaneController {
 	public String initCreationForm(final Map<String, Object> model) {
 		Plane plane = new Plane();
 		
+		/*
 		String username = SecurityContextHolder.getContext().getAuthentication().getName();
 		Airline airline = airlineService.findAirlines().stream()
 				.filter(x->x.getUser().getUsername().equals(username))
 				.findFirst()
 				.get();
+		*/
+		
+		String username = SecurityContextHolder.getContext().getAuthentication().getName();
+		Airline airline = this.flightService.findAirlineByUsername(username);
 		
 		airline.addPlane(plane);
 
@@ -135,16 +124,9 @@ public class PlaneController {
 		if (result.hasErrors()) {
 			return PlaneController.VIEWS_PLANES_CREATE_OR_UPDATE_FORM;
 		} else {
-			/*
-			String username = SecurityContextHolder.getContext().getAuthentication().getName();
-			Airline airline = this.flightService.findAirlineByUsername(username);
-			*/
 			
 			String username = SecurityContextHolder.getContext().getAuthentication().getName();
-			Airline airline = airlineService.findAirlines().stream()
-					.filter(x->x.getUser().getUsername().equals(username))
-					.findFirst()
-					.get();
+			Airline airline = this.flightService.findAirlineByUsername(username);
 			
 			try {
 				airline.addPlane(plane);

@@ -103,7 +103,7 @@ public class FlightController {
 		Collection<Flight> flights = new ArrayList<Flight>();
 		flights.addAll(this.flightService.findAirlineFlight(username));
 		model.put("flights", flights);
-		return "flights/flightList";
+		return "flights/myFlightList";
 	}
 
 	@GetMapping("/flights/{flightId}")

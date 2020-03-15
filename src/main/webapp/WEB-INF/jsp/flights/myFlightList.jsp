@@ -7,7 +7,7 @@
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags"%>
 
 <petclinic:layout pageName="flights">
-	<h2>Flights</h2>
+	<h2>My Flights</h2>
 
 	<table id="flightsTable" class="table table-striped">
 		<thead>
@@ -35,11 +35,7 @@
 	</table>
 
 	<sec:authorize access="hasAuthority('airline')">
-			<button class="btn btn-default" onclick="window.location.href='/flights/new'">New</button>
-		</sec:authorize>
-
-	<sec:authorize access="hasAuthority('airline')">
-			<button class="btn btn-default" onclick="window.location.href='/flights/my_flights'">My Flights</button>
-		</sec:authorize>
+		<button class="btn btn-default" onclick="window.location.href='/flights/new'">New</button>
+	</sec:authorize>
 
 </petclinic:layout>

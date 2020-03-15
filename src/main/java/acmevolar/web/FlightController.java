@@ -20,7 +20,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-
 import javax.validation.Valid;
 
 import org.springframework.beans.BeanUtils;
@@ -47,7 +46,6 @@ import acmevolar.service.FlightService;
 public class FlightController {
 
 	private final FlightService	flightService;
-
 	private static final String	VIEWS_FLIGHT_CREATE_FORM	= "flights/createFlightForm";
 
 
@@ -135,33 +133,17 @@ public class FlightController {
 	//@Secured("hasRole('airline')")
 	@GetMapping(value = "/flights/{flightId}/edit")
 	public String initUpdateForm(@PathVariable("flightId") final int flightId, final ModelMap model) {
-		Flight flight = new Flight();
+		Flight flight = this.flightService.findFlightById(flightId);
 		
 		String username = SecurityContextHolder.getContext().getAuthentication().getName();
-		Airline airline = this.flightService.findAirlineByUsername(username);
-		
-		airline.addFlight(flight);
-		
-		List<Plane> planes = this.planeService.findPlanes().stream()
-				.filter(x->x.getAirline().equals(airline))
-				.collect(Collectors.toList());
-		
-		List<Runway> runways = this.runwayService.findAllRunway();
-		
-		List<Runway> departuresList = runways.stream()
-				.filter(x->x.getType().equals(RunwayType.LANDING))
-				.collect(Collectors.toList());
-		
-		List<Runway> landsList = runways.stream()
-				.filter(x->x.getType().equals(RunwayType.TAKE_OFF))
-				.collect(Collectors.toList());
 
-		List<String> estados = new ArrayList<String>();
-		estados.add("cancelled");
-		estados.add("delayed");
-		estados.add("on_time");
+		List<Plane> planes = this.flightService.findPlanesbyAirline(username);
 
-		//List<String> estados = this.flightService.findFlightStatusTypes().stream().map(s -> s.getName()).collect(Collectors.toList());
+		List<Runway> departuresList = this.flightService.findDepartingRunways();
+
+		List<Runway> landsList = this.flightService.findLandingRunways();
+
+		List<FlightStatusType> estados = this.flightService.findFlightStatusTypes();
 
 		model.put("planes",planes);
 		model.put("departuresList", departuresList);

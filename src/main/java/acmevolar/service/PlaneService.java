@@ -20,14 +20,15 @@ import acmevolar.service.exceptions.DuplicatedPetNameException;
 @Service
 public class PlaneService {
 
-	
 	private PlaneRepository planeRepository;
+	private AirlineRepository airlineRepository;
 	private SpringDataPlaneRepository springPlaneRepository;
 	
 	@Autowired
-	public PlaneService(PlaneRepository planeRepository,SpringDataPlaneRepository springPlaneRepository) {
+	public PlaneService(PlaneRepository planeRepository,SpringDataPlaneRepository springPlaneRepository,AirlineRepository airlineRepository) {
 		this.planeRepository = planeRepository;
 		this.springPlaneRepository = springPlaneRepository;
+		this.airlineRepository = airlineRepository;
 	}
 
 	@Transactional(readOnly = true)

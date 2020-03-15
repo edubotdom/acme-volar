@@ -9,21 +9,28 @@ import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import acmevolar.model.Airline;
+import acmevolar.model.Airport;
 import acmevolar.model.Flight;
 import acmevolar.model.Plane;
 import acmevolar.service.AirlineService;
 import acmevolar.service.FlightService;
 import acmevolar.service.PlaneService;
+import acmevolar.service.exceptions.DuplicatedPetNameException;
 
 @Controller
 public class PlaneController {
@@ -49,10 +56,8 @@ public class PlaneController {
 	}
 	
 	public List<Plane> getAllPlanesFromAirline(Airline airline){
-		List<Plane> res = flightService.findFlights().stream()
-				.filter(x->x.getAirline().getId().equals(airline.getId()))
-				.map(x->x.getPlane())
-				.distinct()
+		List<Plane> res = planeService.findPlanes().stream()
+				.filter(x->x.getAirline().equals(airline))
 				.collect(Collectors.toList());
 		return res;
 	}
@@ -101,10 +106,22 @@ public class PlaneController {
 		return mav;
 	}
 	
+	@InitBinder("airline")
+	public void initAirlineBinder(WebDataBinder dataBinder) {
+		dataBinder.setDisallowedFields("id");
+	}
 	
 	@GetMapping(value = "/planes/new")
 	public String initCreationForm(final Map<String, Object> model) {
 		Plane plane = new Plane();
+		
+		String username = SecurityContextHolder.getContext().getAuthentication().getName();
+		Airline airline = airlineService.findAirlines().stream()
+				.filter(x->x.getUser().getUsername().equals(username))
+				.findFirst()
+				.get();
+		
+		airline.addPlane(plane);
 
 		model.put("plane", plane);
 
@@ -118,23 +135,53 @@ public class PlaneController {
 		if (result.hasErrors()) {
 			return PlaneController.VIEWS_PLANES_CREATE_OR_UPDATE_FORM;
 		} else {
-			
+			/*
 			String username = SecurityContextHolder.getContext().getAuthentication().getName();
 			Airline airline = this.flightService.findAirlineByUsername(username);
+			*/
 			
-			/* OTRA FORMA */
-			/*
 			String username = SecurityContextHolder.getContext().getAuthentication().getName();
 			Airline airline = airlineService.findAirlines().stream()
 					.filter(x->x.getUser().getUsername().equals(username))
 					.findFirst()
 					.get();
-			*/
 			
-			plane.setAirline(airline);
-			
-			this.planeService.savePlane(plane);
+			try {
+				airline.addPlane(plane);
+				this.planeService.savePlane(plane);
+			} catch (DataAccessException e) {
+				e.printStackTrace();
+			}
 
+			return "redirect:/planes/" + plane.getId();
+		}
+	}
+	
+	@GetMapping(value = "/planes/{planeId}/edit")
+	public String initUpdateForm(@PathVariable("planeId") final int planeId, final ModelMap model) {
+		Plane plane = this.planeService.findPlaneById(planeId);
+
+		model.put("plane", plane);
+
+		return PlaneController.VIEWS_PLANES_CREATE_OR_UPDATE_FORM;
+	}
+
+	@PostMapping(value = "/planes/{planeId}/edit")
+	public String processUpdateForm(@Valid final Plane plane, final BindingResult result, @PathVariable("planeId") final int planeId, final ModelMap model) {
+		if (result.hasErrors()) {
+			model.put("plane", plane);
+			return PlaneController.VIEWS_PLANES_CREATE_OR_UPDATE_FORM;
+		} else {
+			Plane planeToUpdate = this.planeService.findPlaneById(planeId);
+			BeanUtils.copyProperties(planeToUpdate, plane, "reference", "maxSeats", "description",
+					"manufacter", "model", "numberOfKm", "maxDistance", "lastMaintenance");
+
+			try {
+				this.planeService.savePlane(plane);;
+			} catch (DataAccessException e) {
+				e.printStackTrace();
+			}
+			
 			return "redirect:/planes/" + plane.getId();
 		}
 	}

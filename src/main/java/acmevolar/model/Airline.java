@@ -17,16 +17,25 @@
 package acmevolar.model;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotEmpty;
 
+import org.springframework.beans.support.MutableSortDefinition;
+import org.springframework.beans.support.PropertyComparator;
 import org.springframework.format.annotation.DateTimeFormat;
 
 /**
@@ -62,7 +71,33 @@ public class Airline extends NamedEntity {
 	@Column(name = "reference")
 	@NotEmpty
 	private String		reference;
+	
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "airline")
+	private Set<Plane> planes;
 
+	
+
+	public Set<Plane> getPlanesInternal() {
+		if(this.planes==null) {
+			this.planes = new HashSet<Plane>();
+		}
+		return this.planes;
+	}
+
+	public void setPlanesinternal(Set<Plane> planes) {
+		this.planes = planes;
+	}
+	
+	public List<Plane> getPlanes() {
+		List<Plane> sortedPlanes = new ArrayList<>(getPlanesInternal());
+		PropertyComparator.sort(sortedPlanes, new MutableSortDefinition("name", true, true));
+		return Collections.unmodifiableList(sortedPlanes);
+	}
+	
+	public void addPlane(Plane plane) {
+		getPlanesInternal().add(plane);
+		plane.setAirline(this);
+	}
 
 	public String getIdentification() {
 		return this.identification;

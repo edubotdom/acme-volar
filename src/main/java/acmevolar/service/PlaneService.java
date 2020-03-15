@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import acmevolar.model.Plane;
 import acmevolar.repository.PlaneRepository;
+import acmevolar.service.exceptions.DuplicatedPetNameException;
 
 @Service
 public class PlaneService {
@@ -24,7 +25,7 @@ public class PlaneService {
 		return planeRepository.findById(id);
 	}
 	
-	@Transactional
+	@Transactional(rollbackFor = DuplicatedPetNameException.class)
 	public void savePlane(Plane plane) throws DataAccessException {
 		planeRepository.save(plane);                
 	}
@@ -35,13 +36,6 @@ public class PlaneService {
 	
 	public void deletePlane(Plane plane) throws DataAccessException {
 		planeRepository.deleteById(plane.getId());
-	}
-	
-	public void updatePlane(Plane plane) throws DataAccessException {
-		Integer id = plane.getId();				// extract id of a plane
-		Plane plane2 = findPlaneById(id);		// we know the original plane with that id
-		deletePlane(plane2);					// we delete the original
-		planeRepository.save(plane);			// we replace with the updated version
 	}
 	
 	@Transactional(readOnly = true)	

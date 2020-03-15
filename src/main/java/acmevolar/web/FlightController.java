@@ -126,7 +126,7 @@ public class FlightController {
 	}
 
 	@GetMapping(value = {
-		"/flights/my_flights"
+		"/my_flights"
 	})
 	public String showAirlineFlightList(final Map<String, Object> model) {
 
@@ -134,7 +134,7 @@ public class FlightController {
 		Collection<Flight> flights = new ArrayList<Flight>();
 		flights.addAll(this.flightService.findAirlineFlight(username));
 		model.put("flights", flights);
-		return "flights/myFlightList";
+		return "flights/flightList";
 	}
 
 	@GetMapping("/flights/{flightId}")

@@ -51,6 +51,7 @@ public class Flight extends BaseEntity {
 	@JoinColumn(name = "flight_status_id")
 	private FlightStatusType	flightStatus;
 
+	//@NotNull
 	@ManyToOne
 	@JoinColumn(name = "plane_id")
 	private Plane				plane;
@@ -59,17 +60,17 @@ public class Flight extends BaseEntity {
 	@Column(name = "published")
 	private Boolean				published;
 
-	@NotNull
+	//@NotNull
 	@ManyToOne
 	@JoinColumn(name = "departes_id")
 	private Runway				departes;
 
-	@NotNull
+	//@NotNull
 	@ManyToOne
 	@JoinColumn(name = "lands_id")
 	private Runway				lands;
 
-	@NotNull
+	//@NotNull
 	@ManyToOne
 	@JoinColumn(name = "airline_id")
 	private Airline				airline;

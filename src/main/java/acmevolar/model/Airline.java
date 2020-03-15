@@ -74,8 +74,9 @@ public class Airline extends NamedEntity {
 	
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "airline")
 	private Set<Plane> planes;
-
 	
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "airline")
+	private Set<Flight> flights;
 
 	public Set<Plane> getPlanesInternal() {
 		if(this.planes==null) {
@@ -84,7 +85,7 @@ public class Airline extends NamedEntity {
 		return this.planes;
 	}
 
-	public void setPlanesinternal(Set<Plane> planes) {
+	public void setPlanesInternal(Set<Plane> planes) {
 		this.planes = planes;
 	}
 	
@@ -97,6 +98,28 @@ public class Airline extends NamedEntity {
 	public void addPlane(Plane plane) {
 		getPlanesInternal().add(plane);
 		plane.setAirline(this);
+	}
+	
+	public Set<Flight> getFlightsInternal() {
+		if(this.flights==null) {
+			this.flights = new HashSet<>();
+		}
+		return this.flights;
+	}
+
+	public void setFlightsInternal(Set<Flight> flights) {
+		this.flights = flights;
+	}
+	
+	public List<Flight> getFlights() {
+		List<Flight> sortedFlights = new ArrayList<>(getFlightsInternal());
+		PropertyComparator.sort(sortedFlights, new MutableSortDefinition("name", true, true));
+		return Collections.unmodifiableList(sortedFlights);
+	}
+	
+	public void addFlight(Flight flight) {
+		getFlightsInternal().add(flight);
+		flight.setAirline(this);
 	}
 
 	public String getIdentification() {

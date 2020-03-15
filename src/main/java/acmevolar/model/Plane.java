@@ -16,17 +16,26 @@
 
 package acmevolar.model;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Past;
 
+import org.springframework.beans.support.MutableSortDefinition;
+import org.springframework.beans.support.PropertyComparator;
 import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
@@ -66,12 +75,38 @@ public class Plane extends BaseEntity {
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date	lastMaintenance;
 	
+	
 	@ManyToOne
 	@JoinColumn(name = "airline_id")
 	private Airline	airline;
 
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "plane")
+	private Set<Flight> flights;
+	
 	public String getReference() {
 		return reference;
+	}
+	
+	public Set<Flight> getFlightsInternal() {
+		if (this.flights == null) {
+			this.flights = new HashSet<>();
+		}
+		return this.flights;
+	}
+	
+	public void setFlightsInternal(Set<Flight> flights) {
+		this.flights=flights;
+	}
+	
+	public List<Flight> getFlights() {
+		List<Flight> sortedFlights = new ArrayList<>(getFlightsInternal());
+		PropertyComparator.sort(sortedFlights, new MutableSortDefinition("name", true, true));
+		return Collections.unmodifiableList(sortedFlights);
+	}
+	
+	public void addFlight(Flight flight) {
+		getFlightsInternal().add(flight);
+		flight.setPlane(this);
 	}
 
 	public void setReference(String reference) {

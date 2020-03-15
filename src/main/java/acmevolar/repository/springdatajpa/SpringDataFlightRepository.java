@@ -36,7 +36,7 @@ import acmevolar.repository.FlightRepository;
 public interface SpringDataFlightRepository extends FlightRepository, Repository<Flight, Integer> {
 
 	@Override
-	@Query("SELECT fstype.name FROM FlightStatusType fstype ORDER BY fstype.name")
+	@Query("SELECT fstype FROM FlightStatusType fstype ORDER BY fstype.name")
 	List<FlightStatusType> findFlightStatusTypes() throws DataAccessException;
 
 	@Override

@@ -76,7 +76,8 @@ public class ClientController {
 			//creating owner, user and authorities
 			this.clientService.saveClient(client);
 
-			return "redirect:/clients/" + client.getId();
+			//return "redirect:/clients/" + client.getId();
+			return "redirect:/";
 		}
 	}
 

@@ -39,26 +39,27 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 		.antMatchers(HttpMethod.GET, "/", "/oups").permitAll()
 		.antMatchers("/users/new").permitAll()
 		
-		.antMatchers("/clients/").hasAuthority("airline")
-		.antMatchers("/clients/**/").hasAuthority("airline")
+		.antMatchers("/clients").hasAuthority("airline")
+		.antMatchers("/clients/new").anonymous()
+		.antMatchers("/clients/**/").hasAnyAuthority("airline")
 		
-		.antMatchers("/airlines/").permitAll()
-		.antMatchers("/airlines/**/").permitAll()
+		.antMatchers("/airlines").hasAnyAuthority("client","airline")
+		.antMatchers("/airlines/**/").hasAnyAuthority("client","airline")
 		.antMatchers("/airlines/new/").hasAuthority("airline")
 		
-		.antMatchers("/airports/").permitAll()
-		.antMatchers("/airports/**/").permitAll()
+		.antMatchers("/airports").hasAnyAuthority("client","airline")
+		.antMatchers("/airports/**/").hasAnyAuthority("client","airline")
 		.antMatchers("/airports/new").hasAuthority("airline")
 		.antMatchers("/airports/**/edit").hasAuthority("airline")
 		.antMatchers("/airports/**/delete").hasAuthority("airline")
 		
-		.antMatchers("/flights/").permitAll()
-		.antMatchers("/flights/**/").permitAll()
+		.antMatchers("/flights").hasAnyAuthority("client","airline")
+		.antMatchers("/flights/**/").hasAnyAuthority("client","airline")
 		.antMatchers("/flights/new").hasAuthority("airline")
 		.antMatchers("/flights/**/edit").hasAuthority("airline")
 		.antMatchers("/flights/**/delete").hasAuthority("airline")
 		
-		.antMatchers("/planes/").hasAuthority("airline")
+		.antMatchers("/planes").hasAuthority("airline")
 		.antMatchers("/planes/**/").hasAuthority("airline")
 		
 		.antMatchers("/admin/**").hasAnyAuthority("admin")

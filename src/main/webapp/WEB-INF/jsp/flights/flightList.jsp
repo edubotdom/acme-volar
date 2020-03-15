@@ -13,10 +13,13 @@
 		<thead>
 			<tr>
 				<th>Reference</th>
-				<th>Seats</th>
+				<th>Airline</th>
+				<th>Departure City</th>
+				<th>Departure Hour</th>
+				<th>Arrival City</th>
+				<th>Arrival Hour</th>
+				<th>Plane</th>
 				<th>Price</th>
-				<th>Flight Status</th>
-				<th>Published</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -25,10 +28,28 @@
 					<td><spring:url value="/flights/{flightId}" var="flightUrl">
 							<spring:param name="flightId" value="${flight.id}" />
 						</spring:url> <a href="${fn:escapeXml(flightUrl)}"><c:out value="${flight.reference}" /></a></td>
-					<td><c:out value="${flight.seats}" /></td>
+						
+					<td><spring:url value="/airlines/{airlineId}" var="airlineUrl">
+							<spring:param name="airlineId" value="${flight.airline.id}" />
+						</spring:url> <a href="${fn:escapeXml(airlineUrl)}"><c:out value="${flight.airline.name}" /></a></td>
+						
+					<td><spring:url value="/runway/{departesId}" var="departesUrl">
+							<spring:param name="departesId" value="${flight.departes.id}" />
+						</spring:url> <a href="${fn:escapeXml(departesUrl)}"><c:out value="${flight.departes.airport.city}" /></a></td>
+					
+					<td><c:out value="${flight.departDate}" /></td>
+						
+					<td><spring:url value="/runway/{landsId}" var="landsUrl">
+							<spring:param name="landsId" value="${flight.lands.id}" />
+						</spring:url> <a href="${fn:escapeXml(landsUrl)}"><c:out value="${flight.lands.airport.city}" /></a></td>
+						
+					<td><c:out value="${flight.landDate}" /></td>
+					
+					<td><spring:url value="/planes/{planeId}" var="planeUrl">
+							<spring:param name="planeId" value="${flight.plane.id}" />
+						</spring:url> <a href="${fn:escapeXml(planeUrl)}"><c:out value="${flight.plane.model}" /></a></td>
+					
 					<td><c:out value="${flight.price}" /></td>
-					<td><c:out value="${flight.flightStatus}" /></td>
-					<td><c:out value="${flight.published}" /></td>
 				</tr>
 			</c:forEach>
 		</tbody>
@@ -36,10 +57,6 @@
 
 	<sec:authorize access="hasAuthority('airline')">
 			<button class="btn btn-default" onclick="window.location.href='/flights/new'">New</button>
-		</sec:authorize>
-
-	<sec:authorize access="hasAuthority('airline')">
-			<button class="btn btn-default" onclick="window.location.href='/flights/my_flights'">My Flights</button>
-		</sec:authorize>
+	</sec:authorize>
 
 </petclinic:layout>

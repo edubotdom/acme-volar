@@ -36,19 +36,30 @@
             <petclinic:inputField label="Seats" name="seats" />
             <petclinic:inputField label="Price" name="price" />
             <petclinic:inputField label="Published" name="published" />
-            <petclinic:selectField label="Status" name="flightStatus" size="3" names="${estados}" />
-			<petclinic:selectField label="Plane" name="plane" size="5" names="${planes}" />
-			<!--<form:select path="plane" items="${planes}" size="5" itemLabel="reference" itemValue="id" />-->
-			<petclinic:selectField label="Lands" name="lands" size="5" names="${landsList}" />
+            <div class="control-group">
+            	<petclinic:selectField label="Status" name="flightStatus" names="${estados}" size="3"/>
+            </div>
+            
+    		<!--
+    		FORMA ALTERNATIVA: no usa CSS pero es un desplegable, no usado por petclinic
+    		
+    		<form:select path="flightStatus" items="${estados}" name="flightStatus"/>
+    		-->
+			
+            <!--<petclinic:selectField label="Status" name="flightStatus" size="3" names="${estados}"/>-->
+			<petclinic:selectField label="Plane" name="plane" size="5" names="${planes}"/>
+			<petclinic:selectField label="Lands" name="lands"  size="5" names="${landsList}"/>
+
 			<petclinic:inputField label="Land Date" name="landDate" />
 			<petclinic:selectField label="Departes" name="departes" size="5" names="${departuresList}" />
 			<petclinic:inputField label="Depart Date" name="departDate" />
 			<!--2020-06-06 14:05-->
             
-            <input type="hidden" name="id" value="${estados}" />
-            <input type="hidden" name="id" value="${planes}" />
-            <input type="hidden" name="name" value="${departuresList}" />
-            <input type="hidden" name="name" value="${landsList}" />
+            <!-- <input type="hidden" name="id" value="${estados}"/> -->
+            <input type="hidden" name="id" value="${planes}"/>
+            <input type="hidden" name="name" value="${departuresList}"/>
+            <input type="hidden" name="name" value="${landsList}"/>
+
         </div>
         <div class="form-group">
             <div class="col-sm-offset-2 col-sm-10">

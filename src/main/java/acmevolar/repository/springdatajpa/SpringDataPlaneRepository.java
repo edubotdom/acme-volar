@@ -12,8 +12,11 @@ import acmevolar.model.Plane;
 import acmevolar.repository.PlaneRepository;
 
 public interface SpringDataPlaneRepository extends PlaneRepository, Repository<Plane, Integer> {
-
-	@Override
+	
+	@Query("SELECT p FROM Plane p WHERE p.airline.id =:id")
+	List<Plane> findPlanesByAirlineId(int id) throws DataAccessException;
+	
 	@Query("SELECT plane FROM Plane plane WHERE plane.airline.user.username =:airline ")
 	List<Plane> findPlanesbyAirline(@Param("airline") String airline) throws DataAccessException;
+
 }

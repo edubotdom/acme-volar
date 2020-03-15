@@ -5,18 +5,20 @@ import java.util.Collection;
 import java.util.List;
 
 import org.springframework.dao.DataAccessException;
+import org.springframework.data.repository.CrudRepository;
 
 import acmevolar.model.Plane;
 
-public interface PlaneRepository {
 
+public interface PlaneRepository extends CrudRepository<Plane, Integer> {
+	
 	Plane findById(int id) throws DataAccessException;
-
-	void save(Plane plane) throws DataAccessException;
-
+	
 	Collection<Plane> findAll() throws DataAccessException;
 
 	void deleteById(int id);
+	
+	List<Plane> findPlanesByAirlineId(int id) throws DataAccessException;
 
 	List<Plane> findPlanesbyAirline(String airline) throws DataAccessException;
 

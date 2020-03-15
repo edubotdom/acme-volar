@@ -89,6 +89,7 @@ INSERT INTO airports(id, name, max_number_of_planes, max_number_of_clients, lati
 INSERT INTO aeroplanes(id, reference, max_seats, description, manufacter, model, number_of_km, max_distance, last_maintenance,airline_id) 
 	VALUES (1, 'V14-5', 150, 'This is a description', 'Boeing', 'B747', 500000.23, 2000000.0, '2011-04-17',1);
 
+
 INSERT INTO runaway(id,name,type,airport_id) VALUES (1,'A-01','TAKE_OFF',1);
 INSERT INTO runaway(id,name,type,airport_id) VALUES (2,'A-02','LANDING',2);
 INSERT INTO runaway(id,name,type,airport_id) VALUES (3,'A-03','TAKE_OFF',2);

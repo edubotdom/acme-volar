@@ -1,9 +1,9 @@
 
 package acmevolar.web;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
+
 import javax.validation.Valid;
 
 import org.springframework.beans.BeanUtils;
@@ -23,10 +23,12 @@ import org.springframework.web.servlet.ModelAndView;
 import acmevolar.model.Airline;
 import acmevolar.model.Plane;
 import acmevolar.service.FlightService;
+
 import acmevolar.service.PlaneService;
 
 @Controller
 public class PlaneController {
+
 
 	private final PlaneService planeService;
 	private final FlightService flightService;
@@ -43,49 +45,38 @@ public class PlaneController {
 		"/planes"
 	})
 	public String showPlaneList(final Map<String, Object> model) {
-		Collection<Plane> planes = new ArrayList<Plane>();
-		planes.addAll(this.planeService.findPlanes());
+		Collection<Plane> planes = this.planeService.findPlanes();
 		model.put("planes", planes);
 		return "planes/planesList";
 	}
-	
+
 	@GetMapping(value = {
 		"/my_planes"
 	})
 	public String showMyPlaneList(final Map<String, Object> model) {
-		
+
 		// first, we get the airline role
 		String username = SecurityContextHolder.getContext().getAuthentication().getName();
-		Airline airline = this.flightService.findAirlineByUsername(username);
-		
+
 		// now, we substract the planes created by the same airline
-		Collection<Plane> planes = new ArrayList<Plane>();
-		planes.addAll(this.planeService.getAllPlanesFromAirline(airline));
+		Collection<Plane> planes = this.planeService.getAllPlanesFromAirline(username);
+    
 		model.put("planes", planes);
 		return "planes/planesList";
 	}
-	
-	
 
-	/**
-	 * Custom handler for displaying an owner.
-	 *
-	 * @param flightId
-	 *            the ID of the owner to display
-	 * @return a ModelMap with the model attributes for the view
-	 */
 	@GetMapping("/planes/{planeId}")
 	public ModelAndView showPlane(@PathVariable("planeId") final int planeId) {
 		ModelAndView mav = new ModelAndView("planes/planeDetails");
 		mav.addObject(this.planeService.findPlaneById(planeId));
 		return mav;
 	}
-	
+
 	@InitBinder("airline")
 	public void initAirlineBinder(WebDataBinder dataBinder) {
 		dataBinder.setDisallowedFields("id");
 	}
-	
+
 	@GetMapping(value = "/planes/new")
 	public String initCreationForm(final Map<String, Object> model) {
 		Plane plane = new Plane();
@@ -103,12 +94,12 @@ public class PlaneController {
 	@PostMapping(value = "/planes/new")
 	public String processCreationForm(@Valid final Plane plane, final BindingResult result) {
 
-		
 		if (result.hasErrors()) {
 			return PlaneController.VIEWS_PLANES_CREATE_OR_UPDATE_FORM;
 		} else {
-			
+
 			String username = SecurityContextHolder.getContext().getAuthentication().getName();
+
 			Airline airline = this.flightService.findAirlineByUsername(username);
 			
 			try {
@@ -151,5 +142,6 @@ public class PlaneController {
 		}
 	}
 	
+
 
 }

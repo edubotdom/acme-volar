@@ -26,11 +26,15 @@ import acmevolar.model.Runway;
 public interface RunwayRepository {
 
 	Runway findById(int id) throws DataAccessException;
-	
+
 	void save(Runway runway) throws DataAccessException;
-	
+
 	List<Runway> findAll() throws DataAccessException;
 
 	Airport findAirportById(Integer airportId) throws DataAccessException;
+
+	List<Runway> findDepartingRunways() throws DataAccessException;
+
+	List<Runway> findLandingRunways() throws DataAccessException;
 
 }

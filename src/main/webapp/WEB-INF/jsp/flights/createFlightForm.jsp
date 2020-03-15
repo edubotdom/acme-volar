@@ -10,18 +10,20 @@
 
 	<jsp:attribute name="customScript">
         <script>
-            $(function () {
-                $("#landDate").datetimepicker({dateFormat: 'yyyy-mm-dd hh:ii'});
-            });
-        </script>
-    </jsp:attribute>
-    
-    <jsp:attribute name="customScript">
+									$(function() {
+										$("#landDate").datetimepicker({
+											format : 'yyyy-mm-dd hh:ii'
+										});
+									});
+								</script>
+        
         <script>
-            $(function () {
-                $("#departDate").datetimepicker({dateFormat: 'yy-mm-dd hh:ii'});
-            });
-        </script>
+									$(function() {
+										$("#departDate").datetimepicker({
+											format : 'yyyy-mm-dd hh:ii'
+										});
+									});
+								</script>
     </jsp:attribute>
 
 	<jsp:body>
@@ -47,14 +49,17 @@
             <!--<petclinic:selectField label="Status" name="flightStatus" size="3" names="${estados}"/>-->
 			<petclinic:selectField label="Plane" name="plane" size="5" names="${planes}"/>
 			<petclinic:selectField label="Lands" name="lands"  size="5" names="${landsList}"/>
+
 			<petclinic:inputField label="Land Date" name="landDate" />
-			<petclinic:selectField label="Departes" name="departes"  size="5" names="${departuresList}"/>
+			<petclinic:selectField label="Departes" name="departes" size="5" names="${departuresList}" />
 			<petclinic:inputField label="Depart Date" name="departDate" />
+			<!--2020-06-06 14:05-->
             
             <!-- <input type="hidden" name="id" value="${estados}"/> -->
             <input type="hidden" name="id" value="${planes}"/>
             <input type="hidden" name="name" value="${departuresList}"/>
             <input type="hidden" name="name" value="${landsList}"/>
+
         </div>
         <div class="form-group">
             <div class="col-sm-offset-2 col-sm-10">

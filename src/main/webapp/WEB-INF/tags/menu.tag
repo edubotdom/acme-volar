@@ -40,6 +40,7 @@
 					</petclinic:menuItem>
 				</sec:authorize>
 				
+
 				<sec:authorize access="!hasAuthority('airline')">
 					<petclinic:menuItem active="${name eq 'flights'}" url="/flights" title="List flights">
 						<span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>

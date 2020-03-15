@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package acmevolar.model;
 
 import java.util.ArrayList;
@@ -37,18 +38,18 @@ import org.springframework.beans.support.MutableSortDefinition;
 import org.springframework.beans.support.PropertyComparator;
 
 @Entity
-@Table(name = "runaway")
+@Table(name = "runway")
 public class Runway extends BaseEntity {
 
 	@NotEmpty
 	@Column(name = "name")
-	private String name;
+	private String		name;
 
 	@NotNull
-	@Enumerated(value=EnumType.STRING)
+	@Enumerated(value = EnumType.STRING)
 	@Column(name = "type")
-	private RunwayType type;
-	
+	private RunwayType	type;
+
 	@ManyToOne
 	@NotNull
 	@JoinColumn(name = "airport_id")
@@ -65,6 +66,7 @@ public class Runway extends BaseEntity {
 		}
 		return this.flightsDepartes;
 	}
+
 
 	protected void setFlightDepartesInternal(Set<Flight> flights) {
 		this.flightsDepartes = flights;
@@ -111,36 +113,32 @@ public class Runway extends BaseEntity {
 	// GETTERS & SETTERS
 	
 	public String getName() {
-		return name;
+		return this.name;
 	}
 
-	public void setName(String name) {
+	public void setName(final String name) {
 		this.name = name;
 	}
 
 	public RunwayType getType() {
-		return type;
+		return this.type;
 	}
 
-	public void setType(RunwayType type) {
+	public void setType(final RunwayType type) {
 		this.type = type;
 	}
 
 	public Airport getAirport() {
-		return airport;
+		return this.airport;
 	}
 
-	public void setAirport(Airport airport) {
+	public void setAirport(final Airport airport) {
 		this.airport = airport;
 	}
 
 	@Override
 	public String toString() {
-		return "Runway [name=" + name + ", type=" + type + ", airport=" + airport + "]";
+		return "Runway [name=" + this.name + ", type=" + this.type + ", airport=" + this.airport + "]";
 	}
 
-	
-	
-	
-	
 }

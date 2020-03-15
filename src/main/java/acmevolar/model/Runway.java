@@ -15,9 +15,6 @@
  */
 package acmevolar.model;
 
-import java.util.Date;
-
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -30,15 +27,11 @@ import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "runaway")
-public class Runaway extends BaseEntity {
+public class Runway extends BaseEntity {
 
 	@NotEmpty
 	@Column(name = "name")
 	private String name;
-	
-	@NotNull
-	@Column(name = "date")
-	private Date date;
 
 	@NotNull
 	@Enumerated(value=EnumType.STRING)
@@ -56,14 +49,6 @@ public class Runaway extends BaseEntity {
 
 	public void setName(String name) {
 		this.name = name;
-	}
-
-	public Date getDate() {
-		return date;
-	}
-
-	public void setDate(Date date) {
-		this.date = date;
 	}
 
 	public RunwayType getType() {
@@ -84,8 +69,10 @@ public class Runaway extends BaseEntity {
 
 	@Override
 	public String toString() {
-		return "Runaway [name=" + name + ", date=" + date + ", type=" + type + ", airport=" + airport + "]";
+		return "Runway [name=" + name + ", type=" + type + ", airport=" + airport + "]";
 	}
+
+	
 	
 	
 	

@@ -20,6 +20,8 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
@@ -63,6 +65,11 @@ public class Plane extends BaseEntity {
 	@Column(name = "last_maintenance", nullable = false)
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date	lastMaintenance;
+	
+	@NotNull
+	@ManyToOne
+	@JoinColumn(name = "airline_id")
+	private Airline	airline;
 
 
 	public String getReference() {

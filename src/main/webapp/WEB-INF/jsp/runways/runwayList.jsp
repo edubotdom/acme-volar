@@ -22,24 +22,19 @@
 				<tr>
 					<td><c:out value="${runway.name}" /></td>
 					<td><c:out value="${runway.type}" /></td>
-					
-					<td>
-						<spring:url value="/airports/{airportId}/runways/{runwayId}/edit" var="runwayEditUrl">
+					<td><spring:url value="/airports/{airportId}/runways/{runwayId}/edit" var="runwayEditUrl">
 								<spring:param name="runwayId" value="${runway.id}" />
 								<spring:param name="airportId" value="${runway.airport.id}" />
-						</spring:url> <a href="${fn:escapeXml(runwayEditUrl)}"><c:out value="Edit" /></a>
-					</td>
-					
+						</spring:url> <a href="${fn:escapeXml(runwayEditUrl)}"><c:out value="Edit" /></a></td>
 				</tr>
 			</c:forEach>
 		</tbody>
 	</table>
-	<!-- 
-	<sec:authorize access="hasAuthority('airline')">
+	
 		<spring:url value="/airports/{airportId}/runways/new" var="runwayNewUrl">
-			<spring:param name="airportId" value="${runways.airport.id}" />
+			<spring:param name="airportId" value="${airport}" />
 		</spring:url>
-		<button class="btn btn-default" onclick="window.location.href='${fn:escapeXml(runwayNewUrl)}'">List Runways</button>
-	</sec:authorize>
-	 -->
+		<button class="btn btn-default" onclick="window.location.href='${fn:escapeXml(runwayNewUrl)}'">New Runway</button>
+	
+	
 </petclinic:layout>

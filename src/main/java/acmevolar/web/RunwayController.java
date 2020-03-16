@@ -63,7 +63,9 @@ public class RunwayController {
 	public String showRunwayList(final Map<String, Object> model,@PathVariable("airportId") final int airportId) {
 
 		List<Runway> runways = this.runwayService.findRunwaysByAirportId(airportId);
+		Airport airport = this.runwayService.findAirportById(airportId);
 		model.put("runways", runways);
+		model.put("airport", airport.getId());
 		return "runways/runwayList";
 	}
 	
@@ -117,6 +119,10 @@ public class RunwayController {
 	@GetMapping(value = "/airports/{airportId}/runways/{runwayId}/edit")
 	public String initUpdateForm(@PathVariable("runwayId") int runwayId, @PathVariable("airportId") final int airportId, ModelMap model) {
 		Runway runway = this.runwayService.findRunwayById(runwayId);
+		List<RunwayType> runwayTypes = new ArrayList<RunwayType>();
+		runwayTypes.add(RunwayType.LANDING);
+		runwayTypes.add(RunwayType.TAKE_OFF);
+		model.put("runwayTypes", runwayTypes);
 		model.put("runway", runway);
 		return RunwayController.VIEWS_RUNWAYS_CREATE_OR_UPDATE_FORM;
 	}

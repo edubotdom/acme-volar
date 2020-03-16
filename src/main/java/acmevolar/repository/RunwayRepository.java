@@ -19,9 +19,11 @@ package acmevolar.repository;
 import java.util.List;
 
 import org.springframework.dao.DataAccessException;
+import org.springframework.data.jpa.repository.Query;
 
 import acmevolar.model.Airport;
 import acmevolar.model.Runway;
+import acmevolar.model.RunwayType;
 
 public interface RunwayRepository {
 
@@ -36,5 +38,8 @@ public interface RunwayRepository {
 	List<Runway> findDepartingRunways() throws DataAccessException;
 
 	List<Runway> findLandingRunways() throws DataAccessException;
+	
+	@Query("SELECT r FROM Runway r WHERE r.airport.id =:airportid")
+	List<Runway> findRunwaysByAirportId(int airportid) throws DataAccessException;
 
 }

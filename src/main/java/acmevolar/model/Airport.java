@@ -1,12 +1,23 @@
 
 package acmevolar.model;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+
+import org.springframework.beans.support.MutableSortDefinition;
+import org.springframework.beans.support.PropertyComparator;
 
 @Entity
 @Table(name = "airports")
@@ -40,6 +51,31 @@ public class Airport extends NamedEntity {
 	@NotEmpty
 	@Column(name = "city")
 	private String	city;
+	
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "airport")
+	private Set<Runway> runways;
+	
+	public Set<Runway> getRunwaysInternal() {
+		if(this.runways==null) {
+			this.runways = new HashSet<Runway>();
+		}
+		return this.runways;
+	}
+
+	public void setRunwaysInternal(Set<Runway> runways) {
+		this.runways = runways;
+	}
+	
+	public List<Runway> getRunways() {
+		List<Runway> sortedRunways = new ArrayList<>(getRunwaysInternal());
+		PropertyComparator.sort(sortedRunways, new MutableSortDefinition("name", true, true));
+		return Collections.unmodifiableList(sortedRunways);
+	}
+	
+	public void addRunway(Runway runway) {
+		getRunwaysInternal().add(runway);
+		runway.setAirport(this);
+	}
 
 
 	@Override

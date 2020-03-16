@@ -11,7 +11,7 @@
 	<jsp:attribute name="customScript">
         <script>
 									$(function() {
-										$("#landDate").datetimepicker({
+										$("#landDate").datepicker({
 											format : 'yyyy-mm-dd hh:ii'
 										});
 									});
@@ -19,7 +19,7 @@
         
         <script>
 									$(function() {
-										$("#departDate").datetimepicker({
+										$("#departDate").datepicker({
 											format : 'yyyy-mm-dd hh:ii'
 										});
 									});

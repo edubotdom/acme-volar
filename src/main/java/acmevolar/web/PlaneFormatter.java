@@ -22,6 +22,7 @@ import java.util.Locale;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.Formatter;
+import org.springframework.stereotype.Component;
 
 import acmevolar.model.FlightStatusType;
 import acmevolar.model.Plane;
@@ -44,6 +45,7 @@ import acmevolar.service.PlaneService;
  * @author Michael Isvy
  */
 
+@Component
 public class PlaneFormatter implements Formatter<Plane> {
 
 	private final PlaneService planeService;
@@ -63,7 +65,7 @@ public class PlaneFormatter implements Formatter<Plane> {
 	public Plane parse(String text, Locale locale) throws ParseException {
 		Collection<Plane> findPlanes = this.planeService.findPlanes();
 		for (Plane plane : findPlanes) {
-			if (plane.getId().toString().equals(text)) {
+			if (plane.getReference().toString().equals(text)) {
 				return plane;
 			}
 		}

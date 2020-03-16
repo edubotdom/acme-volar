@@ -22,6 +22,7 @@ import java.util.Locale;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.Formatter;
+import org.springframework.stereotype.Component;
 
 import acmevolar.model.FlightStatusType;
 import acmevolar.service.FlightService;
@@ -41,7 +42,7 @@ import acmevolar.service.FlightService;
  * @author Juergen Hoeller
  * @author Michael Isvy
  */
-
+@Component
 public class FlightStatusTypeFormatter implements Formatter<FlightStatusType> {
 
 	private final FlightService flightService;

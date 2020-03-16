@@ -12,14 +12,7 @@ INSERT INTO users(username,password,enabled) VALUES ('client1','client1',TRUE);
 INSERT INTO authorities VALUES ('client1','client');
 INSERT INTO clients(id,name, identification, birth_date, phone, email, creation_date, username) VALUES (1,'Sergio Pérez','53933261-P', '1994-09-07', '644584458', 'checoperez@gmail.com', '2005-09-07','client1');
 
-INSERT INTO users(username,password,enabled) VALUES ('airline1','airline1',TRUE);
-INSERT INTO authorities VALUES ('airline1','airline');
-INSERT INTO users(username,password,enabled) VALUES ('airline2','airline2',TRUE);
-INSERT INTO authorities VALUES ('airline2','airline');
-INSERT INTO airlines(id,name, identification, country, phone, email, creation_date, reference, username) 
-VALUES (1,'Sevilla Este Airways','61333744-N', 'Spain', '644584458', 'minardi@gmail.com', '2010-11-07', 'SEA-001','airline1');
-INSERT INTO airlines(id,name, identification, country, phone, email, creation_date, reference, username) 
-VALUES (2,'Montellano Airways','61333778-N', 'Spain', '654789321', 'arrows@gmail.com', '2010-11-07', 'MA-002','airline2');
+
 
 INSERT INTO vets VALUES (1, 'James', 'Carter');
 INSERT INTO vets VALUES (2, 'Helen', 'Leary');
@@ -75,27 +68,49 @@ INSERT INTO visits(id,pet_id,visit_date,description) VALUES (2, 8, '2013-01-02',
 INSERT INTO visits(id,pet_id,visit_date,description) VALUES (3, 8, '2013-01-03', 'neutered');
 INSERT INTO visits(id,pet_id,visit_date,description) VALUES (4, 7, '2013-01-04', 'spayed');
 
+INSERT INTO users(username,password,enabled) VALUES ('airline1','airline1',TRUE);
+INSERT INTO authorities VALUES ('airline1','airline');
+INSERT INTO users(username,password,enabled) VALUES ('airline2','airline2',TRUE);
+INSERT INTO authorities VALUES ('airline2','airline');
+INSERT INTO airlines(id,name, identification, country, phone, email, creation_date, reference, username) 
+VALUES (1,'Sevilla Este Airways','61333744-N', 'Spain', '644584458', 'minardi@gmail.com', '2010-11-07', 'SEA-001','airline1');
+INSERT INTO airlines(id,name, identification, country, phone, email, creation_date, reference, username) 
+VALUES (2,'Montellano Airways','61333778-N', 'Spain', '654789321', 'arrows@gmail.com', '2010-11-07', 'MA-002','airline2');
+
 INSERT INTO flight_status_type VALUES (1, 'on_time');
 INSERT INTO flight_status_type VALUES (2, 'delayed');
 INSERT INTO flight_status_type VALUES (3, 'cancelled');
 
-
---INSERT INTO flights(id, reference, seats, price, flight_status_id, published) VALUES (1, 'R-14', 250, 150, 1, TRUE);
-
 INSERT INTO airports(id, name, max_number_of_planes, max_number_of_clients, latitude, longitude, code, city ) VALUES (1, 'Sevilla Airport', 50, 600, 37.4180000, -5.8931100, 'SVQ', 'Sevilla');
-INSERT INTO airports(id, name, max_number_of_planes, max_number_of_clients, latitude, longitude, code, city ) VALUES (2, 'Madrid Airport', 50, 600, 37.4180000, -5.8931100, 'MDR', 'Madrid');
+INSERT INTO airports(id, name, max_number_of_planes, max_number_of_clients, latitude, longitude, code, city ) VALUES (2, 'Adolfo Suárez Madrid-Barajas Airport', 50, 600, 37.4180000, -5.8931100, 'MDR', 'Madrid');
+INSERT INTO airports(id, name, max_number_of_planes, max_number_of_clients, latitude, longitude, code, city ) VALUES (3, 'El Prat Airport', 50, 600, 37.4180000, -5.8931100, 'BCN', 'Barcelona');
+INSERT INTO airports(id, name, max_number_of_planes, max_number_of_clients, latitude, longitude, code, city ) VALUES (4, 'Charles de Gaulle Airport', 50, 600, 37.4180000, -5.8931100, 'CDG', 'París');
 
 INSERT INTO aeroplanes(id, reference, max_seats, description, manufacter, model, number_of_km, max_distance, last_maintenance,airline_id) 
 	VALUES (1, 'V14-5', 150, 'This is a description', 'Boeing', 'B747', 500000.23, 2000000.0, '2011-04-17',1);
 
+
 INSERT INTO runway(id,name,type,airport_id) VALUES (1,'A-01','TAKE_OFF',1);
 INSERT INTO runway(id,name,type,airport_id) VALUES (2,'A-02','LANDING',2);
+INSERT INTO runway(id,name,type,airport_id) VALUES (3,'A-03','TAKE_OFF',2);
+INSERT INTO runway(id,name,type,airport_id) VALUES (4,'A-04','LANDING',2);
+INSERT INTO runway(id,name,type,airport_id) VALUES (5,'A-05','TAKE_OFF',2);
+INSERT INTO runway(id,name,type,airport_id) VALUES (6,'A-06','LANDING',1);
+INSERT INTO runway(id,name,type,airport_id) VALUES (7,'A-07','TAKE_OFF',2);
+INSERT INTO runway(id,name,type,airport_id) VALUES (8,'A-08','LANDING',1);
+INSERT INTO runway(id,name,type,airport_id) VALUES (9,'A-01','TAKE_OFF',1);
+INSERT INTO runway(id,name,type,airport_id) VALUES (10,'A-10','LANDING',3);
+INSERT INTO runway(id,name,type,airport_id) VALUES (11,'A-11','TAKE_OFF',3);
+INSERT INTO runway(id,name,type,airport_id) VALUES (12,'A-12','LANDING',3);
+INSERT INTO runway(id,name,type,airport_id) VALUES (13,'A-13','TAKE_OFF',3);
+INSERT INTO runway(id,name,type,airport_id) VALUES (14,'A-14','LANDING',4);
+INSERT INTO runway(id,name,type,airport_id) VALUES (15,'A-15','TAKE_OFF',4);
+INSERT INTO runway(id,name,type,airport_id) VALUES (16,'A-16','LANDING',4);
 
 INSERT INTO flights(id, reference, seats, price, flight_status_id, plane_id, published, departes_id, lands_id, airline_id, land_date, depart_date) 
-	VALUES (1, 'R-14', 250, 150.0, 1, 1, TRUE, 1, 2, 1,'2020-06-06 14:05','2020-06-06 15:00');
+	VALUES (1, 'R-01', 250, 150.0, 1, 1, TRUE, 1, 2, 1,'2020-06-06 14:05','2020-06-06 15:00');
+	
+INSERT INTO flights(id, reference, seats, price, flight_status_id, plane_id, published, departes_id, lands_id, airline_id, land_date, depart_date) 
+	VALUES (2, 'R-02', 215, 100.5, 1, 1, TRUE, 9, 15, 2,'2020-06-07 15:05','2020-06-07 16:30');
 
-
-
-
---INSERT INTO flights(id, reference, seats, price, flight_status, published) VALUES (1, 'R-14', 250, 150, 'on_time', TRUE);
 

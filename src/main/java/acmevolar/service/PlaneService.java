@@ -3,6 +3,8 @@ package acmevolar.service;
 
 import java.util.Collection;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
@@ -12,17 +14,20 @@ import acmevolar.model.Airline;
 import acmevolar.model.Plane;
 import acmevolar.repository.AirlineRepository;
 import acmevolar.repository.PlaneRepository;
+import acmevolar.repository.springdatajpa.SpringDataPlaneRepository;
+import acmevolar.service.exceptions.DuplicatedPetNameException;
 
 @Service
 public class PlaneService {
 
-	private PlaneRepository		planeRepository;
-	private AirlineRepository	airlineRepository;
-
-
+	private PlaneRepository planeRepository;
+	private AirlineRepository airlineRepository;
+	private SpringDataPlaneRepository springPlaneRepository;
+	
 	@Autowired
-	public PlaneService(final PlaneRepository planeRepository, final AirlineRepository airlineRepository) {
+	public PlaneService(PlaneRepository planeRepository,SpringDataPlaneRepository springPlaneRepository,AirlineRepository airlineRepository) {
 		this.planeRepository = planeRepository;
+		this.springPlaneRepository = springPlaneRepository;
 		this.airlineRepository = airlineRepository;
 	}
 
@@ -31,9 +36,10 @@ public class PlaneService {
 		return this.planeRepository.findById(id);
 	}
 
-	@Transactional
-	public void savePlane(final Plane plane) throws DataAccessException {
-		this.planeRepository.save(plane);
+	
+	@Transactional(rollbackFor = DuplicatedPetNameException.class)
+	public void savePlane(Plane plane) throws DataAccessException {
+		planeRepository.save(plane);                
 	}
 
 	public void deleteById(final int id) throws DataAccessException {
@@ -66,4 +72,8 @@ public class PlaneService {
 		return this.planeRepository.findPlanesbyAirline(airline);
 	}
 
+	public List<Plane> getAllPlanesFromAirline(Airline airline) {
+		return this.springPlaneRepository.findPlanesByAirlineId(airline.getId());
+	}
+	
 }

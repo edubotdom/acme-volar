@@ -17,11 +17,14 @@
 package acmevolar.model;
 
 import java.time.LocalDateTime;
+import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
@@ -48,6 +51,7 @@ public class Flight extends BaseEntity {
 	@JoinColumn(name = "flight_status_id")
 	private FlightStatusType	flightStatus;
 
+	//@NotNull
 	@ManyToOne
 	@JoinColumn(name = "plane_id")
 	private Plane				plane;
@@ -56,17 +60,17 @@ public class Flight extends BaseEntity {
 	@Column(name = "published")
 	private Boolean				published;
 
-	@NotNull
+	//@NotNull
 	@ManyToOne
 	@JoinColumn(name = "departes_id")
 	private Runway				departes;
 
-	@NotNull
+	//@NotNull
 	@ManyToOne
 	@JoinColumn(name = "lands_id")
 	private Runway				lands;
 
-	@NotNull
+	//@NotNull
 	@ManyToOne
 	@JoinColumn(name = "airline_id")
 	private Airline				airline;

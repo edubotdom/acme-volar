@@ -11,7 +11,7 @@
 	<jsp:attribute name="customScript">
         <script>
 									$(function() {
-										$("#landDate").datetimepicker({
+										$("#landDate").datepicker({
 											format : 'yyyy-mm-dd hh:ii'
 										});
 									});
@@ -19,7 +19,7 @@
         
         <script>
 									$(function() {
-										$("#departDate").datetimepicker({
+										$("#departDate").datepicker({
 											format : 'yyyy-mm-dd hh:ii'
 										});
 									});
@@ -53,13 +53,13 @@
 			<petclinic:inputField label="Land Date" name="landDate" />
 			<petclinic:selectField label="Departes" name="departes" size="5" names="${departuresList}" />
 			<petclinic:inputField label="Depart Date" name="departDate" />
-			<!--2020-06-06 14:05-->
+			<!--2020-06-06 14:05 airline1-->
             
-            <!-- <input type="hidden" name="id" value="${estados}"/> -->
+            <!-- <input type="hidden" name="id" value="${estados}"/> 
             <input type="hidden" name="id" value="${planes}"/>
             <input type="hidden" name="name" value="${departuresList}"/>
             <input type="hidden" name="name" value="${landsList}"/>
-
+-->
         </div>
         <div class="form-group">
             <div class="col-sm-offset-2 col-sm-10">

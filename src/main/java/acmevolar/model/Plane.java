@@ -176,7 +176,7 @@ public class Plane extends BaseEntity {
 	public void setAirline(Airline airline) {
 		this.airline = airline;
 	}
-
+/*
 	@Override
 	public String toString() {
 		return "Plane [reference=" + reference + ", maxSeats=" + maxSeats + ", description=" + description
@@ -184,6 +184,6 @@ public class Plane extends BaseEntity {
 				+ maxDistance + ", lastMaintenance=" + lastMaintenance + ", airline=" + airline + "]";
 	}
 
-	
+	*/
 
 }

@@ -47,6 +47,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 		.antMatchers("/airlines/**/").permitAll()
 		.antMatchers("/airlines/new/").hasAuthority("airline")
 		
+		.antMatchers("/airports/**/runways/").permitAll()
 		.antMatchers("/airports").permitAll()
 		.antMatchers("/airports/**/").permitAll()
 		.antMatchers("/airports/new").hasAuthority("airline")
@@ -59,7 +60,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 		.antMatchers("/flights/new").hasAuthority("airline")
 		.antMatchers("/flights/**/edit").hasAuthority("airline")
 		.antMatchers("/flights/**/delete").hasAuthority("airline")
-		
 		
 		.antMatchers("/my_planes").hasAuthority("airline")
 		.antMatchers("/planes/**/").hasAnyAuthority("client","airline")

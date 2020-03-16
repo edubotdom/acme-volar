@@ -23,13 +23,12 @@
 					<td><c:out value="${runway.name}" /></td>
 					<td><c:out value="${runway.type}" /></td>
 					
-					<sec:authorize access="hasAuthority('airline')">
-						<td><spring:url value="/airports/{airportId}/runways/{runwayId}/edit" var="runwayEditUrl">
+					<td>
+						<spring:url value="/airports/{airportId}/runways/{runwayId}/edit" var="runwayEditUrl">
 								<spring:param name="runwayId" value="${runway.id}" />
 								<spring:param name="airportId" value="${runway.airport.id}" />
-							</spring:url> <a href="${fn:escapeXml(runwayEditUrl)}"><c:out value="Edit" /></a>
-						</td>
-					</sec:authorize>
+						</spring:url> <a href="${fn:escapeXml(runwayEditUrl)}"><c:out value="Edit" /></a>
+					</td>
 					
 				</tr>
 			</c:forEach>

@@ -40,6 +40,6 @@ public interface RunwayRepository {
 	List<Runway> findLandingRunways() throws DataAccessException;
 	
 	@Query("SELECT r FROM Runway r WHERE r.airport.id =:airportid")
-	List<Runway> findRunwaysByAirportId(int airportid) throws DataAccessException;
+	List<Runway> findRunwaysByAirportId(Integer airportid) throws DataAccessException;
 
 }

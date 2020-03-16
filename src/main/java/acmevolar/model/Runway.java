@@ -54,7 +54,7 @@ public class Runway extends BaseEntity {
 	@NotNull
 	@JoinColumn(name = "airport_id")
 	private Airport airport;
-	
+	/*
 	// DEPARTES FROM FLIGHT
 	
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "departes")
@@ -109,7 +109,7 @@ public class Runway extends BaseEntity {
 		getFlightsLandsInternal().add(flight);
 		flight.setDepartes(this);
 	}
-	
+*/
 	// GETTERS & SETTERS
 	
 	public String getName() {

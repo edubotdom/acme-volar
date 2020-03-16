@@ -105,6 +105,7 @@ public class FlightController {
 		} else {
 			String username = SecurityContextHolder.getContext().getAuthentication().getName();
 			Airline airline = this.flightService.findAirlineByUsername(username);
+			//flight.getPlane().addFlight(flight);
 			airline.addFlight(flight);
 			this.flightService.saveFlight(flight);
 

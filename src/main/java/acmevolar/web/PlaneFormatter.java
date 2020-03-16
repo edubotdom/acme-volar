@@ -65,7 +65,7 @@ public class PlaneFormatter implements Formatter<Plane> {
 	public Plane parse(String text, Locale locale) throws ParseException {
 		Collection<Plane> findPlanes = this.planeService.findPlanes();
 		for (Plane plane : findPlanes) {
-			if (plane.getReference().toString().equals(text)) {
+			if (plane.getReference().equals(text)) {
 				return plane;
 			}
 		}

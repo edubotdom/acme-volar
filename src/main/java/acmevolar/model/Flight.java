@@ -179,7 +179,7 @@ public class Flight extends BaseEntity {
 
 	@Override
 	public String toString() {
-		return "Flight [reference=" + this.reference + ", seats=" + this.seats + ", price=" + this.price + ", flightStatus=" + this.flightStatus + ", plane=" + this.plane + ", published=" + this.published + ", departes=" + this.departes + ", lands="
+		return "Flight [id=" + this.id + "reference=" + this.reference + ", seats=" + this.seats + ", price=" + this.price + ", flightStatus=" + this.flightStatus + ", plane=" + this.plane + ", published=" + this.published + ", departes=" + this.departes + ", lands="
 			+ this.lands + ", airline=" + this.airline + ", landDate=" + this.landDate + ", departDate=" + this.departDate + "]";
 	}
 

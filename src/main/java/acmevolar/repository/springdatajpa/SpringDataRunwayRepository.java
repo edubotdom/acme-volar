@@ -56,5 +56,8 @@ public interface SpringDataRunwayRepository extends RunwayRepository, Repository
 	@Override
 	@Query("SELECT r FROM Runway r where r.runwayType.name = 'landing'")
 	List<Runway> findLandingRunways() throws DataAccessException;
+	
+	@Query("SELECT r FROM Runway r where r.name =:runwayName")
+	List<Runway> findRunwaysByName(String runwayName) throws DataAccessException;
 
 }

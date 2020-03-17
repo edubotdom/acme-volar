@@ -64,6 +64,7 @@ public class RunwayService {
 	
 	@Transactional
 	public void saveRunway(Runway runway) throws DataAccessException {
+		runway.setName(runway.getName().replace(",", ""));
 		runwayRepository.save(runway);                
 	}
 
@@ -75,6 +76,12 @@ public class RunwayService {
 	
 	public void deleteRunwayById(Integer runwayId) throws DataAccessException {
 		runwayRepository.deleteById(runwayId);
+	}
+
+	@Transactional(readOnly = true)
+	public List<Runway> findRunwaysByName(String runwayName) {
+		
+		return this.runwayRepository.findRunwaysByName(runwayName);
 	}
 
 }

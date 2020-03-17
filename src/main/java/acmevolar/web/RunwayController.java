@@ -19,8 +19,6 @@ package acmevolar.web;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
-
 import javax.validation.Valid;
 
 import org.springframework.beans.BeanUtils;
@@ -50,16 +48,6 @@ public class RunwayController {
 	public RunwayController(final RunwayService runwayService) {
 		this.runwayService = runwayService;
 	}
-	
-//	@InitBinder("airport")
-//	public void initAirportBinder(WebDataBinder dataBinder) {
-//		dataBinder.setDisallowedFields("id");
-//	}
-//	
-//	@InitBinder("runwayType")
-//	public void initRunwayTypeBinder(WebDataBinder dataBinder) {
-//		dataBinder.setDisallowedFields("name");
-//	}
 
 	//LIST
 	@GetMapping(value = {"/airports/{airportId}/runways"})
@@ -72,30 +60,40 @@ public class RunwayController {
 		return "runways/runwayList";
 	}
 	
+	public void insertData(Map<String, Object> model,@PathVariable("airportId") int airportId) {
+		List<RunwayType> runwayTypes = this.runwayService.findRunwaysTypes();
+		model.put("runwayTypes", runwayTypes);
+	}
+	
 	//CREATE
 	@GetMapping(value = "/airports/{airportId}/runways/new")
 	public String initCreationForm(final Map<String, Object> model,@PathVariable("airportId") final int airportId) {
 		Runway runway = new Runway();
 		
 		Airport airport = this.runwayService.findAirportById(airportId);
-		airport.addRunway(runway);
+		airport.addRunway(runway);		
 		
-		List<RunwayType> runwayTypes = this.runwayService.findRunwaysTypes();
-		
+		insertData(model, airportId);
 		
 		model.put("airport", airport);
 		model.put("runway", runway);
-		model.put("runwayTypes", runwayTypes);
 		
 		return RunwayController.VIEWS_RUNWAYS_CREATE_OR_UPDATE_FORM;
 	}
 
 	@PostMapping(value = "/airports/{airportId}/runways/new")
-	public String processCreationForm(@Valid final Runway runway,@PathVariable("airportId") final int airportId, final BindingResult result) {
+	public String processCreationForm(final Map<String, Object> model,@Valid final Runway runway,@PathVariable("airportId") final int airportId, final BindingResult result) {
 		Airport airport = this.runwayService.findAirportById(airportId);
 		airport.addRunway(runway);
 		if (result.hasErrors()) {
+			insertData(model, airportId);
 			return RunwayController.VIEWS_RUNWAYS_CREATE_OR_UPDATE_FORM;
+			
+		} else if(this.runwayService.findRunwaysByName(runway.getName()).size()!=0) {
+			insertData(model, airportId);
+			result.rejectValue("name", "NameIsAlreadyUsed", "Name is already used");
+			return RunwayController.VIEWS_RUNWAYS_CREATE_OR_UPDATE_FORM;
+			
 		} else {
 			try {
 				this.runwayService.saveRunway(runway);
@@ -122,18 +120,24 @@ public class RunwayController {
     @PostMapping(value = "/airports/{airportId}/runways/{runwayId}/edit")
 	public String processUpdateForm(@Valid Runway runway, BindingResult result, @PathVariable("runwayId") int runwayId, @PathVariable("airportId") final int airportId, ModelMap model) {
         	if (result.hasErrors()) {
+        		insertData(model, airportId);
     			return RunwayController.VIEWS_RUNWAYS_CREATE_OR_UPDATE_FORM;
-    		} else {
-    			Runway runwayToUpdate = this.runwayService.findRunwayById(runwayId);
-    			BeanUtils.copyProperties(runwayToUpdate, runway, "name", "runwayType");
-
-    			try {
-    				this.runwayService.saveRunway(runway);
-    			} catch (DataAccessException e) {
-    				e.printStackTrace();
-    			}
-    			return "redirect:/airports/" + airportId + "/runways" /*" + runway.getId()*/;
-    		}
+    			
+        	} else if(this.runwayService.findRunwaysByName(runway.getName()).size()!=0 && runwayId!=runway.getId().intValue()) {
+        		insertData(model, airportId);
+        		result.rejectValue("name", "NameIsAlreadyUsed", "Name is already used");
+        		return RunwayController.VIEWS_RUNWAYS_CREATE_OR_UPDATE_FORM;
+        		
+        	}else {
+	        	Runway runwayToUpdate = this.runwayService.findRunwayById(runwayId);
+				BeanUtils.copyProperties(runwayToUpdate, runway, "name", "runwayType");
+				try {
+					this.runwayService.saveRunway(runway);
+				} catch (DataAccessException e) {
+					e.printStackTrace();
+				}
+				return "redirect:/airports/" + airportId + "/runways" /*" + runway.getId()*/;
+        	}
 	}
     
     @GetMapping(value = "/airports/{airportId}/runways/{runwayId}/delete")

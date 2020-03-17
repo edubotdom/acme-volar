@@ -12,51 +12,67 @@
 
 	<table class="table table-striped">
 	
-		<tr>
-			<th>Airline</th>
-			<td><b><c:out value="${flight.airline.name}" /></b></td>
-		</tr>
-		<tr>
-			<th>Reference</th>
-			<td><b><c:out value="${flight.reference}" /></b></td>
-		</tr>
-		<tr>
-			<th>Seats</th>
-			<td><c:out value="${flight.seats}" /></td>
-		</tr>
-		<tr>
-			<th>Price</th>
-			<td><c:out value="${flight.price}" /></td>
-		</tr>
-		<tr>
-			<th>Flight Status</th>
-			<td><c:out value="${flight.flightStatus}" /></td>
-		</tr>
-		<tr>
-			<th>Published</th>
-			<td><c:out value="${flight.published}" /></td>
-		</tr>
-		<tr>
-			<th>Plane</th>
-			<td><c:out value="${flight.plane.reference}" /></td>
-		</tr>
-		<tr>
-			<th>Departes</th>
-			<td><c:out value="${flight.departes.name}" /></td>
-		</tr>
-		<tr>
-			<th>Lands</th>
-			<td><c:out value="${flight.lands.name}" /></td>
-		</tr>
-		
+				<tr>
+					<th>Reference</th>
+					<td><spring:url value="/flights/{flightId}" var="flightUrl">
+							<spring:param name="flightId" value="${flight.id}" />
+						</spring:url> <a href="${fn:escapeXml(flightUrl)}"><c:out value="${flight.reference}" /></a></td>
+				</tr>
+				<tr>	
+					<th>Seats</th>
+					<td><c:out value="${flight.seats}" /></td>
+				</tr>
+				<tr>	
+				<th>Published</th>
+					<td><c:out value="${flight.published}" /></td>
+				</tr>
+				<tr>		
+					<th>Airline</th>
+					<td><spring:url value="/airlines/{airlineId}" var="airlineUrl">
+							<spring:param name="airlineId" value="${flight.airline.id}" />
+						</spring:url> <a href="${fn:escapeXml(airlineUrl)}"><c:out value="${flight.airline.name}" /></a></td>
+				</tr>
+				<tr>		
+					<th>Depart runway</th>
+					<td><spring:url value="/airports/{airportId}/runways/{departesId}" var="departesUrl">
+							<spring:param name="departesId" value="${flight.departes.id}" />
+							<spring:param name="airportId" value="${flight.departes.airport.id}" />
+						</spring:url> <a href="${fn:escapeXml(departesUrl)}"><c:out value="${flight.departes.airport.city}" /></a></td>
+				</tr>
+				<tr>	
+					<th>Depart Date</th>
+					<td><c:out value="${flight.departDate}" /></td>
+				</tr>
+				<tr>		
+					<th>Landing runway</th>
+					<td><spring:url value="/airports/{airportId}/runways/{airportId}" var="landsUrl">
+							<spring:param name="landsId" value="${flight.lands.id}" />
+							<spring:param name="airportId" value="${flight.lands.airport.id}" />
+						</spring:url> <a href="${fn:escapeXml(landsUrl)}"><c:out value="${flight.lands.airport.city}" /></a></td>
+				</tr>
+				<tr>		
+					<th>Land Date</th>
+					<td><c:out value="${flight.landDate}" /></td>
+				</tr>
+				<tr>	
+					<th>Plane</th>
+					<td><spring:url value="/planes/{planeId}" var="planeUrl">
+							<spring:param name="planeId" value="${flight.plane.id}" />
+						</spring:url> <a href="${fn:escapeXml(planeUrl)}"><c:out value="${flight.plane.model}" /></a></td>
+				</tr>
+				<tr>	
+					<th>Price</th>
+					<td><c:out value="${flight.price}" /></td>
+				</tr>		
 		
 	</table>
-
+<c:if test="${flight.published==false}">
 	<sec:authorize access="hasAuthority('airline')">
 		<spring:url value="{flightId}/edit" var="editUrl">
 			<spring:param name="flightId" value="${flight.id}" />
 		</spring:url>
 		<a href="${fn:escapeXml(editUrl)}" class="btn btn-default">Edit Flight</a>
-	</sec:authorize>
-
+	</sec:authorize>	
+</c:if>
 </petclinic:layout>
+

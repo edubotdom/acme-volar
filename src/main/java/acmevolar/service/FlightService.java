@@ -70,12 +70,22 @@ public class FlightService {
 	public Collection<Flight> findPublishedFlight() {
 		return this.flightRepository.findPublishedFlight();
 	}
+	
+	@Transactional(readOnly = true)
+	public Collection<Flight> findPublishedFutureFlight() {
+		return this.flightRepository.findPublishedFutureFlight();
+	}
 
 	@Transactional(readOnly = true)
 	public Collection<Flight> findAirlineFlight(final String username) {
 		return this.flightRepository.findAirlineFlight(username);
 	}
 
+	@Transactional(readOnly = true)
+	public Flight findFlightByReference(final String reference) {
+		return this.flightRepository.findFlightByReference(reference);
+	}
+	
 	//FlightStatusType
 	@Transactional(readOnly = true)
 	public List<FlightStatusType> findFlightStatusTypes() throws DataAccessException {
@@ -103,5 +113,5 @@ public class FlightService {
 	public List<Runway> findLandingRunways() throws DataAccessException {
 		return this.runwayRepository.findLandingRunways();
 	}
-
+	
 }

@@ -16,7 +16,8 @@
 
 package acmevolar.service;
 
-import java.util.Collection;
+
+
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +27,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import acmevolar.model.Airport;
 import acmevolar.model.Runway;
+import acmevolar.model.RunwayType;
 import acmevolar.repository.RunwayRepository;
 
 
@@ -54,6 +56,13 @@ public class RunwayService {
 		return runwayRepository.findRunwaysByAirportId(airportId);
 	}
 	
+	//FlightStatusType
+	@Transactional(readOnly = true)
+	public List<RunwayType> findRunwaysTypes() throws DataAccessException {
+		return this.runwayRepository.findRunwaysTypes();
+	}
+	
+	@Transactional
 	public void saveRunway(Runway runway) throws DataAccessException {
 		runwayRepository.save(runway);                
 	}

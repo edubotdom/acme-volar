@@ -21,7 +21,7 @@
 			<c:forEach items="${runways}" var="runway">
 				<tr>
 					<td><c:out value="${runway.name}" /></td>
-					<td><c:out value="${runway.type}" /></td>
+					<td><c:out value="${runway.runwayType.name}" /></td>
 					<td><spring:url value="/airports/{airportId}/runways/{runwayId}/edit" var="runwayEditUrl">
 								<spring:param name="runwayId" value="${runway.id}" />
 								<spring:param name="airportId" value="${runway.airport.id}" />

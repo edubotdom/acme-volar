@@ -16,10 +16,11 @@
     	<input type="hidden" name="id" value="${runway.id}"/>
         <div class="form-group has-feedback">
             <petclinic:inputField label="Name" name="name" />
-            <petclinic:selectField label="Type" name="type" size="2" names="${runwayTypes}" />
-            
-            
+            <div class="control-group">
+            	<petclinic:selectField label="Type" name="runwayType" size="2" names="${runwayTypes}" />
+			</div>
         </div>
+        
         <div class="form-group">
             <div class="col-sm-offset-2 col-sm-10">
              <c:choose>
@@ -34,5 +35,7 @@
 
         </div>
     </form:form>
+    <c:if test="${!runway['new']}">
+        </c:if>
    	</jsp:body>
 </petclinic:layout>

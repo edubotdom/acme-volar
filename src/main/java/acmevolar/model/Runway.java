@@ -25,8 +25,6 @@ import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
@@ -45,13 +43,12 @@ public class Runway extends BaseEntity {
 	@Column(name = "name")
 	private String		name;
 
-	@NotNull
-	@Enumerated(value = EnumType.STRING)
-	@Column(name = "type")
-	private RunwayType	type;
+	@ManyToOne
+	@JoinColumn(name = "runway_type_id")
+	private RunwayType	runwayType;
 
 	@ManyToOne
-	@NotNull
+	//@NotNull
 	@JoinColumn(name = "airport_id")
 	private Airport airport;
 	
@@ -120,13 +117,15 @@ public class Runway extends BaseEntity {
 		this.name = name;
 	}
 
-	public RunwayType getType() {
-		return this.type;
+	public RunwayType getRunwayType() {
+		return runwayType;
 	}
 
-	public void setType(final RunwayType type) {
-		this.type = type;
+
+	public void setRunwayType(RunwayType runwayType) {
+		this.runwayType = runwayType;
 	}
+
 
 	public Airport getAirport() {
 		return this.airport;
@@ -138,7 +137,7 @@ public class Runway extends BaseEntity {
 
 	@Override
 	public String toString() {
-		return "Runway [name=" + this.name + ", type=" + this.type + ", airport=" + this.airport + "]";
+		return "Runway [name=" + this.name + ", type=" + this.runwayType + ", airport=" + this.airport + "]";
 	}
 
 }

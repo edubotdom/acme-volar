@@ -50,4 +50,8 @@ public interface SpringDataFlightRepository extends FlightRepository, Repository
 	@Override
 	@Query("SELECT flight FROM Flight flight WHERE flight.airline.user.username =:username")
 	List<Flight> findAirlineFlight(@Param("username") String username) throws DataAccessException;
+	
+	@Override
+	@Query("SELECT flight FROM Flight flight WHERE flight.reference = :reference")
+	Flight findFlightByReference(@Param("reference") String reference) throws DataAccessException;
 }

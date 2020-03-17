@@ -16,7 +16,6 @@
 
 package acmevolar.model;
 
-import java.time.LocalDateTime;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -24,25 +23,32 @@ import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
+import org.hibernate.validator.constraints.UniqueElements;
 import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
-@Table(name = "flights")
+@Table(name = "flights"/*, uniqueConstraints = @UniqueConstraint(columnNames = { "reference" })*/)
+
 public class Flight extends BaseEntity {
 
 	@NotEmpty
 	@Column(name = "reference")
+	//@UniqueElements
 	private String				reference;
 
 	@NotNull
 	@Column(name = "seats")
+	@Min(value = 0, message = "Can't be negative" )
 	private Integer				seats;
 
 	@NotNull
 	@Column(name = "price")
+	@Min(value = 0, message = "Can't be negative" )
 	private Double				price;
 
 	@NotNull

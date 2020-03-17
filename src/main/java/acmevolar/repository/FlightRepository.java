@@ -51,6 +51,8 @@ public interface FlightRepository {
 	 *            the <code>Flight</code> to save
 	 */
 	void save(Flight flight) throws DataAccessException;
+	
+	
 
 	/**
 	 * Retrieve all <code>Flight</code>s from the data store.
@@ -64,5 +66,7 @@ public interface FlightRepository {
 	Collection<Flight> findAirlineFlight(String username) throws DataAccessException;
 
 	List<Flight> findPublishedFutureFlight() throws DataAccessException;
+
+	Flight findFlightByReference(String reference) throws DataAccessException;
 
 }

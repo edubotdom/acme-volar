@@ -139,7 +139,12 @@ public class FlightController {
 			insertData(model,flight);
 			return FlightController.VIEWS_FLIGHT_CREATE_FORM;
 			
-		} else if(numPlanesInLandAirport+1L>=flight.getLands().getAirport().getMaxNumberOfPlanes()) {
+		} else if(flightService.findFlightByReference(flight.getReference())!=null) {
+			result.rejectValue("reference", "referenceTaken", "Flight reference already taken.");
+			insertData(model,flight);
+			return FlightController.VIEWS_FLIGHT_CREATE_FORM;
+			
+		}else if(numPlanesInLandAirport+1L>=flight.getLands().getAirport().getMaxNumberOfPlanes()) {
 			// this is caused becaused an airport only can deals with a limit of planes per day
 			result.rejectValue("lands", "AirportFullOfPlanes", "This airport is full of planes this day");
 			insertData(model,flight);
@@ -150,7 +155,12 @@ public class FlightController {
 			insertData(model,flight);
 			return FlightController.VIEWS_FLIGHT_CREATE_FORM;
 			
-		} else {
+		} else if(flight.getDepartDate().after(flight.getLandDate())) {
+			result.rejectValue("landDate", "LandingBeforeDepartDate", "Landing date can't be programmed before departing date");
+			insertData(model,flight);
+			return FlightController.VIEWS_FLIGHT_CREATE_FORM;
+			
+		}else {
 			
 			this.flightService.saveFlight(flight);
 

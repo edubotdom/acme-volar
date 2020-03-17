@@ -81,6 +81,11 @@ public class FlightService {
 		return this.flightRepository.findAirlineFlight(username);
 	}
 
+	@Transactional(readOnly = true)
+	public Flight findFlightByReference(final String reference) {
+		return this.flightRepository.findFlightByReference(reference);
+	}
+	
 	//FlightStatusType
 	@Transactional(readOnly = true)
 	public List<FlightStatusType> findFlightStatusTypes() throws DataAccessException {
@@ -108,5 +113,5 @@ public class FlightService {
 	public List<Runway> findLandingRunways() throws DataAccessException {
 		return this.runwayRepository.findLandingRunways();
 	}
-
+	
 }

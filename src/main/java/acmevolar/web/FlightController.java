@@ -100,8 +100,36 @@ public class FlightController {
 
 	@PostMapping(value = "/flights/new")
 	public String processCreationForm(@Valid Flight flight, BindingResult result) {
+		
+		// we get the flight (one per plane) in the same day that depart airport
+		Long numPlanesInDepartAirport = this.flightService.findFlights().stream()
+				.filter(x->x.getDepartDate().getDayOfYear() == flight.getDepartDate().getDayOfYear()
+							|| x.getDepartDate().getYear() == flight.getDepartDate().getYear())
+				.count();
+		
+		// we get the flight (one per plane) in the same day that depart airport
+		Long numPlanesInLandAirport = this.flightService.findFlights().stream()
+				.filter(x->x.getLandDate().getDayOfYear() == flight.getLandDate().getDayOfYear()
+							|| x.getLandDate().getYear() == flight.getLandDate().getYear())
+				.count();
+		
 		if (result.hasErrors()) {
 			return FlightController.VIEWS_FLIGHT_CREATE_FORM;
+			
+		} else if(numPlanesInDepartAirport+1L>=flight.getDepartes().getAirport().getMaxNumberOfPlanes()) {
+			// this is caused becaused an airport only can deals with a limit of planes per day
+			result.rejectValue("departes", "This airport is full of planes this day", "This airport is full of planes this day");
+			return FlightController.VIEWS_FLIGHT_CREATE_FORM;
+			
+		} else if(numPlanesInLandAirport+1L>=flight.getLands().getAirport().getMaxNumberOfPlanes()) {
+			// this is caused becaused an airport only can deals with a limit of planes per day
+			result.rejectValue("lands", "This airport is full of planes this day", "This airport is full of planes this day");
+			return FlightController.VIEWS_FLIGHT_CREATE_FORM;
+			
+		} else if(flight.getDepartes().getAirport().getName().equals(flight.getLands().getAirport().getName())) {
+			result.rejectValue("lands", "This path is close, choose another airport(runway)", "This path is close, choose another airport(runway)");
+			return FlightController.VIEWS_FLIGHT_CREATE_FORM;
+			
 		} else {
 			String username = SecurityContextHolder.getContext().getAuthentication().getName();
 			Airline airline = this.flightService.findAirlineByUsername(username);

@@ -56,7 +56,7 @@ public class RunwayFormatter implements Formatter<Runway> {
 
     @Override
     public String print(final Runway runwayService, final Locale locale) {
-        return runwayService.getName();
+        return runwayService.getName()/* + ", airport: " + runwayService.getAirport().getName() + ", city: " + runwayService.getAirport().getCity()*/;
     }
 
     @Override

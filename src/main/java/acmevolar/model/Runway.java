@@ -48,7 +48,6 @@ public class Runway extends BaseEntity {
 	private RunwayType	runwayType;
 
 	@ManyToOne
-	//@NotNull
 	@JoinColumn(name = "airport_id")
 	private Airport airport;
 	

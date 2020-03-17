@@ -67,11 +67,14 @@ public class RunwayService {
 		runwayRepository.save(runway);                
 	}
 
+	@Transactional(readOnly = true)
 	public Airport findAirportById(Integer airportId) throws DataAccessException {
 		Airport airport = runwayRepository.findAirportById(airportId);
 		return airport;
 	}
 	
-	//Hay que agregar un método para buscar el airport correspondiente a un runway
+	public void deleteRunwayById(Integer runwayId) throws DataAccessException {
+		runwayRepository.deleteById(runwayId);
+	}
 
 }

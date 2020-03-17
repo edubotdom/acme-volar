@@ -74,34 +74,66 @@ public class FlightController {
 	public void initFlightStatusBinder(WebDataBinder dataBinder) {
 		dataBinder.setDisallowedFields("name");
 	}
-
-	@GetMapping(value = "/flights/new")
-	public String initCreationForm(final Map<String, Object> model) {
-		Flight flight = new Flight();
-
+	
+	public void insertData(Map<String, Object> model, Flight flight) {
 		String username = SecurityContextHolder.getContext().getAuthentication().getName();
-
 		List<Plane> planes = this.flightService.findPlanesbyAirline(username);
-
 		List<Runway> departuresList = this.flightService.findDepartingRunways();
-
 		List<Runway> landsList = this.flightService.findLandingRunways();
-
 		List<FlightStatusType> estados = this.flightService.findFlightStatusTypes();
-
+		
 		model.put("planes", planes);
 		model.put("departuresList", departuresList);
 		model.put("landsList", landsList);
 		model.put("estados", estados);
+		
+	}
+
+	@GetMapping(value = "/flights/new")
+	public String initCreationForm(final Map<String, Object> model) {
+		Flight flight = new Flight();
+		insertData(model,flight);
 		model.put("flight", flight);
 
 		return FlightController.VIEWS_FLIGHT_CREATE_FORM;
 	}
 
 	@PostMapping(value = "/flights/new")
-	public String processCreationForm(@Valid Flight flight, BindingResult result) {
+	public String processCreationForm(final Map<String, Object> model, @Valid Flight flight, BindingResult result) {
+		
+		// we get the flight (one per plane) in the same day that depart airport
+		Long numPlanesInDepartAirport = this.flightService.findFlights().stream()
+				.filter(x->x.getDepartDate().getDayOfYear() == flight.getDepartDate().getDayOfYear()
+							|| x.getDepartDate().getYear() == flight.getDepartDate().getYear())
+				.count();
+		
+		// we get the flight (one per plane) in the same day that depart airport
+		Long numPlanesInLandAirport = this.flightService.findFlights().stream()
+				.filter(x->x.getLandDate().getDayOfYear() == flight.getLandDate().getDayOfYear()
+							|| x.getLandDate().getYear() == flight.getLandDate().getYear())
+				.count();
+		
 		if (result.hasErrors()) {
+			insertData(model,flight);
 			return FlightController.VIEWS_FLIGHT_CREATE_FORM;
+			
+		} else if(numPlanesInDepartAirport+1L>=flight.getDepartes().getAirport().getMaxNumberOfPlanes()) {
+			// this is caused becaused an airport only can deals with a limit of planes per day
+			result.rejectValue("departes", "AirportFullOfPlanes", "This airport is full of planes this day");
+			insertData(model,flight);
+			return FlightController.VIEWS_FLIGHT_CREATE_FORM;
+			
+		} else if(numPlanesInLandAirport+1L>=flight.getLands().getAirport().getMaxNumberOfPlanes()) {
+			// this is caused becaused an airport only can deals with a limit of planes per day
+			result.rejectValue("lands", "AirportFullOfPlanes", "This airport is full of planes this day");
+			insertData(model,flight);
+			return FlightController.VIEWS_FLIGHT_CREATE_FORM;
+			
+		} else if(flight.getDepartes().getAirport().getName().equals(flight.getLands().getAirport().getName())) {
+			result.rejectValue("lands", "PathClosed", "This path is close, choose another airport(runway)");
+			insertData(model,flight);
+			return FlightController.VIEWS_FLIGHT_CREATE_FORM;
+			
 		} else {
 			String username = SecurityContextHolder.getContext().getAuthentication().getName();
 			Airline airline = this.flightService.findAirlineByUsername(username);

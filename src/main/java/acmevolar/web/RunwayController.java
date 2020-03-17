@@ -19,6 +19,7 @@ package acmevolar.web;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import javax.validation.Valid;
 
@@ -67,7 +68,7 @@ public class RunwayController {
 		List<Runway> runways = this.runwayService.findRunwaysByAirportId(airportId);
 		Airport airport = this.runwayService.findAirportById(airportId);
 		model.put("runways", runways);
-		model.put("airport", airport.getId());
+		model.put("airport", airport);
 		return "runways/runwayList";
 	}
 	
@@ -118,7 +119,7 @@ public class RunwayController {
 		return RunwayController.VIEWS_RUNWAYS_CREATE_OR_UPDATE_FORM;
 	}
 
-        @PostMapping(value = "/airports/{airportId}/runways/{runwayId}/edit")
+    @PostMapping(value = "/airports/{airportId}/runways/{runwayId}/edit")
 	public String processUpdateForm(@Valid Runway runway, BindingResult result, @PathVariable("runwayId") int runwayId, @PathVariable("airportId") final int airportId, ModelMap model) {
         	if (result.hasErrors()) {
     			return RunwayController.VIEWS_RUNWAYS_CREATE_OR_UPDATE_FORM;
@@ -133,6 +134,16 @@ public class RunwayController {
     			}
     			return "redirect:/airports/" + airportId + "/runways" /*" + runway.getId()*/;
     		}
+	}
+    
+    @GetMapping(value = "/airports/{airportId}/runways/{runwayId}/delete")
+	public String deleteRunway(@PathVariable("runwayId") final int runwayId,@PathVariable("airportId") final int airportId) {
+		Runway runway = this.runwayService.findRunwayById(runwayId);
+		if (runway != null) {
+			this.runwayService.deleteRunwayById(runway.getId());
+		}
+		return "redirect:/airports/" + airportId + "/runways";
+
 	}
 	
 }

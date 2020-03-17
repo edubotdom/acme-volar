@@ -16,7 +16,9 @@
 
 package acmevolar.web;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -169,7 +171,13 @@ public class FlightController {
 				insertData(model, flight);
 				return FlightController.VIEWS_FLIGHT_CREATE_FORM;
 
-			} else {
+			}else if (flight.getDepartDate().before(Calendar.getInstance().getTime())) {
+				result.rejectValue("departDate", "DepartBeforePresentDate",
+						"Depart date can't be programmed before the present");
+				insertData(model, flight);
+				return FlightController.VIEWS_FLIGHT_CREATE_FORM;
+
+			}else {
 
 				this.flightService.saveFlight(flight);
 
@@ -315,6 +323,12 @@ public String processUpdateForm(@Valid Flight flight, BindingResult result, @Pat
 					} else if (flight.getDepartDate().after(flight.getLandDate())) {
 						result.rejectValue("landDate", "LandingBeforeDepartDate",
 								"Landing date can't be programmed before departing date");
+						insertData(model, flight);
+						return FlightController.VIEWS_FLIGHT_CREATE_FORM;
+
+					} else if (flight.getDepartDate().before(Calendar.getInstance().getTime())) {
+						result.rejectValue("departDate", "DepartBeforePresentDate",
+								"Depart date can't be programmed before the present");
 						insertData(model, flight);
 						return FlightController.VIEWS_FLIGHT_CREATE_FORM;
 

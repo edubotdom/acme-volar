@@ -44,6 +44,10 @@ public interface SpringDataFlightRepository extends FlightRepository, Repository
 	List<Flight> findPublishedFlight() throws DataAccessException;
 
 	@Override
+	@Query("SELECT flight FROM Flight flight WHERE flight.published = '1' AND flight.departDate >= current_date()")
+	List<Flight> findPublishedFutureFlight() throws DataAccessException;
+	
+	@Override
 	@Query("SELECT flight FROM Flight flight WHERE flight.airline.user.username =:username")
 	List<Flight> findAirlineFlight(@Param("username") String username) throws DataAccessException;
 }

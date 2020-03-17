@@ -17,7 +17,7 @@
 package acmevolar.model;
 
 import java.time.LocalDateTime;
-
+import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -45,11 +45,12 @@ public class Flight extends BaseEntity {
 	@Column(name = "price")
 	private Double				price;
 
+	@NotNull
 	@ManyToOne
 	@JoinColumn(name = "flight_status_id")
 	private FlightStatusType	flightStatus;
 
-	//@NotNull
+	@NotNull
 	@ManyToOne
 	@JoinColumn(name = "plane_id")
 	private Plane				plane;
@@ -58,12 +59,12 @@ public class Flight extends BaseEntity {
 	@Column(name = "published")
 	private Boolean				published;
 
-	//@NotNull
+	@NotNull
 	@ManyToOne
 	@JoinColumn(name = "departes_id")
 	private Runway				departes;
 
-	//@NotNull
+	@NotNull
 	@ManyToOne
 	@JoinColumn(name = "lands_id")
 	private Runway				lands;
@@ -73,15 +74,13 @@ public class Flight extends BaseEntity {
 	@JoinColumn(name = "airline_id")
 	private Airline				airline;
 
-	@NotNull
-	@Column(name = "land_date")
-	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
-	private LocalDateTime		landDate;
+	@Column(name = "land_date", nullable = false)
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	private Date		landDate;
 
-	@NotNull
-	@Column(name = "depart_date")
-	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
-	private LocalDateTime		departDate;
+	@Column(name = "depart_date", nullable = false)
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	private Date		departDate;
 
 
 	public String getReference() {
@@ -156,19 +155,19 @@ public class Flight extends BaseEntity {
 		this.airline = airline;
 	}
 
-	public LocalDateTime getLandDate() {
+	public Date getLandDate() {
 		return this.landDate;
 	}
 
-	public void setLandDate(final LocalDateTime landDate) {
+	public void setLandDate(final Date landDate) {
 		this.landDate = landDate;
 	}
 
-	public LocalDateTime getDepartDate() {
+	public Date getDepartDate() {
 		return this.departDate;
 	}
 
-	public void setDepartDate(final LocalDateTime departDate) {
+	public void setDepartDate(final Date departDate) {
 		this.departDate = departDate;
 	}
 

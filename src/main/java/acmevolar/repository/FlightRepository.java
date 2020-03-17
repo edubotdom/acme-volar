@@ -63,4 +63,6 @@ public interface FlightRepository {
 	
 	Collection<Flight> findAirlineFlight(String username) throws DataAccessException;
 
+	List<Flight> findPublishedFutureFlight() throws DataAccessException;
+
 }

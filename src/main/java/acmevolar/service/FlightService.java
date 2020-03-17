@@ -70,6 +70,11 @@ public class FlightService {
 	public Collection<Flight> findPublishedFlight() {
 		return this.flightRepository.findPublishedFlight();
 	}
+	
+	@Transactional(readOnly = true)
+	public Collection<Flight> findPublishedFutureFlight() {
+		return this.flightRepository.findPublishedFutureFlight();
+	}
 
 	@Transactional(readOnly = true)
 	public Collection<Flight> findAirlineFlight(final String username) {

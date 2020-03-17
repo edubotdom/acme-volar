@@ -16,6 +16,9 @@
 
 package acmevolar.model;
 
+import java.time.LocalDateTime;
+
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
@@ -24,6 +27,8 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 @Entity
 @Table(name = "flights")
 public class Flight extends BaseEntity {
@@ -31,10 +36,6 @@ public class Flight extends BaseEntity {
 	@NotEmpty
 	@Column(name = "reference")
 	private String				reference;
-
-	public String getReference() {
-		return reference;
-	}
 
 	@NotNull
 	@Column(name = "seats")
@@ -48,6 +49,7 @@ public class Flight extends BaseEntity {
 	@JoinColumn(name = "flight_status_id")
 	private FlightStatusType	flightStatus;
 
+	//@NotNull
 	@ManyToOne
 	@JoinColumn(name = "plane_id")
 	private Plane				plane;
@@ -56,24 +58,31 @@ public class Flight extends BaseEntity {
 	@Column(name = "published")
 	private Boolean				published;
 
-	@NotNull
+	//@NotNull
 	@ManyToOne
 	@JoinColumn(name = "departes_id")
-	private Runaway				departes;
+	private Runway				departes;
 
-	@NotNull
+	//@NotNull
 	@ManyToOne
 	@JoinColumn(name = "lands_id")
-	private Runaway				lands;
+	private Runway				lands;
 
+	//@NotNull
 	@ManyToOne
 	@JoinColumn(name = "airline_id")
 	private Airline				airline;
 
+	@NotNull
+	@Column(name = "land_date")
+	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
+	private LocalDateTime		landDate;
 
-	public Airline getAirline() {
-		return this.airline;
-	}
+	@NotNull
+	@Column(name = "depart_date")
+	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
+	private LocalDateTime		departDate;
+
 
 	public String getReference() {
 		return this.reference;
@@ -122,57 +131,51 @@ public class Flight extends BaseEntity {
 	public void setPublished(final Boolean published) {
 		this.published = published;
 	}
-  
-	public Runaway getDepartes() {
+
+	public Runway getDepartes() {
 		return this.departes;
 	}
 
-	public void setDepartes(final Runaway departes) {
+	public void setDepartes(final Runway departes) {
 		this.departes = departes;
 	}
 
-	public Runaway getLands() {
+	public Runway getLands() {
 		return this.lands;
 	}
 
-	public void setLands(final Runaway lands) {
+	public void setLands(final Runway lands) {
 		this.lands = lands;
+	}
+
+	public Airline getAirline() {
+		return this.airline;
 	}
 
 	public void setAirline(final Airline airline) {
 		this.airline = airline;
 	}
 
+	public LocalDateTime getLandDate() {
+		return this.landDate;
+	}
+
+	public void setLandDate(final LocalDateTime landDate) {
+		this.landDate = landDate;
+	}
+
+	public LocalDateTime getDepartDate() {
+		return this.departDate;
+	}
+
+	public void setDepartDate(final LocalDateTime departDate) {
+		this.departDate = departDate;
+	}
+
 	@Override
 	public String toString() {
 		return "Flight [reference=" + this.reference + ", seats=" + this.seats + ", price=" + this.price + ", flightStatus=" + this.flightStatus + ", plane=" + this.plane + ", published=" + this.published + ", departes=" + this.departes + ", lands="
-			+ this.lands + "]";
+			+ this.lands + ", airline=" + this.airline + ", landDate=" + this.landDate + ", departDate=" + this.departDate + "]";
 	}
 
-	/*
-	 * public void setBirthDate(LocalDate birthDate) {
-	 * this.birthDate = birthDate;
-	 * }
-	 * protected void setOwner(Owner owner) {
-	 * this.owner = owner;
-	 * }
-	 * protected Set<Visit> getVisitsInternal() {
-	 * if (this.visits == null) {
-	 * this.visits = new HashSet<>();
-	 * }
-	 * return this.visits;
-	 * }
-	 * protected void setVisitsInternal(Set<Visit> visits) {
-	 * this.visits = visits;
-	 * }
-	 * public List<Visit> getVisits() {
-	 * List<Visit> sortedVisits = new ArrayList<>(getVisitsInternal());
-	 * PropertyComparator.sort(sortedVisits, new MutableSortDefinition("date", false, false));
-	 * return Collections.unmodifiableList(sortedVisits);
-	 * }
-	 * public void addVisit(Visit visit) {
-	 * getVisitsInternal().add(visit);
-	 * visit.setPet(this);
-	 * }
-	 */
 }

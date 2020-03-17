@@ -16,7 +16,9 @@
 
 package acmevolar.service;
 
-import java.util.Collection;
+
+
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -25,13 +27,14 @@ import org.springframework.transaction.annotation.Transactional;
 
 import acmevolar.model.Airport;
 import acmevolar.model.Runway;
+import acmevolar.model.RunwayType;
 import acmevolar.repository.RunwayRepository;
 
 
 @Service
 public class RunwayService {
 
-private RunwayRepository runwayRepository;
+	private RunwayRepository runwayRepository;
 	
 	@Autowired
 	public RunwayService(RunwayRepository runwayRepository) {
@@ -44,19 +47,34 @@ private RunwayRepository runwayRepository;
 	}
 	
 	@Transactional(readOnly = true)
-	public Collection<Runway> findAllRunway() throws DataAccessException {
+	public List<Runway> findAllRunway() throws DataAccessException {
 		return runwayRepository.findAll();
 	}
 	
+	@Transactional(readOnly = true)
+	public List<Runway> findRunwaysByAirportId(Integer airportId) throws DataAccessException {
+		return runwayRepository.findRunwaysByAirportId(airportId);
+	}
+	
+	//FlightStatusType
+	@Transactional(readOnly = true)
+	public List<RunwayType> findRunwaysTypes() throws DataAccessException {
+		return this.runwayRepository.findRunwaysTypes();
+	}
+	
+	@Transactional
 	public void saveRunway(Runway runway) throws DataAccessException {
 		runwayRepository.save(runway);                
 	}
 
+	@Transactional(readOnly = true)
 	public Airport findAirportById(Integer airportId) throws DataAccessException {
 		Airport airport = runwayRepository.findAirportById(airportId);
 		return airport;
 	}
 	
-	//Hay que agregar un método para buscar el airport correspondiente a un runway
+	public void deleteRunwayById(Integer runwayId) throws DataAccessException {
+		runwayRepository.deleteById(runwayId);
+	}
 
 }

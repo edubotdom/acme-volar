@@ -3,6 +3,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="petclinic" tagdir="/WEB-INF/tags" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
 <petclinic:layout pageName="planes">
@@ -55,5 +56,11 @@
         </c:forEach>
         </tbody>
     </table>
+    
+    <sec:authorize access="hasAuthority('airline')">
+	    <form method="get" action="/planes/new">
+	    	<button class="btn btn-default" type="submit">Create</button>
+		</form>
+	</sec:authorize>
 
 </petclinic:layout>

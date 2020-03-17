@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -13,80 +13,130 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package acmevolar.model;
 
-import java.util.Date;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
-
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
+import org.springframework.beans.support.MutableSortDefinition;
+import org.springframework.beans.support.PropertyComparator;
+
 @Entity
-@Table(name = "runaway")
+@Table(name = "runway")
 public class Runway extends BaseEntity {
 
 	@NotEmpty
 	@Column(name = "name")
-	private String name;
-	
-	@NotNull
-	@Column(name = "date")
-	private Date date;
+	private String		name;
 
-	@NotNull
-	@Enumerated(value=EnumType.STRING)
-	@Column(name = "type")
-	private RunwayType type;
-	
 	@ManyToOne
-	@NotNull
+	@JoinColumn(name = "runway_type_id")
+	private RunwayType	runwayType;
+
+	@ManyToOne
 	@JoinColumn(name = "airport_id")
 	private Airport airport;
-
-	public String getName() {
-		return name;
+	
+	// DEPARTES FROM FLIGHT
+	
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "departes")
+	private Set<Flight> flightsDepartes;
+	
+	protected Set<Flight> getFlightsDepartesInternal() {
+		if (this.flightsDepartes == null) {
+			this.flightsDepartes = new HashSet<>();
+		}
+		return this.flightsDepartes;
 	}
 
-	public void setName(String name) {
+
+	protected void setFlightDepartesInternal(Set<Flight> flights) {
+		this.flightsDepartes = flights;
+	}
+
+	public List<Flight> getFlightsDepartes() {
+		List<Flight> sortedFlights = new ArrayList<>(getFlightsDepartesInternal());
+		PropertyComparator.sort(sortedFlights, new MutableSortDefinition("name", true, true));
+		return Collections.unmodifiableList(sortedFlights);
+	}
+
+	public void addFlightDepartes(Flight flight) {
+		getFlightsDepartesInternal().add(flight);
+		flight.setDepartes(this);
+	}
+	
+	// DEPARTES FROM FLIGHT
+	
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "lands")
+	private Set<Flight> flightsLands;
+	
+	protected Set<Flight> getFlightsLandsInternal() {
+		if (this.flightsLands == null) {
+			this.flightsLands = new HashSet<>();
+		}
+		return this.flightsLands;
+	}
+
+	protected void setFlightLandsInternal(Set<Flight> flights) {
+		this.flightsLands = flights;
+	}
+
+	public List<Flight> getFlightsLands() {
+		List<Flight> sortedFlights = new ArrayList<>(getFlightsLandsInternal());
+		PropertyComparator.sort(sortedFlights, new MutableSortDefinition("name", true, true));
+		return Collections.unmodifiableList(sortedFlights);
+	}
+
+	public void addFlightLands(Flight flight) {
+		getFlightsLandsInternal().add(flight);
+		flight.setDepartes(this);
+	}
+
+	// GETTERS & SETTERS
+	
+	public String getName() {
+		return this.name;
+	}
+
+	public void setName(final String name) {
 		this.name = name;
 	}
 
-	public Date getDate() {
-		return date;
+	public RunwayType getRunwayType() {
+		return runwayType;
 	}
 
-	public void setDate(Date date) {
-		this.date = date;
+
+	public void setRunwayType(RunwayType runwayType) {
+		this.runwayType = runwayType;
 	}
 
-	public RunwayType getType() {
-		return type;
-	}
-
-	public void setType(RunwayType type) {
-		this.type = type;
-	}
 
 	public Airport getAirport() {
-		return airport;
+		return this.airport;
 	}
 
-	public void setAirport(Airport airport) {
+	public void setAirport(final Airport airport) {
 		this.airport = airport;
 	}
 
 	@Override
 	public String toString() {
-		return "Runway [name=" + name + ", date=" + date + ", type=" + type + ", airport=" + airport + "]";
+		return "Runway [name=" + this.name + ", type=" + this.runwayType + ", airport=" + this.airport + "]";
 	}
-	
-	
-	
+
 }

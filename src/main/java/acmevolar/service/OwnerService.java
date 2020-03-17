@@ -17,23 +17,14 @@ package acmevolar.service;
 
 import java.util.Collection;
 
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.StringUtils;
 
 import acmevolar.model.Owner;
-import acmevolar.model.Pet;
-import acmevolar.model.PetType;
-import acmevolar.model.Vet;
-import acmevolar.model.Visit;
 import acmevolar.repository.OwnerRepository;
-import acmevolar.repository.PetRepository;
-import acmevolar.repository.VetRepository;
-import acmevolar.repository.VisitRepository;
-import acmevolar.service.exceptions.DuplicatedPetNameException;
 
 /**
  * Mostly used as a facade for all Petclinic controllers Also a placeholder

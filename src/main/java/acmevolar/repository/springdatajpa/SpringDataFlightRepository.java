@@ -36,7 +36,7 @@ import acmevolar.repository.FlightRepository;
 public interface SpringDataFlightRepository extends FlightRepository, Repository<Flight, Integer> {
 
 	@Override
-	@Query("SELECT fstype.name FROM FlightStatusType fstype ORDER BY fstype.name")
+	@Query("SELECT fstype FROM FlightStatusType fstype ORDER BY fstype.name")
 	List<FlightStatusType> findFlightStatusTypes() throws DataAccessException;
 
 	@Override
@@ -44,6 +44,6 @@ public interface SpringDataFlightRepository extends FlightRepository, Repository
 	List<Flight> findPublishedFlight() throws DataAccessException;
 
 	@Override
-	@Query("SELECT flight FROM Flight flight WHERE flight.airline.user.username =:username ")
+	@Query("SELECT flight FROM Flight flight WHERE flight.airline.user.username =:username")
 	List<Flight> findAirlineFlight(@Param("username") String username) throws DataAccessException;
 }

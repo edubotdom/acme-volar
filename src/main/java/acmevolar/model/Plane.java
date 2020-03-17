@@ -16,15 +16,26 @@
 
 package acmevolar.model;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Past;
 
+import org.springframework.beans.support.MutableSortDefinition;
+import org.springframework.beans.support.PropertyComparator;
 import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
@@ -63,76 +74,116 @@ public class Plane extends BaseEntity {
 	@Column(name = "last_maintenance", nullable = false)
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date	lastMaintenance;
+	
+	
+	@ManyToOne
+	@JoinColumn(name = "airline_id")
+	private Airline	airline;
 
-
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "plane")
+	private Set<Flight> flights;
+	
 	public String getReference() {
-		return this.reference;
+		return reference;
+	}
+	
+	public Set<Flight> getFlightsInternal() {
+		if (this.flights == null) {
+			this.flights = new HashSet<>();
+		}
+		return this.flights;
+	}
+	
+	public void setFlightsInternal(Set<Flight> flights) {
+		this.flights=flights;
+	}
+	
+	public List<Flight> getFlights() {
+		List<Flight> sortedFlights = new ArrayList<>(getFlightsInternal());
+		PropertyComparator.sort(sortedFlights, new MutableSortDefinition("name", true, true));
+		return Collections.unmodifiableList(sortedFlights);
+	}
+	
+	public void addFlight(Flight flight) {
+		getFlightsInternal().add(flight);
+		flight.setPlane(this);
 	}
 
-	public void setReference(final String reference) {
+	public void setReference(String reference) {
 		this.reference = reference;
 	}
 
 	public Integer getMaxSeats() {
-		return this.maxSeats;
+		return maxSeats;
 	}
 
-	public void setMaxSeats(final Integer maxSeats) {
+	public void setMaxSeats(Integer maxSeats) {
 		this.maxSeats = maxSeats;
 	}
 
 	public String getDescription() {
-		return this.description;
+		return description;
 	}
 
-	public void setDescription(final String description) {
+	public void setDescription(String description) {
 		this.description = description;
 	}
 
 	public String getManufacter() {
-		return this.manufacter;
+		return manufacter;
 	}
 
-	public void setManufacter(final String manufacter) {
+	public void setManufacter(String manufacter) {
 		this.manufacter = manufacter;
 	}
 
 	public String getModel() {
-		return this.model;
+		return model;
 	}
 
-	public void setModel(final String model) {
+	public void setModel(String model) {
 		this.model = model;
 	}
 
 	public Double getNumberOfKm() {
-		return this.numberOfKm;
+		return numberOfKm;
 	}
 
-	public void setNumberOfKm(final Double numberOfKm) {
+	public void setNumberOfKm(Double numberOfKm) {
 		this.numberOfKm = numberOfKm;
 	}
 
 	public Double getMaxDistance() {
-		return this.maxDistance;
+		return maxDistance;
 	}
 
-	public void setMaxDistance(final Double maxDistance) {
+	public void setMaxDistance(Double maxDistance) {
 		this.maxDistance = maxDistance;
 	}
 
 	public Date getLastMaintenance() {
-		return this.lastMaintenance;
+		return lastMaintenance;
 	}
 
-	public void setLastMaintenance(final Date lastMaintenance) {
+	public void setLastMaintenance(Date lastMaintenance) {
 		this.lastMaintenance = lastMaintenance;
 	}
 
+	public Airline getAirline() {
+		return airline;
+	}
+
+	public void setAirline(Airline airline) {
+		this.airline = airline;
+	}
+/*
 	@Override
 	public String toString() {
-		return "Plane [reference=" + this.reference + ", maxSeats=" + this.maxSeats + ", description=" + this.description + ", manufacter=" + this.manufacter + ", model=" + this.model + ", numberOfKm=" + this.numberOfKm + ", maxDistance="
-			+ this.maxDistance + ", lastMaintenance=" + this.lastMaintenance + "]";
+		return "Plane [reference=" + reference + ", maxSeats=" + maxSeats + ", description=" + description
+				+ ", manufacter=" + manufacter + ", model=" + model + ", numberOfKm=" + numberOfKm + ", maxDistance="
+				+ maxDistance + ", lastMaintenance=" + lastMaintenance + ", airline=" + airline + "]";
 	}
+
+	*/
 
 }

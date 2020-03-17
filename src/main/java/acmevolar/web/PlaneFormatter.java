@@ -25,7 +25,9 @@ import org.springframework.format.Formatter;
 import org.springframework.stereotype.Component;
 
 import acmevolar.model.FlightStatusType;
+import acmevolar.model.Plane;
 import acmevolar.service.FlightService;
+import acmevolar.service.PlaneService;
 
 /**
  * Instructs Spring MVC on how to parse and print elements of type 'PetType'. Starting
@@ -42,28 +44,29 @@ import acmevolar.service.FlightService;
  * @author Juergen Hoeller
  * @author Michael Isvy
  */
-@Component
-public class FlightStatusTypeFormatter implements Formatter<FlightStatusType> {
 
-	private final FlightService flightService;
+@Component
+public class PlaneFormatter implements Formatter<Plane> {
+
+	private final PlaneService planeService;
 
 
 	@Autowired
-	public FlightStatusTypeFormatter(final FlightService flightService) {
-		this.flightService = flightService;
+	public PlaneFormatter(final PlaneService planeService) {
+		this.planeService = planeService;
 	}
 
 	@Override
-	public String print(final FlightStatusType flightStatusType, final Locale locale) {
-		return flightStatusType.getName();
+	public String print(final Plane plane, final Locale locale) {
+		return plane.getReference();
 	}
 
 	@Override
-	public FlightStatusType parse(final String text, final Locale locale) throws ParseException {
-		Collection<FlightStatusType> findFlightStatusTypes = this.flightService.findFlightStatusTypes();
-		for (FlightStatusType type : findFlightStatusTypes) {
-			if (type.getName().equals(text)) {
-				return type;
+	public Plane parse(String text, Locale locale) throws ParseException {
+		Collection<Plane> findPlanes = this.planeService.findPlanes();
+		for (Plane plane : findPlanes) {
+			if (plane.getReference().equals(text)) {
+				return plane;
 			}
 		}
 		throw new ParseException("type not found: " + text, 0);

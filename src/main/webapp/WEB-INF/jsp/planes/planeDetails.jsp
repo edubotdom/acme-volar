@@ -3,6 +3,7 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="petclinic" tagdir="/WEB-INF/tags" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags"%>
 
 <petclinic:layout pageName="planes">
 
@@ -43,17 +44,14 @@
             <td><c:out value="${plane.lastMaintenance}"/></td>
         </tr>
     </table>
-	<!-- 
-    <spring:url value="{planeId}/edit" var="editUrl">
-        <spring:param name="planeId" value="${plane.id}"/>
-    </spring:url>
-    <a href="${fn:escapeXml(editUrl)}" class="btn btn-default">Edit Plane</a>
+	
+	<sec:authorize access="hasAuthority('airline')">
+		<spring:url value="/planes/{planeId}/edit" var="planeEditUrl">
+			<spring:param name="planeId" value="${plane.id}" />
+		</spring:url>
 
-    <spring:url value="{planeId}/plane/new" var="addUrl">
-        <spring:param name="planeId" value="${plane.id}"/>
-    </spring:url>
-    <a href="${fn:escapeXml(addUrl)}" class="btn btn-default">Add New Plane</a>
-	-->
+		<button class="btn btn-default" onclick="window.location.href='${fn:escapeXml(planeEditUrl)}'">Edit</button>
+	</sec:authorize>
     
 
 </petclinic:layout>

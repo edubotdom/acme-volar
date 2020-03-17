@@ -81,6 +81,9 @@ INSERT INTO flight_status_type VALUES (1, 'on_time');
 INSERT INTO flight_status_type VALUES (2, 'delayed');
 INSERT INTO flight_status_type VALUES (3, 'cancelled');
 
+INSERT INTO runway_type VALUES (1, 'take_off');
+INSERT INTO runway_type VALUES (2, 'landing');
+
 INSERT INTO airports(id, name, max_number_of_planes, max_number_of_clients, latitude, longitude, code, city ) VALUES (1, 'Sevilla Airport', 50, 600, 37.4180000, -5.8931100, 'SVQ', 'Sevilla');
 INSERT INTO airports(id, name, max_number_of_planes, max_number_of_clients, latitude, longitude, code, city ) VALUES (2, 'Adolfo Suárez Madrid-Barajas Airport', 50, 600, 37.4180000, -5.8931100, 'MDR', 'Madrid');
 INSERT INTO airports(id, name, max_number_of_planes, max_number_of_clients, latitude, longitude, code, city ) VALUES (3, 'El Prat Airport', 50, 600, 37.4180000, -5.8931100, 'BCN', 'Barcelona');
@@ -90,22 +93,22 @@ INSERT INTO aeroplanes(id, reference, max_seats, description, manufacter, model,
 	VALUES (1, 'V14-5', 150, 'This is a description', 'Boeing', 'B747', 500000.23, 2000000.0, '2011-04-17',1);
 
 
-INSERT INTO runway(id,name,type,airport_id) VALUES (1,'A-01','TAKE_OFF',1);
-INSERT INTO runway(id,name,type,airport_id) VALUES (2,'A-02','LANDING',2);
-INSERT INTO runway(id,name,type,airport_id) VALUES (3,'A-03','TAKE_OFF',2);
-INSERT INTO runway(id,name,type,airport_id) VALUES (4,'A-04','LANDING',2);
-INSERT INTO runway(id,name,type,airport_id) VALUES (5,'A-05','TAKE_OFF',2);
-INSERT INTO runway(id,name,type,airport_id) VALUES (6,'A-06','LANDING',1);
-INSERT INTO runway(id,name,type,airport_id) VALUES (7,'A-07','TAKE_OFF',2);
-INSERT INTO runway(id,name,type,airport_id) VALUES (8,'A-08','LANDING',1);
-INSERT INTO runway(id,name,type,airport_id) VALUES (9,'A-01','TAKE_OFF',1);
-INSERT INTO runway(id,name,type,airport_id) VALUES (10,'A-10','LANDING',3);
-INSERT INTO runway(id,name,type,airport_id) VALUES (11,'A-11','TAKE_OFF',3);
-INSERT INTO runway(id,name,type,airport_id) VALUES (12,'A-12','LANDING',3);
-INSERT INTO runway(id,name,type,airport_id) VALUES (13,'A-13','TAKE_OFF',3);
-INSERT INTO runway(id,name,type,airport_id) VALUES (14,'A-14','LANDING',4);
-INSERT INTO runway(id,name,type,airport_id) VALUES (15,'A-15','TAKE_OFF',4);
-INSERT INTO runway(id,name,type,airport_id) VALUES (16,'A-16','LANDING',4);
+INSERT INTO runway(id,name,runway_type_id, airport_id) VALUES (1,'A-01',1 ,1);
+INSERT INTO runway(id,name,runway_type_id,airport_id) VALUES (2,'A-02',1 ,2);
+INSERT INTO runway(id,name,runway_type_id,airport_id) VALUES (3,'A-03',2 ,2);
+INSERT INTO runway(id,name,runway_type_id,airport_id) VALUES (4,'A-04',2 ,2);
+INSERT INTO runway(id,name,runway_type_id,airport_id) VALUES (5,'A-05',1 ,2);
+INSERT INTO runway(id,name,runway_type_id,airport_id) VALUES (6,'A-06',2 ,1);
+INSERT INTO runway(id,name,runway_type_id,airport_id) VALUES (7,'A-07',1 ,2);
+INSERT INTO runway(id,name,runway_type_id,airport_id) VALUES (8,'A-08',2 ,1);
+INSERT INTO runway(id,name,runway_type_id,airport_id) VALUES (9,'A-01',1 ,1);
+INSERT INTO runway(id,name,runway_type_id,airport_id) VALUES (10,'A-10',2 ,3);
+INSERT INTO runway(id,name,runway_type_id,airport_id) VALUES (11,'A-11',1 ,3);
+INSERT INTO runway(id,name,runway_type_id,airport_id) VALUES (12,'A-12',2 ,3);
+INSERT INTO runway(id,name,runway_type_id,airport_id) VALUES (13,'A-13',1 ,3);
+INSERT INTO runway(id,name,runway_type_id,airport_id) VALUES (14,'A-14',2 ,4);
+INSERT INTO runway(id,name,runway_type_id,airport_id) VALUES (15,'A-15',1 ,4);
+INSERT INTO runway(id,name,runway_type_id,airport_id) VALUES (16,'A-16',2 ,4);
 
 INSERT INTO flights(id, reference, seats, price, flight_status_id, plane_id, published, departes_id, lands_id, airline_id, land_date, depart_date) 
 	VALUES (1, 'R-01', 250, 150.0, 1, 1, TRUE, 1, 2, 1,'2020-06-06 14:05','2020-06-06 15:00');

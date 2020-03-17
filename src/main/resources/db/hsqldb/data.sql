@@ -101,7 +101,7 @@ INSERT INTO runway(id,name,runway_type_id,airport_id) VALUES (5,'A-05',1 ,2);
 INSERT INTO runway(id,name,runway_type_id,airport_id) VALUES (6,'A-06',2 ,1);
 INSERT INTO runway(id,name,runway_type_id,airport_id) VALUES (7,'A-07',1 ,2);
 INSERT INTO runway(id,name,runway_type_id,airport_id) VALUES (8,'A-08',2 ,1);
-INSERT INTO runway(id,name,runway_type_id,airport_id) VALUES (9,'A-01',1 ,1);
+INSERT INTO runway(id,name,runway_type_id,airport_id) VALUES (9,'A-09',1 ,1);
 INSERT INTO runway(id,name,runway_type_id,airport_id) VALUES (10,'A-10',2 ,3);
 INSERT INTO runway(id,name,runway_type_id,airport_id) VALUES (11,'A-11',1 ,3);
 INSERT INTO runway(id,name,runway_type_id,airport_id) VALUES (12,'A-12',2 ,3);

@@ -44,5 +44,7 @@ public interface RunwayRepository {
 	List<RunwayType> findRunwaysTypes() throws DataAccessException;
 	
 	void deleteById(Integer runwayId) throws DataAccessException;
+	
+	List<Runway> findRunwaysByName(String runwayName) throws DataAccessException;
 
 }

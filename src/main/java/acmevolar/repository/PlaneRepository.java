@@ -2,12 +2,12 @@
 package acmevolar.repository;
 
 import java.util.Collection;
+
 import java.util.List;
 
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.repository.query.Param;
 
-import acmevolar.model.Flight;
 import acmevolar.model.Plane;
 
 
@@ -24,5 +24,7 @@ public interface PlaneRepository{
 	List<Plane> findPlanesbyAirline(@Param("airline") String airline) throws DataAccessException;
 
 	void save(Plane plane) throws DataAccessException;
+
+	List<Plane> findPlanesbyReference(String reference);
 	
 }

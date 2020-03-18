@@ -48,7 +48,7 @@ public class Plane extends BaseEntity {
 
 	@NotNull
 	@Column(name = "max_seats")
-	private Integer	maxSeats;
+	private int	maxSeats;
 
 	@NotEmpty
 	@Column(name = "description")

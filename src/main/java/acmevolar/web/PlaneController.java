@@ -1,6 +1,7 @@
 
 package acmevolar.web;
 
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Map;
 
@@ -29,10 +30,9 @@ import acmevolar.service.PlaneService;
 @Controller
 public class PlaneController {
 
-
 	private final PlaneService planeService;
 	private final FlightService flightService;
-	
+
 	private static final String VIEWS_PLANES_CREATE_OR_UPDATE_FORM = "planes/createPlaneForm";
 
 	@Autowired
@@ -41,18 +41,14 @@ public class PlaneController {
 		this.flightService = flightService;
 	}
 
-	@GetMapping(value = {
-		"/planes"
-	})
+	@GetMapping(value = { "/planes" })
 	public String showPlaneList(final Map<String, Object> model) {
 		Collection<Plane> planes = this.planeService.findPlanes();
 		model.put("planes", planes);
 		return "planes/planesList";
 	}
 
-	@GetMapping(value = {
-		"/my_planes"
-	})
+	@GetMapping(value = { "/my_planes" })
 	public String showMyPlaneList(final Map<String, Object> model) {
 
 		// first, we get the airline role
@@ -60,7 +56,7 @@ public class PlaneController {
 
 		// now, we substract the planes created by the same airline
 		Collection<Plane> planes = this.planeService.getAllPlanesFromAirline(username);
-    
+
 		model.put("planes", planes);
 		return "planes/planesList";
 	}
@@ -80,10 +76,10 @@ public class PlaneController {
 	@GetMapping(value = "/planes/new")
 	public String initCreationForm(final Map<String, Object> model) {
 		Plane plane = new Plane();
-		
+
 		String username = SecurityContextHolder.getContext().getAuthentication().getName();
 		Airline airline = this.flightService.findAirlineByUsername(username);
-		
+
 		airline.addPlane(plane);
 
 		model.put("plane", plane);
@@ -92,19 +88,32 @@ public class PlaneController {
 	}
 
 	@PostMapping(value = "/planes/new")
-	public String processCreationForm(@Valid final Plane plane, final BindingResult result) {
+	public String processCreationForm(final Map<String, Object> model, @Valid final Plane plane,
+			final BindingResult result) {
 
 		if (result.hasErrors()) {
 			return PlaneController.VIEWS_PLANES_CREATE_OR_UPDATE_FORM;
+		} else if (!plane.getLastMaintenance().before(Calendar.getInstance().getTime())) {
+
+			result.rejectValue("lastMaintenance", "MaintenanceAfterPresentDate",
+					"last maintenance date can't be in future");
+			return PlaneController.VIEWS_PLANES_CREATE_OR_UPDATE_FORM;
+
+		} else if (this.planeService.findPlanesByReference(plane.getReference()).size() != 0) {
+
+			result.rejectValue("reference", "ReferenceIsAlreadyUsed", "Reference is already used");
+			model.put("reference", plane.getReference());
+			return PlaneController.VIEWS_PLANES_CREATE_OR_UPDATE_FORM;
+
 		} else {
 
 			String username = SecurityContextHolder.getContext().getAuthentication().getName();
-
 			Airline airline = this.flightService.findAirlineByUsername(username);
-			
+
 			try {
 				airline.addPlane(plane);
 				this.planeService.savePlane(plane);
+
 			} catch (DataAccessException e) {
 				e.printStackTrace();
 			}
@@ -112,7 +121,7 @@ public class PlaneController {
 			return "redirect:/planes/" + plane.getId();
 		}
 	}
-	
+
 	@GetMapping(value = "/planes/{planeId}/edit")
 	public String initUpdateForm(@PathVariable("planeId") final int planeId, final ModelMap model) {
 		Plane plane = this.planeService.findPlaneById(planeId);
@@ -127,6 +136,19 @@ public class PlaneController {
 		if (result.hasErrors()) {
 			model.put("plane", plane);
 			return PlaneController.VIEWS_PLANES_CREATE_OR_UPDATE_FORM;
+		}
+		else if(!plane.getLastMaintenance().before(Calendar.getInstance().getTime())) {
+				
+			result.rejectValue("lastMaintenance", "MaintenanceAfterPresentDate",
+					"last maintenance date can't be in future");
+			return PlaneController.VIEWS_PLANES_CREATE_OR_UPDATE_FORM;
+			
+		} else if(this.planeService.findPlanesByReference(plane.getReference()).size()!=0) {
+				
+			result.rejectValue("reference", "ReferenceIsAlreadyUsed", "Reference is already used");
+			model.put("reference", plane.getReference());
+			return PlaneController.VIEWS_PLANES_CREATE_OR_UPDATE_FORM;
+				
 		} else {
 			Plane planeToUpdate = this.planeService.findPlaneById(planeId);
 			BeanUtils.copyProperties(planeToUpdate, plane, "reference", "maxSeats", "description",
@@ -141,7 +163,5 @@ public class PlaneController {
 			return "redirect:/planes/" + plane.getId();
 		}
 	}
-	
-
 
 }

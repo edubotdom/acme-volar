@@ -2,7 +2,7 @@
 package acmevolar.service;
 
 import java.util.Collection;
-
+import java.util.HashMap;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -74,6 +74,11 @@ public class PlaneService {
 
 	public List<Plane> getAllPlanesFromAirline(Airline airline) {
 		return this.springPlaneRepository.findPlanesByAirlineId(airline.getId());
+	}
+
+	public List<Plane> findPlanesByReference(String reference) {
+		
+		return this.planeRepository.findPlanesbyReference(reference);
 	}
 	
 }

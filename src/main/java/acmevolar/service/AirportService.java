@@ -48,4 +48,9 @@ public class AirportService {
 		return this.airportRepository.findById(airportId);
 	}
 
+	@Transactional(readOnly = true)
+	public Collection<Airport> findAirportByCode(final String code) throws DataAccessException {
+		return this.airportRepository.findAirportByCode(code);
+	}
+
 }

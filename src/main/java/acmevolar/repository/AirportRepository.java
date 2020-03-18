@@ -24,4 +24,6 @@ public interface AirportRepository extends CrudRepository<Airport, Integer> {
 	 */
 	Airport findAirportById(int id) throws DataAccessException;
 
+	Collection<Airport> findAirportByCode(String code) throws DataAccessException;
+
 }

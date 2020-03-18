@@ -68,6 +68,9 @@ public class AirportController {
 
 		if (result.hasErrors()) {
 			return AirportController.VIEWS_AIRPORT_CREATE_FORM;
+		} else if (this.airportService.findAirportByCode(airport.getCode()).size() != 0) {
+			result.rejectValue("code", "ExisteUnAeropuertoConEsteCodigo", "Existe un aeropuerto con este codigo");
+			return AirportController.VIEWS_AIRPORT_CREATE_FORM;
 		} else {
 			try {
 				this.airportService.saveAirport(airport);
@@ -94,6 +97,10 @@ public class AirportController {
 	public String processUpdateForm(@Valid final Airport airport, final BindingResult result, @PathVariable("airportId") final int airportId, final ModelMap model) {
 		if (result.hasErrors()) {
 			model.put("airport", airport);
+			return AirportController.VIEWS_AIRPORT_CREATE_FORM;
+		} else if (this.airportService.findAirportByCode(airport.getCode()).size() != 0) {
+			model.put("airport", airport);
+			result.rejectValue("code", "ExisteUnAeropuertoConEsteCodigo", "Existe un aeropuerto con este codigo");
 			return AirportController.VIEWS_AIRPORT_CREATE_FORM;
 		} else {
 			Airport airportToUpdate = this.airportService.findAirportById(airportId);

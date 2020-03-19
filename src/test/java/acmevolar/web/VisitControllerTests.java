@@ -1,4 +1,4 @@
-package org.springframework.samples.petclinic.web;
+package acmevolar.web;
 
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;

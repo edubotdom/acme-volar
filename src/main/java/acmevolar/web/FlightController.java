@@ -16,9 +16,7 @@
 
 package acmevolar.web;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -155,7 +153,7 @@ public class FlightController {
 				result.rejectValue("lands", "AirportFullOfPlanes", "This airport is full of planes this day");
 
 
-			} if (flight.getDepartes().getAirport().getName().equals(flight.getLands().getAirport().getName())) {
+			} /*if (flight.getDepartes().getAirport().getName().equals(flight.getLands().getAirport().getName())) {
 				result.rejectValue("lands", "PathClosed", "This path is close, choose another airport(runway)");
 
 
@@ -169,7 +167,7 @@ public class FlightController {
 						"Depart date can't be programmed before the present");
 
 
-			}
+			}*/
 			
 			if(result.hasErrors()) {
 				model.put("flight", flight);
@@ -240,7 +238,7 @@ public String processUpdateForm(@Valid Flight flight, BindingResult result, @Pat
 						// day
 						result.rejectValue("lands", "AirportFullOfPlanes", "This airport is full of planes this day");
 
-					} if (flight.getDepartes().getAirport().getName().equals(flight.getLands().getAirport().getName())) {
+					}/* if (flight.getDepartes().getAirport().getName().equals(flight.getLands().getAirport().getName())) {
 						result.rejectValue("lands", "PathClosed", "This path is close, choose another airport(runway)");
 
 					} if (flight.getDepartDate().after(flight.getLandDate())) {
@@ -250,7 +248,7 @@ public String processUpdateForm(@Valid Flight flight, BindingResult result, @Pat
 					} if (flight.getDepartDate().before(Calendar.getInstance().getTime())) {
 						result.rejectValue("departDate", "DepartBeforePresentDate",
 								"Depart date can't be programmed before the present");
-					}
+					}*/
 					
 					if(result.hasErrors()) {
 						model.put("flight", flight);
@@ -262,4 +260,10 @@ public String processUpdateForm(@Valid Flight flight, BindingResult result, @Pat
 					}
                 }
 	}
+    
+	@InitBinder("flight")
+	public void initFlightBinder(WebDataBinder dataBinder) {
+		dataBinder.setValidator(new FlightValidator());
+	}
+    
 }

@@ -43,6 +43,7 @@ import acmevolar.model.Flight;
 import acmevolar.model.FlightStatusType;
 import acmevolar.model.Plane;
 import acmevolar.model.Runway;
+import acmevolar.service.AirlineService;
 import acmevolar.service.FlightService;
 import acmevolar.service.PlaneService;
 
@@ -203,10 +204,16 @@ public class FlightController {
 	@GetMapping(value = "/flights/{flightId}/edit")
 	public String initUpdateForm(@PathVariable("flightId") final int flightId, final ModelMap model) {
 		Flight flight = this.flightService.findFlightById(flightId);
+		String username = SecurityContextHolder.getContext().getAuthentication().getName();
+		Airline airline = this.flightService.findAirlineByUsername(username);
+		if(flight.getPublished() || !flight.getAirline().getName().equals(airline.getName())) {
+			return "redirect:/flights/" + flightId;
+		} else {
 		insertData(model, flight);
 		model.put("flight", flight);
 		return FlightController.VIEWS_FLIGHT_CREATE_FORM;
 	}
+		}
 
     @PostMapping(value = "/flights/{flightId}/edit")
 	@PreAuthorize("hasAuthority('airline')")

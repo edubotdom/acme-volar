@@ -20,20 +20,25 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import acmevolar.model.Airport;
+import acmevolar.model.api.Forecast;
 import acmevolar.service.AirportService;
+import acmevolar.service.ForecastService;
 import acmevolar.service.exceptions.DuplicatedPetNameException;
 
 @Controller
 public class AirportController {
 
 	private final AirportService	airportService;
+	private final ForecastService	forecastService;
+	
 
 	private static final String		VIEWS_AIRPORT_CREATE_FORM	= "airports/createAirportForm";
 
 
 	@Autowired
-	public AirportController(final AirportService airportService) {
+	public AirportController(final AirportService airportService, final ForecastService forecastService) {
 		this.airportService = airportService;
+		this.forecastService = forecastService;
 	}
 
 	@GetMapping(value = {
@@ -50,7 +55,10 @@ public class AirportController {
 	@GetMapping("/airports/{airportId}")
 	public ModelAndView showAirport(@PathVariable("airportId") final int airportId) {
 		ModelAndView mav = new ModelAndView("airports/airportDetails");
-		mav.addObject(this.airportService.findAirportById(airportId));
+		Airport airport = airportService.findAirportById(airportId);
+		Forecast forecast = forecastService.searchForecastByCity(airport.getCity()).block();
+		mav.addObject(airport);
+		mav.addObject(forecast);
 		return mav;
 	}
 

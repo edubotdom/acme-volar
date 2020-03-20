@@ -39,6 +39,27 @@
 			<td><c:out value="${airport.city}" /></td>
 		</tr>
 	</table>
+		
+		<h2>Weather in airport information</h2>
+
+		<table class="table table-striped">
+		<tr>
+			<th>Temperature</th>
+			<td><c:out value="${forecast.main.temp}" /></td>
+		</tr>
+		<tr>
+			<th>Humidity</th>
+			<td><c:out value="${forecast.main.humidity}" /></td>
+		</tr>
+		<tr>
+			<th>Pressure</th>
+			<td><c:out value="${forecast.main.pressure}" /></td>
+		</tr>
+		<tr>
+			<th>Visibility</th>
+			<td><c:out value="${forecast.visibility}" /></td>
+		</tr>
+	</table>
 
 	<sec:authorize access="hasAuthority('airline')">
 		<spring:url value="/airports/{airportId}/edit" var="airportEditUrl">

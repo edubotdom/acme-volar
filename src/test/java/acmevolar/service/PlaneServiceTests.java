@@ -172,6 +172,7 @@ class PlaneServiceTests {
 
 		//Plane plane1 = EntityUtils.getById(planes, Plane.class, 1);
 		assertThat(!planes.isEmpty());
+		assertThat(planes).asList();
 	}
 	
 	@Test
@@ -186,11 +187,30 @@ class PlaneServiceTests {
 		assertThat(a1.getFlights()).asList();
 		assertThat(a1.getIdentification().equals("61333744-N"));
 		assertThat(a1.getName().equals("Sevilla Este Airways"));
-		assertThat(a1.getPhone().equals(644584458));
+		assertThat(a1.getPhone().equals("644584458"));
 		assertThat(a1.getPlanes()).asList();
 		assertThat(a1.getReference().equals("SEA-001"));
 	}
 	
+	@Test
+	void shouldgetAllPlanesFromAirline() {
+		Airline a1 = planeService.findAirlineByUsername("airline1");
+		Collection<Plane> planes = this.planeService.getAllPlanesFromAirline(a1);
+
+		//Plane plane1 = EntityUtils.getById(planes, Plane.class, 1);
+		assertThat(!planes.isEmpty());
+		assertThat(planes).asList();
+	}
+	
+	@Test
+	void shouldgetAllPlanesFromAirlineId() {
+		Airline a1 = planeService.findAirlineByUsername("airline1");
+		Collection<Plane> planes = this.planeService.getAllPlanesFromAirline(a1.getUser().getUsername());
+
+		//Plane plane1 = EntityUtils.getById(planes, Plane.class, 1);
+		assertThat(!planes.isEmpty());
+		assertThat(planes).asList();
+	}
 	
 	@Test
 	void shouldFindPlaneInformationById() {

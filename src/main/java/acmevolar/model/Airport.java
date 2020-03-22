@@ -12,10 +12,14 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
+import org.hibernate.validator.constraints.Range;
 import org.springframework.beans.support.MutableSortDefinition;
 import org.springframework.beans.support.PropertyComparator;
 
@@ -28,27 +32,32 @@ public class Airport extends NamedEntity {
 	private String	name;
 
 	@NotNull
+	@Range(min = 0,max=30000)
 	@Column(name = "max_number_of_planes")
 	private Integer	maxNumberOfPlanes;
 
 	@NotNull
+	@Range(min = 0,max=30000)
 	@Column(name = "max_number_of_clients")
 	private Integer	maxNumberOfClients;
 
 	@NotNull
+	@Range(min = -180,max=180)
 	@Column(name = "latitude")
 	private Double	latitude;
 
 	@NotNull
+	@Range(min = -180,max=180)
 	@Column(name = "longitude")
 	private Double	longitude;
 
 	@NotEmpty
-	@Size(min = 3, max = 3)
+	@Pattern(regexp = "^[A-Z]{3}$", message = "The code must contain 3 chraracters in caps")
 	@Column(name = "code", unique = true)
 	private String	code;
 
 	@NotEmpty
+	@Pattern(regexp = "^[a-zA-Z]+$", message = "Only must contains letters")
 	@Column(name = "city")
 	private String	city;
 	

@@ -26,10 +26,12 @@ import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Past;
@@ -43,9 +45,10 @@ import org.springframework.format.annotation.DateTimeFormat;
 public class Plane extends BaseEntity {
 
 	@NotEmpty
-	@Column(name = "reference")
+	@Column(name = "reference", unique=true)
 	private String	reference;
 
+	@Min(value = 0)
 	@NotNull
 	@Column(name = "max_seats")
 	private Integer	maxSeats;
@@ -62,10 +65,12 @@ public class Plane extends BaseEntity {
 	@Column(name = "model")
 	private String	model;
 
+	@Min(value = 0)
 	@NotNull
 	@Column(name = "number_of_km")
 	private Double	numberOfKm;
 
+	@Min(value = 0)
 	@NotNull
 	@Column(name = "max_distance")
 	private Double	maxDistance;

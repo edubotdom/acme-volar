@@ -9,6 +9,8 @@ import java.time.LocalDate;
 import java.util.Collection;
 import java.util.HashSet;
 
+import javax.validation.ConstraintViolationException;
+
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +40,7 @@ class PlaneServiceTests {
 //	@Autowired
 //	private MockMvc mockMvc;
 
+	//Registrar un avión correctamente
 	@Test
 	@Transactional
 	public void shouldInsertPlaneIntoDatabaseAndGenerateId() {
@@ -66,6 +69,114 @@ class PlaneServiceTests {
 
 		// checks that id has been generated
 		assertThat(plane.getId()).isNotNull();
+	}
+	
+	//No puede insertarse un avión con plazas negativas
+	@Test
+	@Transactional
+	public void shouldNotInsertPlaneNegativeSeats() {
+
+		Airline a1 = this.airlineService.findAirlineById(1);
+		Flight f1 = this.flightService.findFlightById(1);
+		
+		Plane plane = new Plane();
+		plane.setAirline(a1);
+		plane.setDescription("Mock description");
+		plane.setFlightsInternal(new HashSet<Flight>());
+		plane.setLastMaintenance(Date.from(Instant.now().minusSeconds(1)));
+		plane.setManufacter("Boeing");
+		plane.setMaxDistance(45000.);
+		plane.setMaxSeats(-300);
+		plane.setModel("Renton 737");
+		plane.setNumberOfKm(34200.);
+		plane.setReference("REF1");
+		
+
+		Assertions.assertThrows(ConstraintViolationException.class, () ->{
+			f1.setPlane(plane);
+			planeService.savePlane(plane);
+		});
+	}
+	
+	//No puede insertarse un avión con plazas negativas
+	@Test
+	@Transactional
+	public void shouldNotInsertPlaneNegativeDistance() {
+
+		Airline a1 = this.airlineService.findAirlineById(1);
+		Flight f1 = this.flightService.findFlightById(1);
+		
+		Plane plane = new Plane();
+		plane.setAirline(a1);
+		plane.setDescription("Mock description");
+		plane.setFlightsInternal(new HashSet<Flight>());
+		plane.setLastMaintenance(Date.from(Instant.now().minusSeconds(1)));
+		plane.setManufacter("Boeing");
+		plane.setMaxDistance(-45000.);
+		plane.setMaxSeats(300);
+		plane.setModel("Renton 737");
+		plane.setNumberOfKm(34200.);
+		plane.setReference("REF1");
+		
+
+		Assertions.assertThrows(ConstraintViolationException.class, () ->{
+			f1.setPlane(plane);
+			planeService.savePlane(plane);
+		});
+	}
+	
+	//No puede insertarse un avión con kilómetros negativos
+	@Test
+	@Transactional
+	public void shouldNotInsertPlaneNegativeKm() {
+
+		Airline a1 = this.airlineService.findAirlineById(1);
+		Flight f1 = this.flightService.findFlightById(1);
+		
+		Plane plane = new Plane();
+		plane.setAirline(a1);
+		plane.setDescription("Mock description");
+		plane.setFlightsInternal(new HashSet<Flight>());
+		plane.setLastMaintenance(Date.from(Instant.now().minusSeconds(1)));
+		plane.setManufacter("Boeing");
+		plane.setMaxDistance(45000.);
+		plane.setMaxSeats(300);
+		plane.setModel("Renton 737");
+		plane.setNumberOfKm(-34200.);
+		plane.setReference("REF1");
+		
+
+		Assertions.assertThrows(ConstraintViolationException.class, () ->{
+			f1.setPlane(plane);
+			planeService.savePlane(plane);
+		});
+	}
+	
+	//No puede insertarse un avión con último mantenimiento futuro
+	@Test
+	@Transactional
+	public void shouldNotInsertPlaneWrongMaintenance() {
+
+		Airline a1 = this.airlineService.findAirlineById(1);
+		Flight f1 = this.flightService.findFlightById(1);
+		
+		Plane plane = new Plane();
+		plane.setAirline(a1);
+		plane.setDescription("Mock description");
+		plane.setFlightsInternal(new HashSet<Flight>());
+		plane.setLastMaintenance(Date.from(Instant.now().plusSeconds(90000)));
+		plane.setManufacter("Boeing");
+		plane.setMaxDistance(45000.);
+		plane.setMaxSeats(300);
+		plane.setModel("Renton 737");
+		plane.setNumberOfKm(34200.);
+		plane.setReference("REF1");
+		
+
+		Assertions.assertThrows(ConstraintViolationException.class, () ->{
+			f1.setPlane(plane);
+			planeService.savePlane(plane);
+		});
 	}
 	
 	@Test

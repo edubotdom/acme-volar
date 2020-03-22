@@ -18,7 +18,6 @@ package acmevolar.repository.springdatajpa;
 
 import java.util.List;
 
-
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.Repository;
@@ -40,7 +39,11 @@ public interface SpringDataRunwayRepository extends RunwayRepository, Repository
 	@Override
 	@Query("SELECT r FROM RunwayType r ORDER BY r.name")
 	List<RunwayType> findRunwaysTypes() throws DataAccessException;
-	
+
+	@Override
+	@Query("SELECT r FROM RunwayType r where r.id=:runwayTypeId")
+	RunwayType findRunwayTypeById(Integer runwayTypeId) throws DataAccessException;
+
 	@Override
 	@Query("SELECT a FROM Airport a where a.id=:airportId")
 	Airport findAirportById(Integer airportId) throws DataAccessException;
@@ -56,7 +59,8 @@ public interface SpringDataRunwayRepository extends RunwayRepository, Repository
 	@Override
 	@Query("SELECT r FROM Runway r where r.runwayType.name = 'landing'")
 	List<Runway> findLandingRunways() throws DataAccessException;
-	
+
+	@Override
 	@Query("SELECT r FROM Runway r where r.name =:runwayName")
 	List<Runway> findRunwaysByName(String runwayName) throws DataAccessException;
 

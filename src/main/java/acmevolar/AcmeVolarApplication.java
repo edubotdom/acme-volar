@@ -18,7 +18,7 @@ public class AcmeVolarApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(AcmeVolarApplication.class, args);
 	}
-
+/*
 	@Bean
 	public RestTemplate restTemplate(RestTemplateBuilder builder) {
 		return builder.build();
@@ -33,5 +33,5 @@ public class AcmeVolarApplication {
 			log.info(forecast.toString());
 		};
 	}
-	
+	*/
 }

@@ -25,7 +25,7 @@ public class AirportServiceTests {
 	
 	@Test
 	void shouldFindAirportsByName() {
-		Collection<Airport> airport = this.airportService.findAirportsByName("Seville Airport");
+		Collection<Airport> airport = this.airportService.findAirportsByName("Sevilla Airport");
 		assertThat(airport.size()).isEqualTo(1);
 	}
 	
@@ -39,7 +39,7 @@ public class AirportServiceTests {
 		assertThat(airport1.getMaxNumberOfClients()).isEqualTo(600);
 		assertThat(airport1.getLatitude()).isEqualTo(37.4180000);
 		assertThat(airport1.getLongitude()).isEqualTo(-5.8931100);
-		assertThat(airport1.getCode()).isEqualTo("SQV");
+		assertThat(airport1.getCode()).isEqualTo("SVQ");
 		assertThat(airport1.getCity()).isEqualTo("Sevilla");
 	}
 	

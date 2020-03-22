@@ -57,7 +57,7 @@ public class Airport extends NamedEntity {
 	private String	code;
 
 	@NotEmpty
-	@Pattern(regexp = "^[a-zA-Z]+$", message = "Only must contains letters")
+	@Pattern(regexp = "^[a-zA-Z ]+$", message = "Only must contains letters")
 	@Column(name = "city")
 	private String	city;
 	

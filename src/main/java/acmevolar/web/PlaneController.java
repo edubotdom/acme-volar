@@ -83,7 +83,7 @@ public class PlaneController {
 		
 		String username = SecurityContextHolder.getContext().getAuthentication().getName();
 		Airline airline = this.flightService.findAirlineByUsername(username);
-		
+		plane.setAirline(airline);
 		airline.addPlane(plane);
 
 		model.put("plane", plane);
@@ -97,11 +97,16 @@ public class PlaneController {
 		if (result.hasErrors()) {
 			return PlaneController.VIEWS_PLANES_CREATE_OR_UPDATE_FORM;
 		} else {
-
+			
+			if(planeService.findPlaneByReference(plane.getReference())!=null) {
+				result.rejectValue("reference", "RepeatedReference", "You must introduce a reference that was not introduced in other plane.");	
+				return PlaneController.VIEWS_PLANES_CREATE_OR_UPDATE_FORM;
+			}
+			
 			String username = SecurityContextHolder.getContext().getAuthentication().getName();
 
 			Airline airline = this.flightService.findAirlineByUsername(username);
-			
+			plane.setAirline(airline);
 			try {
 				airline.addPlane(plane);
 				this.planeService.savePlane(plane);
@@ -142,6 +147,9 @@ public class PlaneController {
 		}
 	}
 	
-
+	@InitBinder("plane")
+	public void initFlightBinder(WebDataBinder dataBinder) {
+		dataBinder.setValidator(new PlaneValidator());
+	}
 
 }

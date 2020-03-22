@@ -35,6 +35,11 @@ public class PlaneService {
 	public Plane findPlaneById(final int id) throws DataAccessException {
 		return this.planeRepository.findById(id);
 	}
+	
+	@Transactional(readOnly = true)
+	public Plane findPlaneByReference(final String reference) throws DataAccessException {
+		return this.planeRepository.findByReference(reference);
+	}
 
 	
 	@Transactional(rollbackFor = DuplicatedPetNameException.class)
@@ -49,14 +54,14 @@ public class PlaneService {
 	public void deletePlane(final Plane plane) throws DataAccessException {
 		this.planeRepository.deleteById(plane.getId());
 	}
-
+/*
 	public void updatePlane(final Plane plane) throws DataAccessException {
 		Integer id = plane.getId();				// extract id of a plane
 		Plane plane2 = this.findPlaneById(id);		// we know the original plane with that id
 		this.deletePlane(plane2);					// we delete the original
 		this.planeRepository.save(plane);			// we replace with the updated version
 	}
-
+*/
 	@Transactional(readOnly = true)
 	public Collection<Plane> findPlanes() throws DataAccessException {
 		return this.planeRepository.findAll();

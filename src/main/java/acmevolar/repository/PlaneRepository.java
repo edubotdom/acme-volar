@@ -24,5 +24,7 @@ public interface PlaneRepository{
 	List<Plane> findPlanesbyAirline(@Param("airline") String airline) throws DataAccessException;
 
 	void save(Plane plane) throws DataAccessException;
+
+	Plane findByReference(String reference);
 	
 }

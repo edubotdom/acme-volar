@@ -94,7 +94,7 @@ class PlaneControllerTests {
 				.andExpect(model().attributeExists("plane")).andExpect(view().name("planes/planeDetails"));
 	}
 
-	@WithMockUser(value = "airline1", authorities = { "airline" })
+	@WithMockUser(value = "airline1"/*, authorities = { "airline" }*/)
 	@Test
 	void testInitCreationForm() throws Exception {
 		this.mockMvc.perform(get("/planes/new")).andExpect(status().isOk())
@@ -105,11 +105,12 @@ class PlaneControllerTests {
 	@Test
 	void testProcessCreationFormSuccess() throws Exception {
 		this.mockMvc.perform(post("/planes/new").with(csrf())
-
+	
 				.param("reference", "reference").param("maxSeats", "200").param("description", "description")
 				.param("manufacter", "manufacter").param("model", "model").param("numberOfKm", "100")
 				.param("maxDistance", "500").param("lastMaintenance", "2011-04-17"))
-
+				
+				//.andExpect(status().is3xxRedirection())
 				.andExpect(view().name("redirect:/planes/{planeId}"));
 	}
 

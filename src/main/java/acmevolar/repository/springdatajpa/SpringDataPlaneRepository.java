@@ -21,4 +21,8 @@ public interface SpringDataPlaneRepository extends PlaneRepository, Repository<P
 	@Query("SELECT plane FROM Plane plane WHERE plane.airline.user.username =:airline ")
 	List<Plane> findPlanesbyAirline(@Param("airline") String airline) throws DataAccessException;
 
+	@Override
+	@Query("SELECT plane FROM Plane plane WHERE plane.reference =:reference")
+	Plane findByReference(String reference);
+	
 }

@@ -35,6 +35,11 @@ public class PlaneService {
 	public Plane findPlaneById(final int id) throws DataAccessException {
 		return this.planeRepository.findById(id);
 	}
+	
+	@Transactional(readOnly = true)
+	public Plane findPlaneByReference(final String reference) throws DataAccessException {
+		return this.planeRepository.findByReference(reference);
+	}
 
 	
 	@Transactional(rollbackFor = DuplicatedPetNameException.class)

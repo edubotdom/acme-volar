@@ -2,6 +2,7 @@
 package acmevolar.repository;
 
 import java.util.Collection;
+import java.util.List;
 
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.repository.CrudRepository;
@@ -23,5 +24,7 @@ public interface AirportRepository extends CrudRepository<Airport, Integer> {
 	 *             if not found
 	 */
 	Airport findAirportById(int id) throws DataAccessException;
+	
+	List<Airport> findAirportsByName(String airportName) throws DataAccessException;
 
 }

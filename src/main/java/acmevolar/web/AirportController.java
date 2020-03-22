@@ -23,7 +23,8 @@ import acmevolar.model.Airport;
 import acmevolar.model.api.Forecast;
 import acmevolar.service.AirportService;
 import acmevolar.service.ForecastService;
-import acmevolar.service.exceptions.DuplicatedPetNameException;
+import acmevolar.service.exceptions.DuplicatedAirportNameException;
+import acmevolar.service.exceptions.IncorrectCartesianCoordinatesException;
 
 @Controller
 public class AirportController {
@@ -81,9 +82,12 @@ public class AirportController {
 				this.airportService.saveAirport(airport);
 			} catch (DataAccessException e) {
 				e.printStackTrace();
-			} catch (DuplicatedPetNameException e) {
+			} catch (IncorrectCartesianCoordinatesException e) {
+				e.printStackTrace();
+			} catch (DuplicatedAirportNameException e) {
 				e.printStackTrace();
 			}
+
 
 			return "redirect:/airports/" + airport.getId();
 		}
@@ -111,7 +115,9 @@ public class AirportController {
 				this.airportService.saveAirport(airport);
 			} catch (DataAccessException e) {
 				e.printStackTrace();
-			} catch (DuplicatedPetNameException e) {
+			} catch (IncorrectCartesianCoordinatesException e) {
+				e.printStackTrace();
+			} catch (DuplicatedAirportNameException e) {
 				e.printStackTrace();
 			}
 			return "redirect:/airports/" + airport.getId();

@@ -77,7 +77,11 @@ public class AirportController {
 
 		if (result.hasErrors()) {
 			return AirportController.VIEWS_AIRPORT_CREATE_FORM;
+		} else if(this.airportService.findAirportsByName(airport.getName()).size()!=0){
+			result.rejectValue("name", "duplicate", "Already exists");
+			return AirportController.VIEWS_AIRPORT_CREATE_FORM;
 		} else {
+		
 			try {
 				this.airportService.saveAirport(airport);
 			} catch (DataAccessException e) {
@@ -85,7 +89,8 @@ public class AirportController {
 			} catch (IncorrectCartesianCoordinatesException e) {
 				e.printStackTrace();
 			} catch (DuplicatedAirportNameException e) {
-				e.printStackTrace();
+				result.rejectValue("name", "duplicate", "Already exists");
+				return AirportController.VIEWS_AIRPORT_CREATE_FORM;
 			}
 
 

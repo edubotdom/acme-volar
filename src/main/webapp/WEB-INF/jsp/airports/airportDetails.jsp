@@ -5,7 +5,7 @@
 <%@ taglib prefix="petclinic" tagdir="/WEB-INF/tags"%>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags"%>
 
-<petclinic:layout pageName="airports">
+<petclinic:layout pageName="airport">
 
 	<h2>Airport Information</h2>
 
@@ -40,7 +40,7 @@
 		</tr>
 	</table>
 		
-		<h2>Weather in airport information</h2>
+		<h2>Weather in <c:out value="${airport.city}" /></h2>
 
 		<table class="table table-striped">
 		<tr>

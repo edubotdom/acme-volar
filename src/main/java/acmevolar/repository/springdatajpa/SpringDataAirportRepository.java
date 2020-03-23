@@ -17,7 +17,7 @@ public interface SpringDataAirportRepository extends AirportRepository, Reposito
 	@Query("SELECT airport FROM Airport airport WHERE airport.id =:id")
 	Airport findAirportById(@Param("id") int id);
 	
-	@Query("SELECT a FROM Airport a where a.name =:airportName")
+	@Query("SELECT a FROM Airport a WHERE a.name =:airportName")
 	List<Airport> findAirportsByName(String airportName) throws DataAccessException;
 
 }

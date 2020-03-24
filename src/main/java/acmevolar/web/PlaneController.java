@@ -143,7 +143,7 @@ public class PlaneController {
 				e.printStackTrace();
 			}
 			
-			return "redirect:/planes/" + plane.getId();
+			return "redirect:/planes/{planeId}";// + plane.getId();
 		}
 	}
 	

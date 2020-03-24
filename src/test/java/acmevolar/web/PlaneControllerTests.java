@@ -18,6 +18,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
 import org.springframework.security.config.annotation.web.WebSecurityConfigurer;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.test.web.servlet.MockMvc;
 
 import acmevolar.configuration.SecurityConfiguration;
@@ -119,8 +120,7 @@ class PlaneControllerTests {
 			.param("reference", "reference").param("maxSeats", "200").param("description", "description").param("manufacter", "manufacter").param("model", "model").param("numberOfKm", "100").param("maxDistance", "500")
 			.param("lastMaintenance", "2011-04-17"))
 
-			//.andExpect(status().is3xxRedirection())
-			.andExpect(view().name("redirect:/planes/{planeId}"));
+			.andExpect(status().is3xxRedirection());
 	}
 
 	@WithMockUser(value = "airline1", authorities = {

@@ -42,7 +42,7 @@ public class AirportService {
 
 	@Transactional(rollbackFor = IncorrectCartesianCoordinatesException.class, noRollbackFor = DuplicatedAirportNameException.class)
 	public void saveAirport(final Airport airport) throws DataAccessException,IncorrectCartesianCoordinatesException,DuplicatedAirportNameException {
-		if((airport.getLatitude()<=-180.) || (airport.getLatitude()>=180.)
+		if((airport.getLatitude()<=-90.) || (airport.getLatitude()>=90.)
 				|| (airport.getLongitude()<=-180.) || (airport.getLongitude()>=180.)) {
 			throw new IncorrectCartesianCoordinatesException();
 		} else if(this.airportRepository.findAirportsByName(airport.getName()).size()!=0) {

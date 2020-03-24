@@ -16,7 +16,7 @@ public class AirportValidator implements Validator {
 	public void validate(Object target, Errors errors) {
 		Airport airport = (Airport) target;
 		
-		if((airport.getLatitude()<=-180.) || (airport.getLatitude()>=180.)) {
+		if((airport.getLatitude()<=-90.) || (airport.getLatitude()>=90.)) {
 			errors.rejectValue("latitude", "MustBeContained", "Must be contained in -180. and 180");
 		} else if((airport.getLongitude()<=-180.) || (airport.getLongitude()>=180.)) {
 			errors.rejectValue("longitude", "MustBeContained", "Must be contained in -180. and 180");

@@ -42,7 +42,7 @@ public class Airport extends NamedEntity {
 	private Integer	maxNumberOfClients;
 
 	@NotNull
-	@Range(min = -180,max=180)
+	@Range(min = -90,max=90)
 	@Column(name = "latitude")
 	private Double	latitude;
 

@@ -19,6 +19,7 @@ package acmevolar.web;
 
 import java.util.List;
 import java.util.Map;
+
 import javax.validation.Valid;
 
 import org.springframework.beans.BeanUtils;
@@ -110,9 +111,9 @@ public class RunwayController {
 	public String initUpdateForm(@PathVariable("runwayId") int runwayId, @PathVariable("airportId") final int airportId, ModelMap model) {
 		Runway runway = this.runwayService.findRunwayById(runwayId);
 
-		List<RunwayType> runwayTypes = this.runwayService.findRunwaysTypes();
 		
-		model.put("runwayTypes", runwayTypes);
+		insertData(model, airportId);
+		
 		model.put("runway", runway);
 		return RunwayController.VIEWS_RUNWAYS_CREATE_OR_UPDATE_FORM;
 	}

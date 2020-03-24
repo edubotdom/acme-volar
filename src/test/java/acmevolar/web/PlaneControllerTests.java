@@ -1,3 +1,4 @@
+
 package acmevolar.web;
 
 import static org.mockito.BDDMockito.given;
@@ -28,22 +29,23 @@ import acmevolar.service.PlaneService;
 @WebMvcTest(value = PlaneController.class, excludeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = WebSecurityConfigurer.class), excludeAutoConfiguration = SecurityConfiguration.class)
 class PlaneControllerTests {
 
-	private static final int TEST_PLANE_ID = 1;
+	private static final int	TEST_PLANE_ID	= 1;
 
 	@Autowired
-	private PlaneController planeController;
+	private PlaneController		planeController;
 
 	@MockBean
-	private PlaneService planeService;
+	private PlaneService		planeService;
 
 	@MockBean
-	protected FlightService flightService;
+	protected FlightService		flightService;
 
 	@MockBean
-	protected AirlineService airlineService;
+	protected AirlineService	airlineService;
 
 	@Autowired
-	private MockMvc mockMvc;
+	private MockMvc				mockMvc;
+
 
 	/*
 	 * @BeforeEach void setup() { Airline a1 =
@@ -73,45 +75,71 @@ class PlaneControllerTests {
 		given(this.planeService.findPlaneById(PlaneControllerTests.TEST_PLANE_ID)).willReturn(new Plane());
 	}
 
-	@WithMockUser(username = "airline1", value = "airline1", authorities = { "airline" })
+	@WithMockUser(value = "airline1", authorities = {
+		"airline"
+	})
 	@Test
 	void testShowPlaneList() throws Exception {
-		this.mockMvc.perform(get("/planes")).andExpect(status().isOk()).andExpect(model().attributeExists("planes"))
-				.andExpect(view().name("planes/planesList"));
+		this.mockMvc.perform(get("/planes")).andExpect(status().isOk()).andExpect(model().attributeExists("planes")).andExpect(view().name("planes/planesList"));
 	}
 
-	@WithMockUser(value = "airline1", authorities = { "airline" })
+	@WithMockUser(value = "airline1", authorities = {
+		"airline"
+	})
 	@Test
 	void testShowMyPlaneList() throws Exception {
-		this.mockMvc.perform(get("/my_planes")).andExpect(status().isOk()).andExpect(model().attributeExists("planes"))
-				.andExpect(view().name("planes/planesList"));
+		this.mockMvc.perform(get("/my_planes")).andExpect(status().isOk()).andExpect(model().attributeExists("planes")).andExpect(view().name("planes/planesList"));
 	}
 
-	@WithMockUser(value = "airline1", authorities = { "airline" })
+	@WithMockUser(value = "airline1", authorities = {
+		"airline"
+	})
 	@Test
 	void testShowPlane() throws Exception {
-		this.mockMvc.perform(get("/planes/{planeId}", PlaneControllerTests.TEST_PLANE_ID)).andExpect(status().isOk())
-				.andExpect(model().attributeExists("plane")).andExpect(view().name("planes/planeDetails"));
+		this.mockMvc.perform(get("/planes/{planeId}", PlaneControllerTests.TEST_PLANE_ID)).andExpect(status().isOk()).andExpect(model().attributeExists("plane")).andExpect(view().name("planes/planeDetails"));
 	}
 
-	@WithMockUser(value = "airline1"/*, authorities = { "airline" }*/)
+	@WithMockUser(value = "airline1", authorities = {
+		"airline"
+	})
 	@Test
 	void testInitCreationForm() throws Exception {
-		this.mockMvc.perform(get("/planes/new")).andExpect(status().isOk())
-				.andExpect(view().name("planes/createPlaneForm"));
+		this.mockMvc.perform(get("/planes/new")).andExpect(status().isOk()).andExpect(model().attributeExists("plane")).andExpect(view().name("planes/createPlaneForm"));
 	}
 
-	@WithMockUser(value = "airline1", authorities = { "airline" })
+	@WithMockUser(value = "airline1", authorities = {
+		"airline"
+	})
 	@Test
 	void testProcessCreationFormSuccess() throws Exception {
 		this.mockMvc.perform(post("/planes/new").with(csrf())
-	
-				.param("reference", "reference").param("maxSeats", "200").param("description", "description")
-				.param("manufacter", "manufacter").param("model", "model").param("numberOfKm", "100")
-				.param("maxDistance", "500").param("lastMaintenance", "2011-04-17"))
-				
-				//.andExpect(status().is3xxRedirection())
-				.andExpect(view().name("redirect:/planes/{planeId}"));
+
+			.param("reference", "reference").param("maxSeats", "200").param("description", "description").param("manufacter", "manufacter").param("model", "model").param("numberOfKm", "100").param("maxDistance", "500")
+			.param("lastMaintenance", "2011-04-17"))
+
+			//.andExpect(status().is3xxRedirection())
+			.andExpect(view().name("redirect:/planes/{planeId}"));
+	}
+
+	@WithMockUser(value = "airline1", authorities = {
+		"airline"
+	})
+	@Test
+	void testInitUpdateForm() throws Exception {
+		mockMvc.perform(get("/planes/{planeId}/edit", TEST_PLANE_ID)).andExpect(status().isOk()).andExpect(model().attributeExists("plane")).andExpect(view().name("planes/createPlaneForm"));
+	}
+
+	@WithMockUser(value = "airline1", authorities = {
+		"airline"
+	})
+	@Test
+	void testProcessUpdateFormSuccess() throws Exception {
+		mockMvc.perform(post("/planes/{planeId}/edit", TEST_PLANE_ID).with(csrf())
+
+			.param("reference", "reference2").param("maxSeats", "200").param("description", "description2").param("manufacter", "manufacter2").param("model", "model2").param("numberOfKm", "100").param("maxDistance", "500")
+			.param("lastMaintenance", "2011-04-17"))
+
+			.andExpect(status().is3xxRedirection()).andExpect(view().name("redirect:/planes/{planeId}"));
 	}
 
 	/**

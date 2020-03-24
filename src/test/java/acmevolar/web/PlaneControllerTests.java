@@ -21,6 +21,7 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import acmevolar.configuration.SecurityConfiguration;
+import acmevolar.model.Airline;
 import acmevolar.model.Plane;
 import acmevolar.service.AirlineService;
 import acmevolar.service.FlightService;
@@ -73,6 +74,7 @@ class PlaneControllerTests {
 	@BeforeEach
 	void setup() {
 		given(this.planeService.findPlaneById(PlaneControllerTests.TEST_PLANE_ID)).willReturn(new Plane());
+		given(this.flightService.findAirlineByUsername("airline1")).willReturn(new Airline());
 	}
 
 	@WithMockUser(value = "airline1", authorities = {

@@ -34,48 +34,48 @@ import acmevolar.service.RunwayService;
 @WebMvcTest(value = RunwayController.class, excludeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = WebSecurityConfigurer.class), excludeAutoConfiguration = SecurityConfiguration.class)
 class RunwayControllerTests {
 
-	private static final int	TEST_RUNWAY_ID1				= 1;	//Departes from Sevilla
-	private static final int	TEST_RUNWAY_TAKE_OFF_ID1	= 1;
-	private static final int	TEST_RUNWAY_ID4				= 4;	//Lands in Madrid
-	private static final int	TEST_RUNWAY_LANDING_ID2		= 2;
+	private static final int		TEST_RUNWAY_ID1				= 1;	//Departes from Sevilla
+	private static final int		TEST_RUNWAY_TAKE_OFF_ID1	= 1;
+	private static final int		TEST_RUNWAY_ID4				= 4;	//Lands in Madrid
+	private static final int		TEST_RUNWAY_LANDING_ID2		= 2;
 
-	private static final int	TEST_AIRPORT_ID1			= 1;//Sevilla
-	private static final int	TEST_AIRPORT_ID2			= 2; //Madrid
-
-	@Autowired
-	private RunwayController	runwayController;
-
-	@MockBean
-	protected RunwayService		runwayService;
-		
-	@MockBean
-	protected RunwayTypeFormatter 	runwayTypeFormatter;
-
-	@MockBean
-	protected AirportService	airportService;
-
-	@MockBean
-	protected FlightService		flightService;
+	private static final int		TEST_AIRPORT_ID1			= 1;//Sevilla
+	private static final int		TEST_AIRPORT_ID2			= 2; //Madrid
 
 	@Autowired
-	private MockMvc				mockMvc;
+	private RunwayController		runwayController;
+
+	@MockBean
+	protected RunwayService			runwayService;
+
+	@MockBean
+	protected RunwayTypeFormatter	runwayTypeFormatter;
+
+	@MockBean
+	protected AirportService		airportService;
+
+	@MockBean
+	protected FlightService			flightService;
+
+	@Autowired
+	private MockMvc					mockMvc;
 
 
 	@BeforeEach
 	void setup() {
 		given(this.runwayService.findRunwayById(RunwayControllerTests.TEST_RUNWAY_ID1)).willReturn(new Runway());
-		
+
 		RunwayType runway1 = new RunwayType();
 		runway1.setName("take_off");
 		runway1.setId(1);
 		given(this.runwayService.findRunwayTypeById(RunwayControllerTests.TEST_RUNWAY_TAKE_OFF_ID1)).willReturn(runway1);
 		given(this.runwayService.findRunwayById(RunwayControllerTests.TEST_RUNWAY_ID4)).willReturn(new Runway());
-		
+
 		RunwayType runway2 = new RunwayType();
 		runway2.setName("landing");
 		runway2.setId(2);
 		given(this.runwayService.findRunwayTypeById(RunwayControllerTests.TEST_RUNWAY_LANDING_ID2)).willReturn(new RunwayType());
-		
+
 		List<RunwayType> rts = new ArrayList<RunwayType>();
 		rts.add(runway1);
 		rts.add(runway2);
@@ -100,11 +100,12 @@ class RunwayControllerTests {
 		this.mockMvc.perform(get("/airports/{airportId}/runways/new", TEST_AIRPORT_ID1)).andExpect(status().isOk()).andExpect(model().attributeExists("runway", "airport")).andExpect(view().name("runways/createOrUpdateRunwaysForm"));
 	}
 
-	@WithMockUser(value = "airline1")
+	@WithMockUser(value = "airline1", authorities = {
+		"airline"
+	})
 	@Test
 	void testProcessCreationFormSuccess() throws Exception {
-		this.mockMvc.perform(post("/airports/{airportId}/runways/new", TEST_AIRPORT_ID1).with(csrf()).param("name", "Runway Example").param("runwayType", "landing")).andExpect(status().is3xxRedirection())
-			.andExpect(view().name("redirect:/airports/{airportId}/runways/"));
+		this.mockMvc.perform(post("/airports/{airportId}/runways/new", TEST_AIRPORT_ID1).with(csrf()).param("name", "Runway Example").param("runwayType", "landing")).andExpect(status().is3xxRedirection());
 	}
 
 	@WithMockUser(value = "airline1", authorities = {

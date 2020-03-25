@@ -18,7 +18,6 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
 import org.springframework.security.config.annotation.web.WebSecurityConfigurer;
 import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.test.annotation.Rollback;
 import org.springframework.test.web.servlet.MockMvc;
 
 import acmevolar.configuration.SecurityConfiguration;
@@ -137,7 +136,6 @@ class PlaneControllerTests {
 	@Test
 	void testProcessUpdateFormSuccess() throws Exception {
 		mockMvc.perform(post("/planes/{planeId}/edit", TEST_PLANE_ID).with(csrf())
-
 			.param("reference", "reference2").param("maxSeats", "200").param("description", "description2").param("manufacter", "manufacter2").param("model", "model2").param("numberOfKm", "100").param("maxDistance", "500")
 			.param("lastMaintenance", "2011-04-17"))
 

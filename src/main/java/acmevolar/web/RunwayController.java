@@ -36,6 +36,8 @@ import acmevolar.model.Airport;
 import acmevolar.model.Runway;
 import acmevolar.model.RunwayType;
 import acmevolar.service.RunwayService;
+import acmevolar.service.exceptions.DuplicatedAirportNameException;
+import acmevolar.service.exceptions.IncorrectCartesianCoordinatesException;
 
 @Controller
 public class RunwayController {
@@ -73,6 +75,7 @@ public class RunwayController {
 		
 		Airport airport = this.runwayService.findAirportById(airportId);
 		airport.addRunway(runway);		
+		runway.setAirport(airport);
 		
 		insertData(model, airportId);
 		
@@ -83,9 +86,10 @@ public class RunwayController {
 	}
 
 	@PostMapping(value = "/airports/{airportId}/runways/new")
-	public String processCreationForm(final Map<String, Object> model,@Valid final Runway runway,@PathVariable("airportId") final int airportId, final BindingResult result) {
+	public String processCreationForm(final Map<String, Object> model,@Valid final Runway runway,@PathVariable("airportId") final int airportId, final BindingResult result) throws DataAccessException, IncorrectCartesianCoordinatesException, DuplicatedAirportNameException {
 		Airport airport = this.runwayService.findAirportById(airportId);
 		airport.addRunway(runway);
+		runway.setAirport(airport);
 		if (result.hasErrors()) {
 			insertData(model, airportId);
 			return RunwayController.VIEWS_RUNWAYS_CREATE_OR_UPDATE_FORM;
@@ -101,6 +105,7 @@ public class RunwayController {
 			} catch (DataAccessException e) {
 				e.printStackTrace();
 			}
+			
 			return "redirect:/airports/" + airportId + "/runways/";
 		}
 	}
@@ -137,7 +142,7 @@ public class RunwayController {
 				} catch (DataAccessException e) {
 					e.printStackTrace();
 				}
-				return "redirect:/airports/" + airportId + "/runways" /*" + runway.getId()*/;
+				return "redirect:/airports/{airportId}/runways" /*" + runway.getId()*/;
         	}
 	}
     
@@ -147,7 +152,7 @@ public class RunwayController {
 		if (runway != null) {
 			this.runwayService.deleteRunwayById(runway.getId());
 		}
-		return "redirect:/airports/" + airportId + "/runways";
+		return "redirect:/airports/{airportId}/runways";
 
 	}
 	

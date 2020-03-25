@@ -1,6 +1,8 @@
 
 package acmevolar.web;
 
+import static org.hamcrest.Matchers.hasProperty;
+import static org.hamcrest.Matchers.is;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -10,6 +12,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
 import java.time.Instant;
+import java.util.Date;
 import java.util.HashSet;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -24,6 +27,8 @@ import org.springframework.context.annotation.FilterType;
 import org.springframework.security.config.annotation.web.WebSecurityConfigurer;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
+
+import com.sun.el.parser.ParseException;
 
 import acmevolar.configuration.SecurityConfiguration;
 import acmevolar.model.Airline;
@@ -96,6 +101,18 @@ class PlaneControllerTests {
 	@Test
 	void testShowPlane() throws Exception {
 		this.mockMvc.perform(get("/planes/{planeId}", PlaneControllerTests.TEST_PLANE_ID)).andExpect(status().isOk()).andExpect(model().attributeExists("plane")).andExpect(view().name("planes/planeDetails"));
+	}
+	
+	@WithMockUser(username = "airline1", value = "airline1", authorities = {
+		"airline"
+	})
+	@Test
+	void shouldFindPlaneInformation() throws Exception {
+		this.mockMvc.perform(get("/planes/{planeId}", PlaneControllerTests.TEST_PLANE_ID)).andExpect(status().isOk()).andExpect(model().attributeExists("plane")).andExpect(model().attribute("plane", hasProperty("reference", is("V14-5"))))
+			.andExpect(model().attribute("plane", hasProperty("maxSeats", is(150)))).andExpect(model().attribute("plane", hasProperty("description", is("This is a description"))))
+			//.andExpect(model().attribute("plane", hasProperty("lastMaintenance", is("2011-04-17 00:00:00.0"))))
+			.andExpect(model().attribute("plane", hasProperty("lastMaintenance"))).andExpect(view().name("planes/planeDetails"));
+
 	}
 
 	@WithMockUser(value = "airline1", authorities = {
@@ -181,7 +198,7 @@ class PlaneControllerTests {
 				.param("maxDistance", maxDistance)
 				.param("lastMaintenance", lastMaintenance))
 
-				.andExpect(model().attributeHasErrors("plane"))/*.andExpect(view().name("planes/createPlaneForm"))*/;
+				.andExpect(model().attributeHasErrors("plane")).andExpect(view().name("planes/createPlaneForm"));
 	}
 
 	@WithMockUser(value = "airline1", authorities = {
@@ -228,6 +245,27 @@ class PlaneControllerTests {
 				.param("lastMaintenance", "2011-04-17"))
 			.andExpect(status().is3xxRedirection()).andExpect(view().name("redirect:/planes/{planeId}"));
 	}
+	
+	@WithMockUser(value = "airline1", authorities = {"airline"})
+	@ParameterizedTest 
+	@CsvSource({
+	    "reference1, 200, description1, manufacturer1, model1, 100, -500, 2011-04-17",
+	    "reference2, 300, 200, manufacturer2, model2, -200, 600, 2012-05-18",
+	    "75, 400, 200, 100, 0, 300, 700, FECHA",
+	    "reference4, -500, description4, manufacturer4, model4, -400, -800, -2014-07-20",
+	}) 
+	void testProcessUpdateFormHasErrors(String reference, String maxSeats, String description, String manufacturer, String model, String numberOfKm, String maxDistance, String lastMaintenance) throws Exception {
+		mockMvc.perform(post("/planes/{planeId}/edit", TEST_PLANE_ID).with(csrf())
+			.param("reference", reference)
+			.param("maxSeats", maxSeats)
+			.param("description", description)
+			.param("manufacter", manufacturer)
+			.param("model", model)
+			.param("numberOfKm", numberOfKm)
+			.param("maxDistance", maxDistance)
+			.param("lastMaintenance", lastMaintenance))
+		.andExpect(model().attributeHasErrors("plane")).andExpect(view().name("planes/createPlaneForm"));
+	}
 
 	@WithMockUser(value = "airline1", authorities = {
 		"airline"
@@ -236,23 +274,10 @@ class PlaneControllerTests {
 	@Test
 	void testProcessUpdateFormHasErrors() throws Exception {
 		mockMvc.perform(post("/planes/{planeId}/edit", TEST_PLANE_ID).with(csrf()).param("reference", "reference").param("maxSeats", "-200")
-			
 			.param("description", "description2").param("manufacter", "manufacter2").param("model", "model2").param("numberOfKm", "100")
 			.param("maxDistance", "500").param("lastMaintenance", "2019-04-17"))
 		.andExpect(model().attributeHasErrors("plane"))
 		.andExpect(view().name("planes/createPlaneForm"));
-	}
-
-	@WithMockUser(username = "airline1", value = "airline1", authorities = {
-		"airline"
-	})
-	@Test
-	void shouldFindPlaneInformation() throws Exception {
-		this.mockMvc.perform(get("/planes/{planeId}", PlaneControllerTests.TEST_PLANE_ID)).andExpect(status().isOk()).andExpect(model().attributeExists("plane")).andExpect(model().attribute("plane", hasProperty("reference", is("V14-5"))))
-			.andExpect(model().attribute("plane", hasProperty("maxSeats", is(150)))).andExpect(model().attribute("plane", hasProperty("description", is("This is a description"))))
-			//.andExpect(model().attribute("plane", hasProperty("lastMaintenance", is("2011-04-17 00:00:00.0"))))
-			.andExpect(model().attribute("plane", hasProperty("lastMaintenance"))).andExpect(view().name("planes/planeDetails"));
-
 	}
 
 }

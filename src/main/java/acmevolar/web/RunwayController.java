@@ -28,7 +28,9 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
@@ -86,12 +88,13 @@ public class RunwayController {
 	}
 
 	@PostMapping(value = "/airports/{airportId}/runways/new")
-	public String processCreationForm(Map<String, Object> model,@Valid Runway runway,@PathVariable("airportId") int airportId, BindingResult result) throws DataAccessException, IncorrectCartesianCoordinatesException, DuplicatedAirportNameException {
+	public String processCreationForm(Map<String, Object> model,@Valid Runway runway, BindingResult result,@PathVariable("airportId") int airportId) {// throws DataAccessException, IncorrectCartesianCoordinatesException, DuplicatedAirportNameException {
 		Airport airport = this.runwayService.findAirportById(airportId);
 		airport.addRunway(runway);
 		runway.setAirport(airport);
 		if (result.hasErrors()) {
-			//insertData(model, airportId);
+			insertData(model, airportId);
+			model.put("runway", runway);
 			return RunwayController.VIEWS_RUNWAYS_CREATE_OR_UPDATE_FORM;
 			
 		} else if(this.runwayService.findRunwaysByName(runway.getName()).size()!=0) {
@@ -156,5 +159,10 @@ public class RunwayController {
 
 	}
 	
+	@InitBinder("runway")
+	public void initFlightBinder(WebDataBinder dataBinder) {
+		dataBinder.setValidator(new RunwayValidator());
+	}
+    
 }
 

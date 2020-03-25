@@ -3,16 +3,18 @@ package acmevolar.service;
 
 import  static org.assertj.core.api.Assertions.assertThat;
 
-import java.sql.Date;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashSet;
 
 import javax.validation.ConstraintViolationException;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
@@ -39,7 +41,7 @@ class PlaneServiceTests {
 	
 //	@Autowired
 //	private MockMvc mockMvc;
-
+	
 	//Registrar un avión correctamente
 	@Test
 	@Transactional
@@ -67,10 +69,44 @@ class PlaneServiceTests {
 
 		this.flightService.saveFlight(f1);
 
-		// checks that id has been generated
+		// comprueba si está insertado
 		assertThat(plane.getId()).isNotNull();
 	}
-	
+/*	
+	@Test
+	@Transactional
+	@ParameterizedTest 
+	@CsvSource({
+	    "reference1, 200, description1, manufacturer1, model1, 100, 500",
+	    "reference2, 300, description2, manufacturer2, model2, 200, 600",
+	    "reference4, 500, description4, manufacturer4, model4, 400, 800"
+	}) 
+	public void shouldInsertPlanes(String reference, Integer maxSeats, String description, String manufacturer, String model, Double numberOfKm, Double maxDistance) {
+
+		Airline a1 = this.airlineService.findAirlineById(1);
+		Flight f1 = this.flightService.findFlightById(1);
+		
+		Plane plane = new Plane();
+		plane.setAirline(a1);
+		plane.setReference(reference);
+		plane.setMaxSeats(maxSeats);
+		plane.setDescription(description);
+		plane.setManufacter(manufacturer);
+		plane.setNumberOfKm(numberOfKm.doubleValue());
+		plane.setMaxDistance(maxDistance.doubleValue());
+		plane.setLastMaintenance(Date.from(Instant.now().minusSeconds(90000)));
+		
+		f1.setPlane(plane);
+		assertThat(f1.getPlane()).isEqualTo(plane);
+
+        this.planeService.savePlane(plane);
+
+		this.flightService.saveFlight(f1);
+
+		// comprueba si está insertado
+		assertThat(plane.getId()).isNotNull();
+	}
+*/	
 	//No puede insertarse un avión con plazas negativas
 	@Test
 	@Transactional
@@ -179,6 +215,35 @@ class PlaneServiceTests {
 		});
 	}
 	
+/*	@Test
+	@Transactional
+	@ParameterizedTest 
+	@CsvSource({
+	    "reference1, 200, description1, manufacturer1, model1, 100, -500",
+	    "reference2, 300, description2, manufacturer2, model2, -200, 600",
+	    "reference4, -500, description4, manufacturer4, model4, -400, -800"
+	}) 
+	public void shouldNotInsertPlanes(String reference, Integer maxSeats, String description, String manufacturer, String model, Double numberOfKm, Double maxDistance) {
+
+		Airline a1 = this.airlineService.findAirlineById(1);
+		Flight f1 = this.flightService.findFlightById(1);
+		
+		Plane plane = new Plane();
+		plane.setAirline(a1);
+		plane.setReference(reference);
+		plane.setMaxSeats(maxSeats);
+		plane.setDescription(description);
+		plane.setManufacter(manufacturer);
+		plane.setNumberOfKm(numberOfKm.doubleValue());
+		plane.setMaxDistance(maxDistance.doubleValue());
+		plane.setLastMaintenance(Date.from(Instant.now().minusSeconds(90000)));
+		
+		Assertions.assertThrows(ConstraintViolationException.class, () ->{
+			f1.setPlane(plane);
+			planeService.savePlane(plane);
+		});
+	}
+*/	
 	@Test
 	@Transactional
 	public void shouldDeletePlaneById() {

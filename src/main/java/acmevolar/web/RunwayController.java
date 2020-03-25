@@ -86,16 +86,16 @@ public class RunwayController {
 	}
 
 	@PostMapping(value = "/airports/{airportId}/runways/new")
-	public String processCreationForm(final Map<String, Object> model,@Valid final Runway runway,@PathVariable("airportId") final int airportId, final BindingResult result) throws DataAccessException, IncorrectCartesianCoordinatesException, DuplicatedAirportNameException {
+	public String processCreationForm(Map<String, Object> model,@Valid Runway runway,@PathVariable("airportId") int airportId, BindingResult result) throws DataAccessException, IncorrectCartesianCoordinatesException, DuplicatedAirportNameException {
 		Airport airport = this.runwayService.findAirportById(airportId);
 		airport.addRunway(runway);
 		runway.setAirport(airport);
 		if (result.hasErrors()) {
-			insertData(model, airportId);
+			//insertData(model, airportId);
 			return RunwayController.VIEWS_RUNWAYS_CREATE_OR_UPDATE_FORM;
 			
 		} else if(this.runwayService.findRunwaysByName(runway.getName()).size()!=0) {
-			insertData(model, airportId);
+			//insertData(model, airportId);
 			result.rejectValue("name", "NameIsAlreadyUsed", "Name is already used");
 			return RunwayController.VIEWS_RUNWAYS_CREATE_OR_UPDATE_FORM;
 			

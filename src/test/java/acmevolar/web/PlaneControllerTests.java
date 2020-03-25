@@ -1,8 +1,6 @@
 
 package acmevolar.web;
 
-import static org.hamcrest.Matchers.hasProperty;
-import static org.hamcrest.Matchers.is;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -11,9 +9,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
-import java.text.ParseException;
 import java.time.Instant;
-import java.util.Date;
 import java.util.HashSet;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -196,6 +192,27 @@ class PlaneControllerTests {
 		mockMvc.perform(get("/planes/{planeId}/edit", TEST_PLANE_ID)).andExpect(status().isOk()).andExpect(model().attributeExists("plane")).andExpect(view().name("planes/createPlaneForm"));
 	}
 
+	@WithMockUser(value = "airline1", authorities = {"airline"})
+	@ParameterizedTest 
+	@CsvSource({
+	    "reference1, 200, description1, manufacturer1, model1, 100, 500, 2011-04-17",
+	    "reference2, 300, description2, manufacturer2, model2, 200, 600, 2012-05-18",
+	    "reference3, 400, description3, manufacturer3, model3, 300, 700, 2013-06-19",
+	    "reference4, 500, description4, manufacturer4, model4, 400, 800, 2014-07-20",
+	}) 
+	void testProcessUpdateFormSuccess(String reference, String maxSeats, String description, String manufacturer, String model, String numberOfKm, String maxDistance, String lastMaintenance) throws Exception {
+		mockMvc.perform(post("/planes/{planeId}/edit", TEST_PLANE_ID).with(csrf())
+			.param("reference", reference)
+			.param("maxSeats", maxSeats)
+			.param("description", description)
+			.param("manufacter", manufacturer)
+			.param("model", model)
+			.param("numberOfKm", numberOfKm)
+			.param("maxDistance", maxDistance)
+			.param("lastMaintenance", lastMaintenance))
+			.andExpect(status().is3xxRedirection());
+	}
+	
 	@WithMockUser(value = "airline1", authorities = {
 		"airline"
 	})

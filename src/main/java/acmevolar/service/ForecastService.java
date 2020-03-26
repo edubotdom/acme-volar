@@ -24,7 +24,6 @@ public class ForecastService {
 	                //.defaultHeader(HttpHeaders.USER_AGENT, USER_AGENT)
 	                .build();
 	    }
-
 	    public Mono<Forecast> searchForecastByCity(String city) {
 	          return webClient.post()
 	                .uri("?q="+city+"&APPID=d2f0a2704a754d4725df51ffd0749391")

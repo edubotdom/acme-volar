@@ -31,7 +31,6 @@ public class AirportController {
 
 	private final AirportService	airportService;
 	private final ForecastService	forecastService;
-	
 
 	private static final String		VIEWS_AIRPORT_CREATE_FORM	= "airports/createAirportForm";
 
@@ -56,8 +55,8 @@ public class AirportController {
 	@GetMapping("/airports/{airportId}")
 	public ModelAndView showAirport(@PathVariable("airportId") final int airportId) {
 		ModelAndView mav = new ModelAndView("airports/airportDetails");
-		Airport airport = airportService.findAirportById(airportId);
-		Forecast forecast = forecastService.searchForecastByCity(airport.getCity()).block();
+		Airport airport = this.airportService.findAirportById(airportId);
+		Forecast forecast = this.forecastService.searchForecastByCity(airport.getCity()).block();
 		mav.addObject(airport);
 		mav.addObject(forecast);
 		return mav;
@@ -77,11 +76,11 @@ public class AirportController {
 
 		if (result.hasErrors()) {
 			return AirportController.VIEWS_AIRPORT_CREATE_FORM;
-		} else if(this.airportService.findAirportsByName(airport.getName()).size()!=0){
+		} else if (this.airportService.findAirportsByName(airport.getName()).size() != 0) {
 			result.rejectValue("name", "duplicate", "Already exists");
 			return AirportController.VIEWS_AIRPORT_CREATE_FORM;
 		} else {
-		
+
 			try {
 				this.airportService.saveAirport(airport);
 			} catch (DataAccessException e) {
@@ -92,7 +91,6 @@ public class AirportController {
 				result.rejectValue("name", "duplicate", "Already exists");
 				return AirportController.VIEWS_AIRPORT_CREATE_FORM;
 			}
-
 
 			return "redirect:/airports/" + airport.getId();
 		}
@@ -111,6 +109,9 @@ public class AirportController {
 	public String processUpdateForm(@Valid final Airport airport, final BindingResult result, @PathVariable("airportId") final int airportId, final ModelMap model) {
 		if (result.hasErrors()) {
 			model.put("airport", airport);
+			return AirportController.VIEWS_AIRPORT_CREATE_FORM;
+		} else if (this.airportService.findAirportsByName(airport.getName()).size() != 0) {
+			result.rejectValue("name", "duplicate", "Already exists");
 			return AirportController.VIEWS_AIRPORT_CREATE_FORM;
 		} else {
 			Airport airportToUpdate = this.airportService.findAirportById(airportId);

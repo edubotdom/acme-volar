@@ -81,7 +81,7 @@ public class AirportServiceTests {
 		airportWithIncorretCardinalCoordinates.setName("JFK Airport");
 		airportWithIncorretCardinalCoordinates.setMaxNumberOfPlanes(2000);
 		airportWithIncorretCardinalCoordinates.setMaxNumberOfClients(25000);
-		airportWithIncorretCardinalCoordinates.setLatitude(182.5);
+		airportWithIncorretCardinalCoordinates.setLatitude(92.5);
 		airportWithIncorretCardinalCoordinates.setLongitude(-73.789288);
 		airportWithIncorretCardinalCoordinates.setCode("JFK");
 		airportWithIncorretCardinalCoordinates.setCity("New York");
@@ -117,7 +117,7 @@ public class AirportServiceTests {
 		secondAirport.setName("JFK Airport");
 		secondAirport.setMaxNumberOfPlanes(100);
 		secondAirport.setMaxNumberOfClients(1000);
-		secondAirport.setLatitude(160.2);
+		secondAirport.setLatitude(60.2);
 		secondAirport.setLongitude(-173.789288);
 		secondAirport.setCode("NYC");
 		secondAirport.setCity("New York City");

@@ -25,6 +25,7 @@ import javax.validation.Valid;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -55,6 +56,7 @@ public class RunwayController {
 	}
 
 	//LIST
+	@PreAuthorize("hasAuthority('airline')")
 	@GetMapping(value = {"/airports/{airportId}/runways"})
 	public String showRunwayList(final Map<String, Object> model,@PathVariable("airportId") final int airportId) {
 
@@ -71,6 +73,7 @@ public class RunwayController {
 	}
 	
 	//CREATE
+	@PreAuthorize("hasAuthority('airline')")
 	@GetMapping(value = "/airports/{airportId}/runways/new")
 	public String initCreationForm(final Map<String, Object> model,@PathVariable("airportId") final int airportId) {
 		Runway runway = new Runway();
@@ -87,6 +90,7 @@ public class RunwayController {
 		return RunwayController.VIEWS_RUNWAYS_CREATE_OR_UPDATE_FORM;
 	}
 
+	@PreAuthorize("hasAuthority('airline')")
 	@PostMapping(value = "/airports/{airportId}/runways/new")
 	public String processCreationForm(Map<String, Object> model,@Valid Runway runway, BindingResult result,@PathVariable("airportId") int airportId) {// throws DataAccessException, IncorrectCartesianCoordinatesException, DuplicatedAirportNameException {
 		Airport airport = this.runwayService.findAirportById(airportId);
@@ -115,6 +119,7 @@ public class RunwayController {
 
 	
 	//UPDATE
+	@PreAuthorize("hasAuthority('airline')")
 	@GetMapping(value = "/airports/{airportId}/runways/{runwayId}/edit")
 	public String initUpdateForm(@PathVariable("runwayId") int runwayId, @PathVariable("airportId") final int airportId, ModelMap model) {
 		Runway runway = this.runwayService.findRunwayById(runwayId);
@@ -126,6 +131,7 @@ public class RunwayController {
 		return RunwayController.VIEWS_RUNWAYS_CREATE_OR_UPDATE_FORM;
 	}
 
+	@PreAuthorize("hasAuthority('airline')")
     @PostMapping(value = "/airports/{airportId}/runways/{runwayId}/edit")
 	public String processUpdateForm(@Valid Runway runway, BindingResult result, @PathVariable("runwayId") int runwayId, @PathVariable("airportId") final int airportId, ModelMap model) {
         	if (result.hasErrors()) {
@@ -149,6 +155,7 @@ public class RunwayController {
         	}
 	}
     
+	@PreAuthorize("hasAuthority('airline')")
     @GetMapping(value = "/airports/{airportId}/runways/{runwayId}/delete")
 	public String deleteRunway(@PathVariable("runwayId") final int runwayId,@PathVariable("airportId") final int airportId) {
 		Runway runway = this.runwayService.findRunwayById(runwayId);

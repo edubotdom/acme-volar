@@ -227,7 +227,8 @@ class PlaneControllerTests {
 			.param("numberOfKm", numberOfKm)
 			.param("maxDistance", maxDistance)
 			.param("lastMaintenance", lastMaintenance))
-			.andExpect(status().is3xxRedirection());
+			.andExpect(status().is3xxRedirection())
+			.andExpect(view().name("redirect:/planes/{planeId}"));
 	}
 	
 	@WithMockUser(value = "airline1", authorities = {

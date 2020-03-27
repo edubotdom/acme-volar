@@ -8,10 +8,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
-import java.time.Instant;
-import java.util.Date;
-import java.util.HashSet;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -24,11 +20,9 @@ import org.springframework.context.annotation.FilterType;
 import org.springframework.security.config.annotation.web.WebSecurityConfigurer;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
+
 import acmevolar.configuration.SecurityConfiguration;
-import acmevolar.model.Airline;
 import acmevolar.model.Airport;
-import acmevolar.model.Flight;
-import acmevolar.model.Plane;
 import acmevolar.model.api.Clouds;
 import acmevolar.model.api.Coord;
 import acmevolar.model.api.Forecast;
@@ -219,9 +213,13 @@ public class AirportControllerTests {
 	@WithMockUser(value = "spring")
 	@Test
 	void testProcessUpdateFormSuccess() throws Exception {
-		mockMvc.perform(post("/airports/{airportId}/edit", TEST_AIRPORT_ID).with(csrf()).param("name", "Sevilla Airports").param("maxNumberOfPlanes", "201")
+		mockMvc.perform(post("/airports/{airportId}/edit", TEST_AIRPORT_ID).with(csrf())
+				.param("name", "Sevilla Airports").param("maxNumberOfPlanes", "201")
 				.param("maxNumberOfClients", "100").param("latitude", "11.98").param("longitude", "78.987")
-				.param("code", "VBA").param("city", "Madrid")).andExpect(status().is3xxRedirection());
+				.param("code", "VBA").param("city", "Madrid"))
+		
+				.andExpect(status().is3xxRedirection())
+				.andExpect(view().name("redirect:/airports/{airportId}"));
 	}
 	
 	@WithMockUser(value = "spring")
@@ -243,7 +241,8 @@ public class AirportControllerTests {
 				.param("code", code)
 				.param("city", city))
 
-				.andExpect(status().is3xxRedirection());
+				.andExpect(status().is3xxRedirection())
+				.andExpect(view().name("redirect:/airports/{airportId}"));
 	} 
 
 	@WithMockUser(value = "spring")

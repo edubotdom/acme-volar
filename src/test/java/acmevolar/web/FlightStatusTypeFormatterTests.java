@@ -1,12 +1,14 @@
 
 package acmevolar.web;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -41,20 +43,20 @@ class FlightStatusTypeFormatterTests {
 		FlightStatusType flightStatusType = new FlightStatusType();
 		flightStatusType.setName("on_time");
 		String flightStatusTypeName = this.flightStatusTypeFormatter.print(flightStatusType, Locale.ENGLISH);
-		Assertions.assertEquals("on_time", flightStatusTypeName);
+		assertEquals("on_time", flightStatusTypeName);
 	}
 
 	@Test
 	void shouldParse() throws ParseException {
 		Mockito.when(this.flightService.findFlightStatusTypes()).thenReturn(this.makeFlightStatusTypes());
 		FlightStatusType flightStatusType = this.flightStatusTypeFormatter.parse("on_time", Locale.ENGLISH);
-		Assertions.assertEquals("on_time", flightStatusType.getName());
+		assertEquals("on_time", flightStatusType.getName());
 	}
 
 	@Test
 	void shouldThrowParseException() throws ParseException {
 		Mockito.when(this.flightService.findFlightStatusTypes()).thenReturn(this.makeFlightStatusTypes());
-		Assertions.assertThrows(ParseException.class, () -> {
+		assertThrows(ParseException.class, () -> {
 			this.flightStatusTypeFormatter.parse("otro_tipo", Locale.ENGLISH);
 		});
 	}

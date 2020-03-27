@@ -1,6 +1,7 @@
 
 package acmevolar.service;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.sql.Timestamp;
@@ -15,7 +16,6 @@ import java.util.stream.Collectors;
 
 import javax.validation.ConstraintViolationException;
 
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -69,18 +69,18 @@ public class FlightServiceTests {
 		String stringLandDate1 = "2020-06-06 15:00:00";
 		Timestamp landDate1 = Timestamp.valueOf(stringLandDate1);
 
-		Assertions.assertThat(flight1.getAirline()).isEqualTo(airline1);
-		Assertions.assertThat(flight1.getDepartDate()).isEqualTo(departDate1);
-		Assertions.assertThat(flight1.getDepartes()).isEqualTo(runway1);
-		Assertions.assertThat(flight1.getFlightStatus()).isEqualTo(flightStatusType1);
-		Assertions.assertThat(flight1.getId()).isEqualTo(1);
-		Assertions.assertThat(flight1.getLandDate()).isEqualTo(landDate1);
-		Assertions.assertThat(flight1.getLands()).isEqualTo(runway2);
-		Assertions.assertThat(flight1.getPlane()).isEqualTo(plane1);
-		Assertions.assertThat(flight1.getPrice()).isEqualTo(150.0);
-		Assertions.assertThat(flight1.getPublished()).isEqualTo(true);
-		Assertions.assertThat(flight1.getReference()).isEqualTo("R-01");
-		Assertions.assertThat(flight1.getSeats()).isEqualTo(250);
+		assertThat(flight1.getAirline()).isEqualTo(airline1);
+		assertThat(flight1.getDepartDate()).isEqualTo(departDate1);
+		assertThat(flight1.getDepartes()).isEqualTo(runway1);
+		assertThat(flight1.getFlightStatus()).isEqualTo(flightStatusType1);
+		assertThat(flight1.getId()).isEqualTo(1);
+		assertThat(flight1.getLandDate()).isEqualTo(landDate1);
+		assertThat(flight1.getLands()).isEqualTo(runway2);
+		assertThat(flight1.getPlane()).isEqualTo(plane1);
+		assertThat(flight1.getPrice()).isEqualTo(150.0);
+		assertThat(flight1.getPublished()).isEqualTo(true);
+		assertThat(flight1.getReference()).isEqualTo("R-01");
+		assertThat(flight1.getSeats()).isEqualTo(250);
 	}
 
 	@Test
@@ -123,11 +123,11 @@ public class FlightServiceTests {
 			e.printStackTrace();
 		}
 
-		Assertions.assertThat(flight.getId()).isNotNull();
+		assertThat(flight.getId()).isNotNull();
 
 		Flight flightFound = this.flightService.findFlightById(flight.getId());
 
-		Assertions.assertThat(flight.equals(flightFound));
+		assertThat(flight.equals(flightFound));
 	}
 
 	@Test
@@ -135,8 +135,8 @@ public class FlightServiceTests {
 	public void shouldFindFlights() {
 		Collection<Flight> flights = this.flightService.findFlights();
 
-		Assertions.assertThat(!flights.isEmpty());
-		Assertions.assertThat(flights).asList();
+		assertThat(!flights.isEmpty());
+		assertThat(flights).asList();
 	}
 
 	@Test
@@ -144,11 +144,11 @@ public class FlightServiceTests {
 	public void shouldFindPublishedFlights() {
 		Collection<Flight> publishedFlights = this.flightService.findPublishedFlight();
 
-		Assertions.assertThat(!publishedFlights.isEmpty());
-		Assertions.assertThat(publishedFlights).asList();
+		assertThat(!publishedFlights.isEmpty());
+		assertThat(publishedFlights).asList();
 
 		List<Flight> publishedFlightsStream = publishedFlights.stream().filter(x -> x.getPublished()).collect(Collectors.toList());
-		Assertions.assertThat(publishedFlights.size() == publishedFlightsStream.size());
+		assertThat(publishedFlights.size() == publishedFlightsStream.size());
 	}
 
 	@Test
@@ -156,12 +156,12 @@ public class FlightServiceTests {
 	public void shouldFindPublishedFutureFlights() {
 		Collection<Flight> publishedFutureFlights = this.flightService.findPublishedFutureFlight();
 
-		Assertions.assertThat(!publishedFutureFlights.isEmpty());
-		Assertions.assertThat(publishedFutureFlights).asList();
+		assertThat(!publishedFutureFlights.isEmpty());
+		assertThat(publishedFutureFlights).asList();
 
 		Date currentDate = new Date(System.currentTimeMillis());
 		List<Flight> publishedFutureFlightsStream = publishedFutureFlights.stream().filter(x -> x.getPublished() && x.getDepartDate().compareTo(currentDate) >= 0).collect(Collectors.toList());
-		Assertions.assertThat(publishedFutureFlights.size() == publishedFutureFlightsStream.size());
+		assertThat(publishedFutureFlights.size() == publishedFutureFlightsStream.size());
 	}
 
 	@Test
@@ -169,12 +169,12 @@ public class FlightServiceTests {
 	public void shouldFindAirlineFlights() {
 		Collection<Flight> airlineFlights = this.flightService.findAirlineFlight("airline1");
 
-		Assertions.assertThat(!airlineFlights.isEmpty());
-		Assertions.assertThat(airlineFlights).asList();
+		assertThat(!airlineFlights.isEmpty());
+		assertThat(airlineFlights).asList();
 
 		Airline airline = this.flightService.findAirlineByUsername("airline1");
 		List<Flight> airlineFlightsStream = airlineFlights.stream().filter(x -> x.getAirline().equals(airline)).collect(Collectors.toList());
-		Assertions.assertThat(airlineFlights.size() == airlineFlightsStream.size());
+		assertThat(airlineFlights.size() == airlineFlightsStream.size());
 	}
 
 	@Test
@@ -199,18 +199,18 @@ public class FlightServiceTests {
 		String stringLandDate1 = "2020-06-06 15:00:00";
 		Timestamp landDate1 = Timestamp.valueOf(stringLandDate1);
 
-		Assertions.assertThat(flight1.getAirline()).isEqualTo(airline1);
-		Assertions.assertThat(flight1.getDepartDate()).isEqualTo(departDate1);
-		Assertions.assertThat(flight1.getDepartes()).isEqualTo(runway1);
-		Assertions.assertThat(flight1.getFlightStatus()).isEqualTo(flightStatusType1);
-		Assertions.assertThat(flight1.getId()).isEqualTo(1);
-		Assertions.assertThat(flight1.getLandDate()).isEqualTo(landDate1);
-		Assertions.assertThat(flight1.getLands()).isEqualTo(runway2);
-		Assertions.assertThat(flight1.getPlane()).isEqualTo(plane1);
-		Assertions.assertThat(flight1.getPrice()).isEqualTo(150.0);
-		Assertions.assertThat(flight1.getPublished()).isEqualTo(true);
-		Assertions.assertThat(flight1.getReference()).isEqualTo("R-01");
-		Assertions.assertThat(flight1.getSeats()).isEqualTo(250);
+		assertThat(flight1.getAirline()).isEqualTo(airline1);
+		assertThat(flight1.getDepartDate()).isEqualTo(departDate1);
+		assertThat(flight1.getDepartes()).isEqualTo(runway1);
+		assertThat(flight1.getFlightStatus()).isEqualTo(flightStatusType1);
+		assertThat(flight1.getId()).isEqualTo(1);
+		assertThat(flight1.getLandDate()).isEqualTo(landDate1);
+		assertThat(flight1.getLands()).isEqualTo(runway2);
+		assertThat(flight1.getPlane()).isEqualTo(plane1);
+		assertThat(flight1.getPrice()).isEqualTo(150.0);
+		assertThat(flight1.getPublished()).isEqualTo(true);
+		assertThat(flight1.getReference()).isEqualTo("R-01");
+		assertThat(flight1.getSeats()).isEqualTo(250);
 	}
 
 	@Test
@@ -218,8 +218,8 @@ public class FlightServiceTests {
 	public void shouldFindFlightStatusTypes() {
 		Collection<FlightStatusType> flightStatusTypes = this.flightService.findFlightStatusTypes();
 
-		Assertions.assertThat(!flightStatusTypes.isEmpty());
-		Assertions.assertThat(flightStatusTypes).asList();
+		assertThat(!flightStatusTypes.isEmpty());
+		assertThat(flightStatusTypes).asList();
 	}
 
 	@Test
@@ -233,14 +233,14 @@ public class FlightServiceTests {
 
 		User user1 = this.flightService.findAirlineByUsername("airline1").getUser();
 
-		Assertions.assertThat(airline1.getCountry()).isEqualTo("Spain");
-		Assertions.assertThat(airline1.getCreationDate()).isEqualTo(creationDate1);
-		Assertions.assertThat(airline1.getEmail()).isEqualTo("minardi@gmail.com");
-		Assertions.assertThat(airline1.getIdentification()).isEqualTo("61333744-N");
-		Assertions.assertThat(airline1.getName()).isEqualTo("Sevilla Este Airways");
-		Assertions.assertThat(airline1.getPhone()).isEqualTo("644584458");
-		Assertions.assertThat(airline1.getReference()).isEqualTo("SEA-001");
-		Assertions.assertThat(airline1.getUser()).isEqualTo(user1);
+		assertThat(airline1.getCountry()).isEqualTo("Spain");
+		assertThat(airline1.getCreationDate()).isEqualTo(creationDate1);
+		assertThat(airline1.getEmail()).isEqualTo("minardi@gmail.com");
+		assertThat(airline1.getIdentification()).isEqualTo("61333744-N");
+		assertThat(airline1.getName()).isEqualTo("Sevilla Este Airways");
+		assertThat(airline1.getPhone()).isEqualTo("644584458");
+		assertThat(airline1.getReference()).isEqualTo("SEA-001");
+		assertThat(airline1.getUser()).isEqualTo(user1);
 	}
 
 	@Test
@@ -248,12 +248,12 @@ public class FlightServiceTests {
 	public void shouldFindPlanesByAirline() {
 		Collection<Plane> airlinePlanes = this.flightService.findPlanesbyAirline("airline1");
 
-		Assertions.assertThat(!airlinePlanes.isEmpty());
-		Assertions.assertThat(airlinePlanes).asList();
+		assertThat(!airlinePlanes.isEmpty());
+		assertThat(airlinePlanes).asList();
 
 		Airline airline = this.flightService.findAirlineByUsername("airline1");
 		List<Plane> airlinePlanesStream = airlinePlanes.stream().filter(x -> x.getAirline().equals(airline)).collect(Collectors.toList());
-		Assertions.assertThat(airlinePlanes.size() == airlinePlanesStream.size());
+		assertThat(airlinePlanes.size() == airlinePlanesStream.size());
 	}
 
 	@Test
@@ -261,11 +261,11 @@ public class FlightServiceTests {
 	public void shouldFindDepartingRunways() {
 		Collection<Runway> departingRunways = this.flightService.findDepartingRunways();
 
-		Assertions.assertThat(!departingRunways.isEmpty());
-		Assertions.assertThat(departingRunways).asList();
+		assertThat(!departingRunways.isEmpty());
+		assertThat(departingRunways).asList();
 
 		List<Runway> departingRunwaysStream = departingRunways.stream().filter(x -> x.getFlightsDepartes().size() > 0).collect(Collectors.toList());
-		Assertions.assertThat(departingRunways.size() == departingRunwaysStream.size());
+		assertThat(departingRunways.size() == departingRunwaysStream.size());
 	}
 
 	@Test
@@ -273,15 +273,15 @@ public class FlightServiceTests {
 	public void shouldFindLandingRunways() {
 		Collection<Runway> landingRunways = this.flightService.findDepartingRunways();
 
-		Assertions.assertThat(!landingRunways.isEmpty());
-		Assertions.assertThat(landingRunways).asList();
+		assertThat(!landingRunways.isEmpty());
+		assertThat(landingRunways).asList();
 
 		List<Runway> landingRunwaysStream = landingRunways.stream().filter(x -> x.getFlightsDepartes().size() > 0).collect(Collectors.toList());
-		Assertions.assertThat(landingRunways.size() == landingRunwaysStream.size());
+		assertThat(landingRunways.size() == landingRunwaysStream.size());
 	}
 
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	
+
 	@Test
 	@Transactional
 	public void shouldNotSaveFlightEmptyReference() throws ParseException {
@@ -316,11 +316,11 @@ public class FlightServiceTests {
 		flight.setReference("");
 		flight.setSeats(150);
 
-		assertThrows(ConstraintViolationException.class, () ->{
+		assertThrows(ConstraintViolationException.class, () -> {
 			this.flightService.saveFlight(flight);
 		});
 	}
-	
+
 	@Test
 	@Transactional
 	public void shouldNotSaveFlightNullSeats() throws ParseException {
@@ -355,12 +355,11 @@ public class FlightServiceTests {
 		flight.setReference("R-02");
 		flight.setSeats(null);
 
-		assertThrows(ConstraintViolationException.class, () ->{
+		assertThrows(ConstraintViolationException.class, () -> {
 			this.flightService.saveFlight(flight);
 		});
 	}
-	
-	
+
 	@Test
 	@Transactional
 	public void shouldNotSaveFlightNegativeSeats() throws ParseException {
@@ -395,11 +394,11 @@ public class FlightServiceTests {
 		flight.setReference("R-02");
 		flight.setSeats(-150);
 
-		assertThrows(ConstraintViolationException.class, () ->{
+		assertThrows(ConstraintViolationException.class, () -> {
 			this.flightService.saveFlight(flight);
 		});
 	}
-	
+
 	@Test
 	@Transactional
 	public void shouldNotSaveFlightNullPrice() throws ParseException {
@@ -434,11 +433,11 @@ public class FlightServiceTests {
 		flight.setReference("R-02");
 		flight.setSeats(150);
 
-		assertThrows(ConstraintViolationException.class, () ->{
+		assertThrows(ConstraintViolationException.class, () -> {
 			this.flightService.saveFlight(flight);
 		});
 	}
-	
+
 	@Test
 	@Transactional
 	public void shouldNotSaveFlightNegativePrice() throws ParseException {
@@ -473,11 +472,11 @@ public class FlightServiceTests {
 		flight.setReference("R-02");
 		flight.setSeats(150);
 
-		assertThrows(ConstraintViolationException.class, () ->{
+		assertThrows(ConstraintViolationException.class, () -> {
 			this.flightService.saveFlight(flight);
 		});
 	}
-	
+
 	@Test
 	@Transactional
 	public void shouldNotSaveFlightNullFlightStatus() throws ParseException {
@@ -509,11 +508,11 @@ public class FlightServiceTests {
 		flight.setReference("R-02");
 		flight.setSeats(150);
 
-		assertThrows(ConstraintViolationException.class, () ->{
+		assertThrows(ConstraintViolationException.class, () -> {
 			this.flightService.saveFlight(flight);
 		});
 	}
-	
+
 	@Test
 	@Transactional
 	public void shouldNotSaveFlightNullPlane() throws ParseException {
@@ -546,11 +545,11 @@ public class FlightServiceTests {
 		flight.setReference("R-02");
 		flight.setSeats(150);
 
-		assertThrows(ConstraintViolationException.class, () ->{
+		assertThrows(ConstraintViolationException.class, () -> {
 			this.flightService.saveFlight(flight);
 		});
 	}
-	
+
 	@Test
 	@Transactional
 	public void shouldNotSaveFlightNullPublished() throws ParseException {
@@ -585,11 +584,11 @@ public class FlightServiceTests {
 		flight.setReference("R-02");
 		flight.setSeats(150);
 
-		assertThrows(ConstraintViolationException.class, () ->{
+		assertThrows(ConstraintViolationException.class, () -> {
 			this.flightService.saveFlight(flight);
 		});
 	}
-	
+
 	@Test
 	@Transactional
 	public void shouldNotSaveFlightNullDepartes() throws ParseException {
@@ -622,11 +621,11 @@ public class FlightServiceTests {
 		flight.setReference("R-02");
 		flight.setSeats(150);
 
-		assertThrows(ConstraintViolationException.class, () ->{
+		assertThrows(ConstraintViolationException.class, () -> {
 			this.flightService.saveFlight(flight);
 		});
 	}
-	
+
 	@Test
 	@Transactional
 	public void shouldNotSaveFlightNullLands() throws ParseException {
@@ -659,9 +658,9 @@ public class FlightServiceTests {
 		flight.setReference("R-02");
 		flight.setSeats(150);
 
-		assertThrows(ConstraintViolationException.class, () ->{
+		assertThrows(ConstraintViolationException.class, () -> {
 			this.flightService.saveFlight(flight);
 		});
 	}
-	
+
 }

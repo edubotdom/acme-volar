@@ -1,12 +1,14 @@
 
 package acmevolar.web;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -41,20 +43,20 @@ class PlaneFormatterTests {
 		Plane plane = new Plane();
 		plane.setReference("V14-5");
 		String planeName = this.planeFormatter.print(plane, Locale.ENGLISH);
-		Assertions.assertEquals("V14-5", planeName);
+		assertEquals("V14-5", planeName);
 	}
 
 	@Test
 	void shouldParse() throws ParseException {
 		Mockito.when(this.planeService.findPlanes()).thenReturn(this.makePlanes());
 		Plane plane = this.planeFormatter.parse("V14-5", Locale.ENGLISH);
-		Assertions.assertEquals("V14-5", plane.getReference());
+		assertEquals("V14-5", plane.getReference());
 	}
 
 	@Test
 	void shouldThrowParseException() throws ParseException {
 		Mockito.when(this.planeService.findPlanes()).thenReturn(this.makePlanes());
-		Assertions.assertThrows(ParseException.class, () -> {
+		assertThrows(ParseException.class, () -> {
 			this.planeFormatter.parse("B10-0", Locale.ENGLISH);
 		});
 	}

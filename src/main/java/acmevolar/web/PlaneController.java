@@ -23,7 +23,6 @@ import org.springframework.web.servlet.ModelAndView;
 import acmevolar.model.Airline;
 import acmevolar.model.Plane;
 import acmevolar.service.FlightService;
-
 import acmevolar.service.PlaneService;
 
 @Controller
@@ -118,6 +117,7 @@ public class PlaneController {
 		}
 	}
 	
+	//@PreAuthorize("hasAuthority('airline')")
 	@GetMapping(value = "/planes/{planeId}/edit")
 	public String initUpdateForm(@PathVariable("planeId") final int planeId, final ModelMap model) {
 		Plane plane = this.planeService.findPlaneById(planeId);
@@ -127,6 +127,7 @@ public class PlaneController {
 		return PlaneController.VIEWS_PLANES_CREATE_OR_UPDATE_FORM;
 	}
 
+	//@PreAuthorize("hasAuthority('airline')")
 	@PostMapping(value = "/planes/{planeId}/edit")
 	public String processUpdateForm(@Valid final Plane plane, final BindingResult result, @PathVariable("planeId") final int planeId, final ModelMap model) {
 		if (result.hasErrors()) {

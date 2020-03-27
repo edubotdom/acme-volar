@@ -38,8 +38,6 @@ import acmevolar.model.Airport;
 import acmevolar.model.Runway;
 import acmevolar.model.RunwayType;
 import acmevolar.service.RunwayService;
-import acmevolar.service.exceptions.DuplicatedAirportNameException;
-import acmevolar.service.exceptions.IncorrectCartesianCoordinatesException;
 
 @Controller
 public class RunwayController {
@@ -149,7 +147,7 @@ public class RunwayController {
         	}
 	}
     
-    @GetMapping(value = "/airports/{airportId}/runways/{runwayId}/delete")
+   /* @GetMapping(value = "/airports/{airportId}/runways/{runwayId}/delete")
 	public String deleteRunway(@PathVariable("runwayId") final int runwayId,@PathVariable("airportId") final int airportId) {
 		Runway runway = this.runwayService.findRunwayById(runwayId);
 		if (runway != null) {
@@ -157,7 +155,7 @@ public class RunwayController {
 		}
 		return "redirect:/airports/{airportId}/runways";
 
-	}
+	}*/
 	
 	@InitBinder("runway")
 	public void initFlightBinder(WebDataBinder dataBinder) {

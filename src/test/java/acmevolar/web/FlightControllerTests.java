@@ -3,8 +3,10 @@ package acmevolar.web;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -24,9 +26,12 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import acmevolar.configuration.SecurityConfiguration;
 import acmevolar.model.Airline;
+import acmevolar.model.Airport;
 import acmevolar.model.Flight;
 import acmevolar.model.FlightStatusType;
 import acmevolar.model.Plane;
+import acmevolar.model.Runway;
+import acmevolar.model.RunwayType;
 import acmevolar.service.AirlineService;
 import acmevolar.service.FlightService;
 import acmevolar.service.PlaneService;
@@ -34,7 +39,9 @@ import acmevolar.service.RunwayService;
 import acmevolar.service.UserService;
 
 @WebMvcTest(value = FlightController.class, includeFilters = {
-	@ComponentScan.Filter(value = PlaneFormatter.class, type = FilterType.ASSIGNABLE_TYPE), @ComponentScan.Filter(value = FlightStatusTypeFormatter.class, type = FilterType.ASSIGNABLE_TYPE)
+	@ComponentScan.Filter(value = PlaneFormatter.class, type = FilterType.ASSIGNABLE_TYPE), 
+	@ComponentScan.Filter(value = FlightStatusTypeFormatter.class, type = FilterType.ASSIGNABLE_TYPE), 
+	@ComponentScan.Filter(value = RunwayFormatter.class, type = FilterType.ASSIGNABLE_TYPE)
 }, excludeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = WebSecurityConfigurer.class), excludeAutoConfiguration = SecurityConfiguration.class)
 public class FlightControllerTests {
 
@@ -103,9 +110,80 @@ public class FlightControllerTests {
 		List<Plane> planes = new ArrayList<>();
 		planes.add(plane1);
 
+		Airport ap = new Airport();
+		ap.setCity("city");
+		ap.setCode("code");
+		ap.setLatitude(0.);
+		ap.setLongitude(0.);
+		ap.setMaxNumberOfClients(0);
+		ap.setMaxNumberOfPlanes(0);
+		ap.setName("airport1");
+		ap.setRunwaysInternal(new HashSet<>());
+		ap.setId(1);
+		
+		Airport ap2 = new Airport();
+		ap2.setCity("city2");
+		ap2.setCode("code");
+		ap2.setLatitude(0.);
+		ap2.setLongitude(0.);
+		ap2.setMaxNumberOfClients(0);
+		ap2.setMaxNumberOfPlanes(0);
+		ap2.setName("airport2");
+		ap2.setRunwaysInternal(new HashSet<>());
+		ap2.setId(2);
+		
+		RunwayType rt_landing = new RunwayType();
+		rt_landing.setId(1);
+		rt_landing.setName("landing");
+		
+		RunwayType rt_take_off = new RunwayType();
+		rt_take_off.setId(2);
+		rt_take_off.setName("take_off");		
+		
+		Runway r_depart = new Runway();
+		r_depart.setAirport(ap2);
+		r_depart.setId(1);
+		r_depart.setName("runway1");
+		r_depart.setFlightsDepartes(new HashSet<Flight>());
+		r_depart.setFlightsLands(new HashSet<Flight>());
+		r_depart.setRunwayType(rt_take_off);
+		
+		Runway r_landing = new Runway();
+		r_landing.setAirport(ap);
+		r_landing.setId(2);
+		r_landing.setName("runway2");
+		r_landing.setFlightsDepartes(new HashSet<Flight>());
+		r_landing.setFlightsLands(new HashSet<Flight>());
+		r_landing.setRunwayType(rt_landing);
+		
+		List<Runway> departingRunways = new ArrayList<>(); 
+		departingRunways.add(r_depart);
+		BDDMockito.given(this.flightService.findDepartingRunways()).willReturn(departingRunways);
+		
+		List<Runway> landingRunways = new ArrayList<>(); 
+		landingRunways.add(r_landing);
+		BDDMockito.given(this.flightService.findLandingRunways()).willReturn(landingRunways);
+		
+		
 		BDDMockito.given(this.planeService.findPlaneById(1)).willReturn(plane1);
 		BDDMockito.given(this.flightService.findPlanesbyAirline("airline1")).willReturn(planes);
 
+		
+		Flight flight1 = new Flight();
+		flight1.setAirline(airline1);
+		flight1.setDepartDate(Date.from(Instant.now().minusSeconds(6000)));
+		flight1.setDepartes(r_depart);
+		flight1.setFlightStatus(flightStatusOnTime);
+		flight1.setId(1);
+		flight1.setLandDate(Date.from(Instant.now().plusSeconds(6000)));
+		flight1.setLands(r_landing);
+		flight1.setPlane(plane1);
+		flight1.setPrice(0.);
+		flight1.setPublished(false);
+		flight1.setReference("F-01");
+		flight1.setSeats(10);
+		
+		BDDMockito.given(this.flightService.findFlightById(2)).willReturn(flight1);
 		BDDMockito.given(this.flightService.findFlightById(FlightControllerTests.TEST_FLIGHT_ID)).willReturn(new Flight());
 	}
 
@@ -142,8 +220,8 @@ public class FlightControllerTests {
 
 		this.mockMvc.perform(MockMvcRequestBuilders.post("/flights/new").with(SecurityMockMvcRequestPostProcessors.csrf())
 
-			.param("reference", "R-05").param("seats", "100").param("price", "100.0").param("flightStatus", "on_time").param("plane", "V14-5").param("published", "true").param("departes", "A-05, airport: Adolfo Suárez Madrid-Barajas Airport, city: Madrid")
-			.param("lands", "A-08, airport: Sevilla Airport, city: Sevilla").param("landDate", "2020-03-27").param("departDate", "2020-03-27")).andExpect(MockMvcResultMatchers.view().name("redirect:/flights/{flightId}"));
+			.param("reference", "R-05").param("seats", "100").param("price", "100.0").param("flightStatus", "on_time").param("plane", "V14-5").param("published", "true").param("departes", "runway1, airport: airport2, city: city2")
+			.param("lands", "runway2, airport: airport1, city: city").param("landDate", "2020-03-27").param("departDate", "2020-03-27")).andExpect(MockMvcResultMatchers.view().name("redirect:/flights/{flightId}"));
 	}
 
 	@WithMockUser(value = "airline1")

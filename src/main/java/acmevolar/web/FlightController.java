@@ -49,9 +49,10 @@ import acmevolar.service.PlaneService;
 @Controller
 public class FlightController {
 
-	private final FlightService flightService;
-	private final PlaneService planeService;
-	private static final String VIEWS_FLIGHT_CREATE_FORM = "flights/createFlightForm";
+	private final FlightService	flightService;
+	private final PlaneService	planeService;
+	private static final String	VIEWS_FLIGHT_CREATE_FORM	= "flights/createFlightForm";
+
 
 	@Autowired
 	public FlightController(final FlightService flightService, final PlaneService planeService) {
@@ -59,7 +60,9 @@ public class FlightController {
 		this.planeService = planeService;
 	}
 	@PreAuthorize("hasAuthority('client') || isAnonymous()")
-	@GetMapping(value = { "/flights" })
+	@GetMapping(value = {
+		"/flights"
+	})
 	public String showFlightList(final Map<String, Object> model) {
 
 		Collection<Flight> flights = new ArrayList<Flight>();
@@ -69,16 +72,16 @@ public class FlightController {
 	}
 
 	@InitBinder("plane")
-	public void initPlaneBinder(WebDataBinder dataBinder) {
+	public void initPlaneBinder(final WebDataBinder dataBinder) {
 		dataBinder.setDisallowedFields("id");
 	}
 
 	@InitBinder("flightStatus")
-	public void initFlightStatusBinder(WebDataBinder dataBinder) {
+	public void initFlightStatusBinder(final WebDataBinder dataBinder) {
 		dataBinder.setDisallowedFields("name");
 	}
 
-	public void insertData(Map<String, Object> model, Flight flight) {
+	public void insertData(final Map<String, Object> model, final Flight flight) {
 		String username = SecurityContextHolder.getContext().getAuthentication().getName();
 		List<Plane> planes = this.flightService.findPlanesbyAirline(username);
 		List<Runway> departuresList = this.flightService.findDepartingRunways();
@@ -100,22 +103,21 @@ public class FlightController {
 	public String initCreationForm(final Map<String, Object> model) {
 		Flight flight = new Flight();
 		flight.setPublished(false);
-		insertData(model, flight);
+		this.insertData(model, flight);
 		model.put("flight", flight);
 
 		return FlightController.VIEWS_FLIGHT_CREATE_FORM;
 	}
 	@PreAuthorize("hasAuthority('airline')")
 	@PostMapping(value = "/flights/new")
-	public String processCreationForm(final Map<String, Object> model, @Valid Flight flight, BindingResult result) {
+	public String processCreationForm(final Map<String, Object> model, @Valid final Flight flight, final BindingResult result) {
 
 		if (result.hasErrors()) {
 			model.put("flight", flight);
-			insertData(model, flight);
+			this.insertData(model, flight);
 			return FlightController.VIEWS_FLIGHT_CREATE_FORM;
 
 		} else {
-
 
 			String username = SecurityContextHolder.getContext().getAuthentication().getName();
 			Airline airline = this.flightService.findAirlineByUsername(username);
@@ -130,50 +132,49 @@ public class FlightController {
 			planeFlight.setFlightsInternal(flightsFromPlane);
 
 			// we get the flight (one per plane) in the same day that depart airport
-			Long numPlanesInDepartAirport = this.flightService.findFlights().stream()
-					.filter(x -> x.getDepartDate().equals(flight.getDepartDate())).count();
+			Long numPlanesInDepartAirport = this.flightService.findFlights().stream().filter(x -> x.getDepartDate().equals(flight.getDepartDate())).count();
 
 			// we get the flight (one per plane) in the same day that depart airport
-			Long numPlanesInLandAirport = this.flightService.findFlights().stream()
-					.filter(x -> x.getLandDate().equals(flight.getLandDate())).count();
+			Long numPlanesInLandAirport = this.flightService.findFlights().stream().filter(x -> x.getLandDate().equals(flight.getLandDate())).count();
 
 			if (numPlanesInDepartAirport + 1L >= flight.getDepartes().getAirport().getMaxNumberOfPlanes()) {
 				// this is caused becaused an airport only can deals with a limit of planes per
 				// day
 				result.rejectValue("departes", "AirportFullOfPlanes", "This airport is full of planes this day");
 
-
-			} if (flightService.findFlightByReference(flight.getReference()) != null) {
+			}
+			if (this.flightService.findFlightByReference(flight.getReference()) != null) {
 				result.rejectValue("reference", "referenceTaken", "Flight reference already taken.");
 
-
-			} if (numPlanesInLandAirport + 1L >= flight.getLands().getAirport().getMaxNumberOfPlanes()) {
+			}
+			if (numPlanesInLandAirport + 1L >= flight.getLands().getAirport().getMaxNumberOfPlanes()) {
 				// this is caused becaused an airport only can deals with a limit of planes per
 				// day
 				result.rejectValue("lands", "AirportFullOfPlanes", "This airport is full of planes this day");
 
+			} /*
+				 * if (flight.getDepartes().getAirport().getName().equals(flight.getLands().getAirport().getName())) {
+				 * result.rejectValue("lands", "PathClosed", "This path is close, choose another airport(runway)");
+				 *
+				 *
+				 * } if (flight.getDepartDate().after(flight.getLandDate())) {
+				 * result.rejectValue("landDate", "LandingBeforeDepartDate",
+				 * "Landing date can't be programmed before departing date");
+				 *
+				 *
+				 * }if (flight.getDepartDate().before(Calendar.getInstance().getTime())) {
+				 * result.rejectValue("departDate", "DepartBeforePresentDate",
+				 * "Depart date can't be programmed before the present");
+				 *
+				 *
+				 * }
+				 */
 
-			} /*if (flight.getDepartes().getAirport().getName().equals(flight.getLands().getAirport().getName())) {
-				result.rejectValue("lands", "PathClosed", "This path is close, choose another airport(runway)");
-
-
-			} if (flight.getDepartDate().after(flight.getLandDate())) {
-				result.rejectValue("landDate", "LandingBeforeDepartDate",
-						"Landing date can't be programmed before departing date");
-
-
-			}if (flight.getDepartDate().before(Calendar.getInstance().getTime())) {
-				result.rejectValue("departDate", "DepartBeforePresentDate",
-						"Depart date can't be programmed before the present");
-
-
-			}*/
-			
-			if(result.hasErrors()) {
+			if (result.hasErrors()) {
 				model.put("flight", flight);
-				insertData(model, flight);
+				this.insertData(model, flight);
 				return FlightController.VIEWS_FLIGHT_CREATE_FORM;
-			}else {
+			} else {
 
 				this.flightService.saveFlight(flight);
 
@@ -182,7 +183,9 @@ public class FlightController {
 		}
 	}
 	@PreAuthorize("hasAuthority('airline')")
-	@GetMapping(value = { "/my_flights" })
+	@GetMapping(value = {
+		"/my_flights"
+	})
 	public String showAirlineFlightList(final Map<String, Object> model) {
 
 		String username = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -199,77 +202,77 @@ public class FlightController {
 	}
 
 	// @Secured("hasRole('airline')")
-	@PreAuthorize("hasAuthority('airline')")	
+	@PreAuthorize("hasAuthority('airline')")
 	@GetMapping(value = "/flights/{flightId}/edit")
 	public String initUpdateForm(@PathVariable("flightId") final int flightId, final ModelMap model) {
 		Flight flight = this.flightService.findFlightById(flightId);
 		String username = SecurityContextHolder.getContext().getAuthentication().getName();
 		Airline airline = this.flightService.findAirlineByUsername(username);
-		if(flight.getPublished() || !flight.getAirline().getName().equals(airline.getName())) {
-			return "redirect:/flights/" + flightId;
+		if (flight.getPublished() || !flight.getAirline().getName().equals(airline.getName())) {
+			return "redirect:/flights/{flightId}";
 		} else {
-		insertData(model, flight);
-		model.put("flight", flight);
-		return FlightController.VIEWS_FLIGHT_CREATE_FORM;
-	}
+			this.insertData(model, flight);
+			model.put("flight", flight);
+			return FlightController.VIEWS_FLIGHT_CREATE_FORM;
 		}
+	}
 
-    @PostMapping(value = "/flights/{flightId}/edit")
+	@PostMapping(value = "/flights/{flightId}/edit")
 	@PreAuthorize("hasAuthority('airline')")
-public String processUpdateForm(@Valid Flight flight, BindingResult result, @PathVariable("flightId") int flightId, ModelMap model) {
-	if (result.hasErrors()) {
-		model.put("flight", flight);
-		insertData(model, flight);
-		return VIEWS_FLIGHT_CREATE_FORM;
+	public String processUpdateForm(@Valid final Flight flight, final BindingResult result, @PathVariable("flightId") final int flightId, final ModelMap model) {
+		if (result.hasErrors()) {
+			model.put("flight", flight);
+			this.insertData(model, flight);
+			return FlightController.VIEWS_FLIGHT_CREATE_FORM;
+		} else {
+			Flight flightToUpdate = this.flightService.findFlightById(flightId);
+			BeanUtils.copyProperties(flightToUpdate, flight, "reference", "seats", "price", "flightStatus", "published", "landDate", "departDate", "lands", "departes", "plane");
+
+			// we get the flight (one per plane) in the same day that depart airport
+			Long numPlanesInDepartAirport = this.flightService.findFlights().stream().filter(x -> x.getDepartDate().equals(flight.getDepartDate())).count();
+
+			// we get the flight (one per plane) in the same day that depart airport
+			Long numPlanesInLandAirport = this.flightService.findFlights().stream().filter(x -> x.getLandDate().equals(flight.getLandDate())).count();
+
+			if (numPlanesInDepartAirport + 1L >= flight.getDepartes().getAirport().getMaxNumberOfPlanes()) {
+				// this is caused becaused an airport only can deals with a limit of planes per
+				// day
+				result.rejectValue("departes", "AirportFullOfPlanes", "This airport is full of planes this day");
+
+			}
+			if (numPlanesInLandAirport + 1L >= flight.getLands().getAirport().getMaxNumberOfPlanes()) {
+				// this is caused becaused an airport only can deals with a limit of planes per
+				// day
+				result.rejectValue("lands", "AirportFullOfPlanes", "This airport is full of planes this day");
+
+			} /*
+				 * if (flight.getDepartes().getAirport().getName().equals(flight.getLands().getAirport().getName())) {
+				 * result.rejectValue("lands", "PathClosed", "This path is close, choose another airport(runway)");
+				 *
+				 * } if (flight.getDepartDate().after(flight.getLandDate())) {
+				 * result.rejectValue("landDate", "LandingBeforeDepartDate",
+				 * "Landing date can't be programmed before departing date");
+				 *
+				 * } if (flight.getDepartDate().before(Calendar.getInstance().getTime())) {
+				 * result.rejectValue("departDate", "DepartBeforePresentDate",
+				 * "Depart date can't be programmed before the present");
+				 * }
+				 */
+
+			if (result.hasErrors()) {
+				model.put("flight", flight);
+				this.insertData(model, flight);
+				return FlightController.VIEWS_FLIGHT_CREATE_FORM;
+			} else {
+				this.flightService.saveFlight(flight);
+				return "redirect:/flights/{flightId}";
+			}
+		}
 	}
-	else {
-		Flight flightToUpdate=this.flightService.findFlightById(flightId);
-		BeanUtils.copyProperties(flightToUpdate, flight, "reference", "seats", "price", "flightStatus", "published", "landDate", "departDate", "lands", "departes", "plane");                                                                                  
-		
-		// we get the flight (one per plane) in the same day that depart airport
-					Long numPlanesInDepartAirport = this.flightService.findFlights().stream()
-							.filter(x -> x.getDepartDate().equals(flight.getDepartDate())).count();
 
-					// we get the flight (one per plane) in the same day that depart airport
-					Long numPlanesInLandAirport = this.flightService.findFlights().stream()
-							.filter(x -> x.getLandDate().equals(flight.getLandDate())).count();
-
-					if (numPlanesInDepartAirport + 1L >= flight.getDepartes().getAirport().getMaxNumberOfPlanes()) {
-						// this is caused becaused an airport only can deals with a limit of planes per
-						// day
-						result.rejectValue("departes", "AirportFullOfPlanes", "This airport is full of planes this day");
-
-					} if (numPlanesInLandAirport + 1L >= flight.getLands().getAirport().getMaxNumberOfPlanes()) {
-						// this is caused becaused an airport only can deals with a limit of planes per
-						// day
-						result.rejectValue("lands", "AirportFullOfPlanes", "This airport is full of planes this day");
-
-					}/* if (flight.getDepartes().getAirport().getName().equals(flight.getLands().getAirport().getName())) {
-						result.rejectValue("lands", "PathClosed", "This path is close, choose another airport(runway)");
-
-					} if (flight.getDepartDate().after(flight.getLandDate())) {
-						result.rejectValue("landDate", "LandingBeforeDepartDate",
-								"Landing date can't be programmed before departing date");
-
-					} if (flight.getDepartDate().before(Calendar.getInstance().getTime())) {
-						result.rejectValue("departDate", "DepartBeforePresentDate",
-								"Depart date can't be programmed before the present");
-					}*/
-					
-					if(result.hasErrors()) {
-						model.put("flight", flight);
-						insertData(model, flight);
-						return FlightController.VIEWS_FLIGHT_CREATE_FORM;
-					} else {
-						this.flightService.saveFlight(flight);                   
-						return "redirect:/flights/" + flight.getId();
-					}
-                }
-	}
-    
 	@InitBinder("flight")
-	public void initFlightBinder(WebDataBinder dataBinder) {
+	public void initFlightBinder(final WebDataBinder dataBinder) {
 		dataBinder.setValidator(new FlightValidator());
 	}
-    
+
 }

@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package acmevolar.web;
 
 import java.util.Calendar;
@@ -38,49 +39,55 @@ public class FlightValidator implements Validator {
 	//private FlightService flightService;
 
 	@Override
-	public void validate(Object obj, Errors errors) {		
+	public void validate(final Object obj, final Errors errors) {
 		Flight flight = (Flight) obj;
-						
-		if(flight.getLands()==null||flight.getDepartes()==null||flight.getDepartDate()==null||flight.getLandDate()==null||flight.getSeats()==null||flight.getPrice()==null||flight.getReference().isEmpty()) {
-			if(flight.getLands()==null) {
+
+		if (flight.getLands() == null || flight.getDepartes() == null || flight.getDepartDate() == null || flight.getLandDate() == null || flight.getSeats() == null || flight.getPrice() == null || flight.getReference().isEmpty()) {
+			if (flight.getLands() == null) {
 				errors.rejectValue("lands", "NullLandValue", "You must fill land's information.");
-				
-			} else if(flight.getDepartes()==null) {
+
+			} else if (flight.getDepartes() == null) {
 				errors.rejectValue("departes", "NullDepartValue", "You must fill depart's information.");
 
-			} else if(flight.getDepartDate()==null) {
+			} else if (flight.getDepartDate() == null) {
 				errors.rejectValue("departDate", "NullDepartDateValue", "You must fill depart date.");
 
-			}else if(flight.getLandDate()==null) {
+			} else if (flight.getLandDate() == null) {
 				errors.rejectValue("landDate", "NullLandDateValue", "You must fill land date.");
-			
-			} else if(flight.getSeats()==null) {
+
+			} else if (flight.getSeats() == null) {
 				errors.rejectValue("seats", "NullSeatValue", "You must fill seat information.");
-			
-			} else if(flight.getPrice()==null) {
+
+			} else if (flight.getPrice() == null) {
 				errors.rejectValue("price", "NullPriceValue", "You must fill price information.");
-			
-			} else if(flight.getReference().isEmpty()) {
+
+			} else if (flight.getReference().isEmpty()) {
 				errors.rejectValue("reference", "NullReferenceValue", "You must fill reference information.");
-			
+
 			}
 		} else {
-			if(flight.getSeats()<0){
+			if (flight.getSeats() < 0) {
 				errors.rejectValue("seats", "Minus0Seats", "You must specificate a number equal or higher than 0.");
-			
-			} if(flight.getPrice()<0){
-							errors.rejectValue("price", "Minus0Price", "You must specificate a number equal or higher than 0.");
-		} if (flight.getDepartes().getAirport().getName().equals(flight.getLands().getAirport().getName())) {
-							errors.rejectValue("lands", "PathClosed", "This path is close, choose another airport(runway)");
 
-		} if (flight.getDepartDate().after(flight.getLandDate())) {
-							errors.rejectValue("landDate", "LandingBeforeDepartDate",
-									"Landing date can't be programmed before departing date");
+			}
+			if (flight.getSeats() > flight.getPlane().getMaxSeats()) {
+				errors.rejectValue("seats", "TooManySeats", "The number of seats in the flight cannot by higher than the number of seats in its plane.");
 
-		} if (flight.getDepartDate().before(Calendar.getInstance().getTime())) {
-							errors.rejectValue("departDate", "DepartBeforePresentDate",
-									"Depart date can't be programmed before the present");
-		}
+			}
+			if (flight.getPrice() < 0) {
+				errors.rejectValue("price", "Minus0Price", "You must specificate a number equal or higher than 0.");
+			}
+			if (flight.getDepartes().getAirport().getName().equals(flight.getLands().getAirport().getName())) {
+				errors.rejectValue("lands", "PathClosed", "This path is close, choose another airport(runway)");
+
+			}
+			if (flight.getDepartDate().after(flight.getLandDate())) {
+				errors.rejectValue("landDate", "LandingBeforeDepartDate", "Landing date can't be programmed before departing date");
+
+			}
+			if (flight.getDepartDate().before(Calendar.getInstance().getTime())) {
+				errors.rejectValue("departDate", "DepartBeforePresentDate", "Depart date can't be programmed before the present");
+			}
 		}
 	}
 
@@ -88,7 +95,7 @@ public class FlightValidator implements Validator {
 	 * This Validator validates *just* Pet instances
 	 */
 	@Override
-	public boolean supports(Class<?> clazz) {
+	public boolean supports(final Class<?> clazz) {
 		return Flight.class.isAssignableFrom(clazz);
 	}
 

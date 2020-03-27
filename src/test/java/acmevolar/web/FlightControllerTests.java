@@ -1,10 +1,6 @@
 
 package acmevolar.web;
 
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
@@ -16,6 +12,8 @@ import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.mockito.BDDMockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -27,6 +25,7 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import acmevolar.configuration.SecurityConfiguration;
 import acmevolar.model.Airline;
@@ -49,7 +48,9 @@ import acmevolar.service.UserService;
 }, excludeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = WebSecurityConfigurer.class), excludeAutoConfiguration = SecurityConfiguration.class)
 public class FlightControllerTests {
 
-	private static final int	TEST_FLIGHT_ID	= 1;
+	private static final int	TEST_FLIGHT_ID			= 1;
+
+	private static final int	TEST_FLIGHT_ID_PUBLIC	= 2;
 
 	@Autowired
 	protected FlightController	flightController;
@@ -96,24 +97,24 @@ public class FlightControllerTests {
 
 		//Airline airline1 = this.airlineService.findAirlineById(1);
 		//BDDMockito.given(this.airlineService.findAirlineById(1)).willReturn(airline1);
-		
-		User user1=new User();
+
+		User user1 = new User();
 		user1.setUsername("airline1");
 		user1.setPassword("airline1");
 		user1.setEnabled(true);
-		
+
 		//Authorities authority1 = new Authorities();
 		//authority1.setUsername("airline");
 		//authority1.setUsername("airline");
-		
-		Airline airline1= new Airline();
+
+		Airline airline1 = new Airline();
 		airline1.setId(1);
 		airline1.setName("Sevilla Este Airways");
 		airline1.setIdentification("61333744-N");
 		airline1.setCountry("Spain");
 		airline1.setPhone("644584458");
 		airline1.setEmail("minardi@gmail.com");
-		LocalDate localDate1= LocalDate.parse("2010-11-07");
+		LocalDate localDate1 = LocalDate.parse("2010-11-07");
 		airline1.setCreationDate(localDate1);
 		airline1.setReference("SEA-001");
 		airline1.setUser(user1);
@@ -121,7 +122,7 @@ public class FlightControllerTests {
 
 		Plane plane1 = new Plane();
 		plane1.setId(1);
-		plane1.setAirline(new Airline());
+		plane1.setAirline(airline1);
 		plane1.setDescription("This is a description");
 		String stringDate = "2011-04-17";
 		Date date1 = new SimpleDateFormat("yyyy-MM-dd").parse(stringDate);
@@ -141,8 +142,8 @@ public class FlightControllerTests {
 		ap.setCode("code");
 		ap.setLatitude(0.);
 		ap.setLongitude(0.);
-		ap.setMaxNumberOfClients(0);
-		ap.setMaxNumberOfPlanes(0);
+		ap.setMaxNumberOfClients(100);
+		ap.setMaxNumberOfPlanes(100);
 		ap.setName("airport1");
 		ap.setRunwaysInternal(new HashSet<>());
 		ap.setId(1);
@@ -152,8 +153,8 @@ public class FlightControllerTests {
 		ap2.setCode("code");
 		ap2.setLatitude(0.);
 		ap2.setLongitude(0.);
-		ap2.setMaxNumberOfClients(0);
-		ap2.setMaxNumberOfPlanes(0);
+		ap2.setMaxNumberOfClients(100);
+		ap2.setMaxNumberOfPlanes(100);
 		ap2.setName("airport2");
 		ap2.setRunwaysInternal(new HashSet<>());
 		ap2.setId(2);
@@ -190,6 +191,11 @@ public class FlightControllerTests {
 		landingRunways.add(r_landing);
 		BDDMockito.given(this.flightService.findLandingRunways()).willReturn(landingRunways);
 
+		List<Runway> runways = new ArrayList<>();
+		runways.add(r_depart);
+		runways.add(r_landing);
+		BDDMockito.given(this.runwayService.findAllRunway()).willReturn(runways);
+
 		BDDMockito.given(this.planeService.findPlaneById(1)).willReturn(plane1);
 		BDDMockito.given(this.flightService.findPlanesbyAirline("airline1")).willReturn(planes);
 
@@ -207,31 +213,58 @@ public class FlightControllerTests {
 		flight1.setReference("F-01");
 		flight1.setSeats(10);
 
+		Flight flight2 = new Flight();
+		flight2.setId(2);
+		flight2.setAirline(airline1);
+		flight2.setDepartDate(Date.from(Instant.now().minusSeconds(6000)));
+		flight2.setDepartes(r_depart);
+		flight2.setFlightStatus(flightStatusOnTime);
+		flight2.setLandDate(Date.from(Instant.now().plusSeconds(6000)));
+		flight2.setLands(r_landing);
+		flight2.setPlane(plane1);
+		flight2.setPrice(0.);
+		flight2.setPublished(true);
+		flight2.setReference("F-02");
+		flight2.setSeats(10);
+
 		BDDMockito.given(this.flightService.findFlightById(1)).willReturn(flight1);
+
+		BDDMockito.given(this.flightService.findFlightById(2)).willReturn(flight2);
+
+		BDDMockito.given(this.planeService.findPlanes()).willReturn(planes);
 	}
 
-	@WithMockUser(value = "airline1")
+	@WithMockUser(value = "airline1", authorities = {
+		"airline"
+	})
 	@Test
 	void testShowFlightList() throws Exception {
-		this.mockMvc.perform(MockMvcRequestBuilders.get("/flights")).andExpect(status().isOk()).andExpect(model().attributeExists("flights")).andExpect(view().name("flights/flightList"));
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/flights")).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.model().attributeExists("flights")).andExpect(MockMvcResultMatchers.view().name("flights/flightList"));
 	}
 
-	@WithMockUser(value = "airline1")
+	@WithMockUser(value = "airline1", authorities = {
+		"airline"
+	})
 	@Test
 	void testShowAirlineFlightList() throws Exception {
-		this.mockMvc.perform(MockMvcRequestBuilders.get("/my_flights")).andExpect(status().isOk()).andExpect(model().attributeExists("flights")).andExpect(view().name("flights/flightList"));
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/my_flights")).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.model().attributeExists("flights")).andExpect(MockMvcResultMatchers.view().name("flights/flightList"));
 	}
 
-	@WithMockUser(value = "airline1")
+	@WithMockUser(value = "airline1", authorities = {
+		"airline"
+	})
 	@Test
 	void testShowFlight() throws Exception {
-		this.mockMvc.perform(MockMvcRequestBuilders.get("/flights/{flightId}", FlightControllerTests.TEST_FLIGHT_ID)).andExpect(status().isOk()).andExpect(model().attributeExists("flight")).andExpect(view().name("flights/flightDetails"));
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/flights/{flightId}", FlightControllerTests.TEST_FLIGHT_ID)).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.model().attributeExists("flight"))
+			.andExpect(MockMvcResultMatchers.view().name("flights/flightDetails"));
 	}
 
-	@WithMockUser(value = "airline1")
+	@WithMockUser(value = "airline1", authorities = {
+		"airline"
+	})
 	@Test
 	void testInitCreationForm() throws Exception {
-		this.mockMvc.perform(MockMvcRequestBuilders.get("/flights/new")).andExpect(status().isOk()).andExpect(view().name("flights/createFlightForm"));
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/flights/new")).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.view().name("flights/createFlightForm"));
 	}
 
 	@WithMockUser(value = "airline1", authorities = {
@@ -243,47 +276,140 @@ public class FlightControllerTests {
 		this.mockMvc.perform(MockMvcRequestBuilders.post("/flights/new").with(SecurityMockMvcRequestPostProcessors.csrf())
 
 			.param("reference", "R-05").param("seats", "100").param("price", "100.0").param("flightStatus", "on_time").param("plane", "V14-5").param("published", "true").param("departes", "runway1, airport: airport2, city: city2")
-			.param("lands", "runway2, airport: airport1, city: city").param("landDate", "2020-03-27").param("departDate", "2020-03-27")).andExpect(view().name("redirect:/flights/{flightId}"));
+			.param("lands", "runway2, airport: airport1, city: city").param("landDate", "2021-03-27").param("departDate", "2021-03-27")).andExpect(MockMvcResultMatchers.status().is3xxRedirection());
 	}
 
-	@WithMockUser(value = "airline1")
+	@WithMockUser(value = "airline1", authorities = {
+		"airline"
+	})
+	@ParameterizedTest
+	@CsvSource({
+		"R-05, 100, 100.0, on_time, V14-5, true, 'runway1, airport: airport2, city: city2', 'runway2, airport: airport1, city: city', 2021-03-27, 2021-03-27",
+		"R-05, 100, 100.0, on_time, V14-5, true, 'runway2, airport: airport1, city: city', 'runway1, airport: airport2, city: city2', 2021-03-27, 2021-03-27",
+		"R-05, 100, 100.0, on_time, V14-5, true, 'runway1, airport: airport2, city: city2', 'runway2, airport: airport1, city: city', 2022-03-27, 2022-03-27",
+	})
+	void testProcessCreationFormSuccess(final String reference, final String seats, final String price, final String flightStatus, final String plane, final String published, final String departes, final String lands, final String landDate,
+		final String departDate) throws Exception {
+		this.mockMvc
+			.perform(MockMvcRequestBuilders.post("/flights/new").with(SecurityMockMvcRequestPostProcessors.csrf()).param("reference", reference).param("seats", seats).param("price", price).param("flightStatus", flightStatus).param("plane", plane)
+				.param("published", published).param("departes", departes).param("lands", lands).param("landDate", landDate).param("departDate", departDate))
+
+			.andExpect(MockMvcResultMatchers.status().is3xxRedirection());
+	}
+
+	@WithMockUser(value = "airline1", authorities = {
+		"airline"
+	})
 	@Test
 	void testProcessCreationFormHasErrors() throws Exception {
 		this.mockMvc.perform(MockMvcRequestBuilders.post("/flights/new").with(SecurityMockMvcRequestPostProcessors.csrf())
 
-			.param("reference", "R-04").param("seats", "160").param("price", "120.0").param("flightStatus", "on_time").param("plane", "1").param("published", "1").param("departes", "1").param("lands", "2").param("landDate", "20123-06-06")
-			.param("departDate", "20-06-06")).andExpect(model().attributeHasErrors("flight")).andExpect(view().name("flights/createFlightForm"));
+			.param("reference", "R-05").param("seats", "12100").param("price", "100.0").param("flightStatus", "on_time").param("plane", "V14-5").param("published", "true").param("departes", "runway1, airport: airport2, city: city2")
+			.param("lands", "runway2, airport: airport1, city: city").param("landDate", "2021-03-27").param("departDate", "2021-03-27")).andExpect(MockMvcResultMatchers.model().attributeHasErrors("flight"))
+			.andExpect(MockMvcResultMatchers.view().name("flights/createFlightForm"));
 	}
 
-	@WithMockUser(value = "airline1", authorities = { "airline" })
+	@WithMockUser(value = "airline1", authorities = {
+		"airline"
+	})
+	@ParameterizedTest
+	@CsvSource({
+		"'', 100, 100.0, on_time, V14-5, true, 'runway1, airport: airport2, city: city2', 'runway2, airport: airport1, city: city', 2021-03-27, 2021-03-27",
+		"R-05, -100, 100.0, on_time, V14-5, true, 'runway1, airport: airport2, city: city2', 'runway2, airport: airport1, city: city', 2021-03-27, 2021-03-27",
+		"R-05, 100, -100.0, on_time, V14-5, true, 'runway1, airport: airport2, city: city2', 'runway2, airport: airport1, city: city', 2021-03-27, 2021-03-27",
+		"R-05, 100, 100.0, abcd, V14-5, true, 'runway1, airport: airport2, city: city2', 'runway2, airport: airport1, city: city', 2021-03-27, 2021-03-27",
+		"R-05, 100, 100.0, on_time, V14-5, true, 'error', 'runway2, airport: airport1, city: city', 2021-03-27, 2021-03-27", "R-05, 100, 100.0, on_time, V14-5, true, 'runway1, airport: airport2, city: city2', 'error', 2021-03-27, 2021-03-27",
+		"R-05, 100, 100.0, on_time, V14-5, true, 'runway1, airport: airport2, city: city2', 'runway2, airport: airport1, city: city', 2015-03-27, 2021-03-27",
+		"R-05, 100, 100.0, on_time, V14-5, true, 'runway1, airport: airport2, city: city2', 'runway2, airport: airport1, city: city', 2021-03-27, 2013-03-27"
+	})
+	void testProcessCreationFormHasErrors(final String reference, final String seats, final String price, final String flightStatus, final String plane, final String published, final String departes, final String lands, final String landDate,
+		final String departDate) throws Exception {
+		this.mockMvc
+			.perform(MockMvcRequestBuilders.post("/flights/new").with(SecurityMockMvcRequestPostProcessors.csrf()).param("reference", reference).param("seats", seats).param("price", price).param("flightStatus", flightStatus).param("plane", plane)
+				.param("published", published).param("departes", departes).param("lands", lands).param("landDate", landDate).param("departDate", departDate))
+
+			.andExpect(MockMvcResultMatchers.model().attributeHasErrors("flight")).andExpect(MockMvcResultMatchers.view().name("flights/createFlightForm"));
+	}
+
+	@WithMockUser(value = "airline1", authorities = {
+		"airline"
+	})
 	@Test
 	void testInitUpdateFormSuccess() throws Exception {
-		this.mockMvc.perform(MockMvcRequestBuilders.get("/flights/{flightId}/edit", TEST_FLIGHT_ID))
-		.andExpect(status().isOk()).andExpect(model().attributeExists("flight")).andExpect(view().name("flights/createFlightForm"));
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/flights/{flightId}/edit", FlightControllerTests.TEST_FLIGHT_ID)).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.model().attributeExists("flight"))
+			.andExpect(MockMvcResultMatchers.view().name("flights/createFlightForm"));
 	}
 
-	@WithMockUser(value = "airline1")
+	@WithMockUser(value = "airline1", authorities = {
+		"airline"
+	})
 	@Test
 	void testInitUpdateFormAlreadyPublic() throws Exception {
-		this.mockMvc.perform(MockMvcRequestBuilders.get("/flights/{flightId}/edit", FlightControllerTests.TEST_FLIGHT_ID)).andExpect(status().isOk()).andExpect(view().name("exception"));
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/flights/{flightId}/edit", FlightControllerTests.TEST_FLIGHT_ID_PUBLIC)).andExpect(MockMvcResultMatchers.status().isFound())
+			.andExpect(MockMvcResultMatchers.view().name("redirect:/flights/{flightId}"));
 	}
 
-	@WithMockUser(value = "airline1")
+	@WithMockUser(value = "airline1", authorities = {
+		"airline"
+	})
 	@Test
 	void testProcessUpdateFormSuccess() throws Exception {
 		this.mockMvc.perform(MockMvcRequestBuilders.post("/flights/{flightId}/edit", FlightControllerTests.TEST_FLIGHT_ID).with(SecurityMockMvcRequestPostProcessors.csrf())
 
-			.param("seats", "170").param("price", "120.0").param("flightStatus", "1").param("plane", "V14-5").param("published", "1").param("departes", "1").param("lands", "2").param("landDate", "20-06-06").param("departDate", "20-06-06"))
-			.andExpect(view().name("redirect:/flights/{flightId}"));
+			.param("reference", "R-05").param("seats", "150").param("price", "100.0").param("flightStatus", "on_time").param("plane", "V14-5").param("published", "true").param("departes", "runway1, airport: airport2, city: city2")
+			.param("lands", "runway2, airport: airport1, city: city").param("landDate", "2021-03-27").param("departDate", "2021-03-27")).andExpect(MockMvcResultMatchers.view().name("redirect:/flights/{flightId}"));
 	}
 
-	@WithMockUser(value = "airline1")
+	@WithMockUser(value = "airline1", authorities = {
+		"airline"
+	})
+	@ParameterizedTest
+	@CsvSource({
+		"R-05, 100, 100.0, on_time, V14-5, true, 'runway1, airport: airport2, city: city2', 'runway2, airport: airport1, city: city', 2021-03-27, 2021-03-27",
+		"R-05, 100, 100.0, on_time, V14-5, true, 'runway2, airport: airport1, city: city', 'runway1, airport: airport2, city: city2', 2021-03-27, 2021-03-27",
+		"R-05, 100, 100.0, on_time, V14-5, true, 'runway1, airport: airport2, city: city2', 'runway2, airport: airport1, city: city', 2022-03-27, 2022-03-27",
+	})
+	void testProcessUpdateFormSuccess(final String reference, final String seats, final String price, final String flightStatus, final String plane, final String published, final String departes, final String lands, final String landDate,
+		final String departDate) throws Exception {
+		this.mockMvc
+			.perform(MockMvcRequestBuilders.post("/flights/{flightId}/edit", FlightControllerTests.TEST_FLIGHT_ID).with(SecurityMockMvcRequestPostProcessors.csrf()).param("reference", reference).param("seats", seats).param("price", price)
+				.param("flightStatus", flightStatus).param("plane", plane).param("published", published).param("departes", departes).param("lands", lands).param("landDate", landDate).param("departDate", departDate))
+
+			.andExpect(MockMvcResultMatchers.view().name("redirect:/flights/{flightId}"));
+	}
+
+	@WithMockUser(value = "airline1", authorities = {
+		"airline"
+	})
 	@Test
 	void testProcessUpdateFormHasErrors() throws Exception {
 		this.mockMvc.perform(MockMvcRequestBuilders.post("/flights/{flightId}/edit", FlightControllerTests.TEST_FLIGHT_ID).with(SecurityMockMvcRequestPostProcessors.csrf())
 
-			.param("seats", "180").param("price", "120.0").param("flightStatus", "1").param("plane", "1").param("published", "1").param("departes", "1").param("lands", "2").param("landDate", "20-06-06").param("departDate", "23435340-06-06"))
-			.andExpect(model().attributeHasErrors("flight")).andExpect(view().name("flights/createFlightForm"));
+			.param("reference", "R-05").param("seats", "438450").param("price", "-20.0").param("flightStatus", "on_time").param("plane", "V14-5").param("published", "true").param("departes", "runway1, airport: airport2, city: city2")
+			.param("lands", "runway2, airport: airport1, city: city").param("landDate", "2021-03-27").param("departDate", "2021-03-27")).andExpect(MockMvcResultMatchers.model().attributeHasErrors("flight"))
+			.andExpect(MockMvcResultMatchers.view().name("flights/createFlightForm"));
+	}
+
+	@WithMockUser(value = "airline1", authorities = {
+		"airline"
+	})
+	@ParameterizedTest
+	@CsvSource({
+		"'', 100, 100.0, on_time, V14-5, true, 'runway1, airport: airport2, city: city2', 'runway2, airport: airport1, city: city', 2021-03-27, 2021-03-27",
+		"R-05, -100, 100.0, on_time, V14-5, true, 'runway1, airport: airport2, city: city2', 'runway2, airport: airport1, city: city', 2021-03-27, 2021-03-27",
+		"R-05, 100, -100.0, on_time, V14-5, true, 'runway1, airport: airport2, city: city2', 'runway2, airport: airport1, city: city', 2021-03-27, 2021-03-27",
+		"R-05, 100, 100.0, abcd, V14-5, true, 'runway1, airport: airport2, city: city2', 'runway2, airport: airport1, city: city', 2021-03-27, 2021-03-27",
+		"R-05, 100, 100.0, on_time, V14-5, true, 'error', 'runway2, airport: airport1, city: city', 2021-03-27, 2021-03-27", "R-05, 100, 100.0, on_time, V14-5, true, 'runway1, airport: airport2, city: city2', 'error', 2021-03-27, 2021-03-27",
+		"R-05, 100, 100.0, on_time, V14-5, true, 'runway1, airport: airport2, city: city2', 'runway2, airport: airport1, city: city', 2015-03-27, 2021-03-27",
+		"R-05, 100, 100.0, on_time, V14-5, true, 'runway1, airport: airport2, city: city2', 'runway2, airport: airport1, city: city', 2021-03-27, 2013-03-27"
+	})
+	void testProcessUpdateFormHasErrors(final String reference, final String seats, final String price, final String flightStatus, final String plane, final String published, final String departes, final String lands, final String landDate,
+		final String departDate) throws Exception {
+		this.mockMvc
+			.perform(MockMvcRequestBuilders.post("/flights/{flightId}/edit", FlightControllerTests.TEST_FLIGHT_ID).with(SecurityMockMvcRequestPostProcessors.csrf()).param("reference", reference).param("seats", seats).param("price", price)
+				.param("flightStatus", flightStatus).param("plane", plane).param("published", published).param("departes", departes).param("lands", lands).param("landDate", landDate).param("departDate", departDate))
+
+			.andExpect(MockMvcResultMatchers.model().attributeHasErrors("flight")).andExpect(MockMvcResultMatchers.view().name("flights/createFlightForm"));
 	}
 
 }

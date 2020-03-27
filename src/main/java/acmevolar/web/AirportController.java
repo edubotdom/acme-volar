@@ -11,6 +11,7 @@ import javax.validation.Valid;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -63,6 +64,7 @@ public class AirportController {
 	}
 
 	@GetMapping(value = "/airports/new")
+	@PreAuthorize("hasAuthority('airline')")
 	public String initCreationForm(final Map<String, Object> model) {
 		Airport airport = new Airport();
 
@@ -72,6 +74,7 @@ public class AirportController {
 	}
 
 	@PostMapping(value = "/airports/new")
+	@PreAuthorize("hasAuthority('airline')")
 	public String processCreationForm(@Valid final Airport airport, final BindingResult result) {
 
 		if (result.hasErrors()) {
@@ -97,6 +100,7 @@ public class AirportController {
 	}
 
 	@GetMapping(value = "/airports/{airportId}/edit")
+	@PreAuthorize("hasAuthority('airline')")
 	public String initUpdateForm(@PathVariable("airportId") final int airportId, final ModelMap model) {
 		Airport airport = this.airportService.findAirportById(airportId);
 
@@ -106,6 +110,7 @@ public class AirportController {
 	}
 
 	@PostMapping(value = "/airports/{airportId}/edit")
+	@PreAuthorize("hasAuthority('airline')")
 	public String processUpdateForm(@Valid final Airport airport, final BindingResult result, @PathVariable("airportId") final int airportId, final ModelMap model) {
 		if (result.hasErrors()) {
 			model.put("airport", airport);
@@ -131,6 +136,7 @@ public class AirportController {
 	}
 
 	@GetMapping(value = "/airports/{airportId}/delete")
+	@PreAuthorize("hasAuthority('airline')")
 	public String deleteAirport(@PathVariable("airportId") final int airportId) {
 		Optional<Airport> airport = this.airportService.findById(airportId);
 		if (airport.isPresent()) {

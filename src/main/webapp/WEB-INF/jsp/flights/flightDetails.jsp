@@ -33,22 +33,32 @@
 						</spring:url> <a href="${fn:escapeXml(airlineUrl)}"><c:out value="${flight.airline.name}" /></a></td>
 				</tr>
 				<tr>		
-					<th>Depart runway</th>
-					<td><spring:url value="/airports/{airportId}/runways/{departesId}" var="departesUrl">
-							<spring:param name="departesId" value="${flight.departes.id}" />
+					<th>Depart airport</th>
+					<td><spring:url value="/airports/{airportId}" var="departAirportURL">
 							<spring:param name="airportId" value="${flight.departes.airport.id}" />
-						</spring:url> <a href="${fn:escapeXml(departesUrl)}"><c:out value="${flight.departes.airport.city}" /></a></td>
+						</spring:url> <a href="${fn:escapeXml(departAirportURL)}"><c:out value="${flight.departes.airport.name}" /></a></td>
+				</tr>
+				<tr>		
+					<th>Depart runway</th>
+					<td><spring:url value="/airports/{airportId}/runways" var="departesUrl">
+							<spring:param name="airportId" value="${flight.departes.airport.id}" />
+						</spring:url> <a href="${fn:escapeXml(departesUrl)}"><c:out value="${flight.departes.name}" /></a></td>
 				</tr>
 				<tr>	
 					<th>Depart Date</th>
 					<td><c:out value="${flight.departDate}" /></td>
 				</tr>
 				<tr>		
-					<th>Landing runway</th>
-					<td><spring:url value="/airports/{airportId}/runways/{airportId}" var="landsUrl">
-							<spring:param name="landsId" value="${flight.lands.id}" />
+					<th>Landing airport</th>
+					<td><spring:url value="/airports/{airportId}" var="landAirportUrl">
 							<spring:param name="airportId" value="${flight.lands.airport.id}" />
-						</spring:url> <a href="${fn:escapeXml(landsUrl)}"><c:out value="${flight.lands.airport.city}" /></a></td>
+						</spring:url> <a href="${fn:escapeXml(landAirportUrl)}"><c:out value="${flight.lands.airport.name}" /></a></td>
+				</tr>
+				<tr>		
+					<th>Landing runway</th>
+					<td><spring:url value="/airports/{airportId}/runways" var="landsUrl">
+							<spring:param name="airportId" value="${flight.lands.airport.id}" />
+						</spring:url> <a href="${fn:escapeXml(landsUrl)}"><c:out value="${flight.lands.name}" /></a></td>
 				</tr>
 				<tr>		
 					<th>Land Date</th>

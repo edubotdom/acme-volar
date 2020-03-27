@@ -68,6 +68,11 @@
 
 		<button class="btn btn-default" onclick="window.location.href='${fn:escapeXml(airportEditUrl)}'">Edit</button>
 		
+		<spring:url value="/airports/{airportId}/delete" var="airportEditUrl">
+			<spring:param name="airportId" value="${airport.id}" />
+		</spring:url>
+
+		<button class="btn btn-default" onclick="window.location.href='${fn:escapeXml(airportEditUrl)}'">Delete</button>
 		
 		<spring:url value="/airports/{airportId}/runways/" var="runwayListUrl">
 			<spring:param name="airportId" value="${airport.id}" />

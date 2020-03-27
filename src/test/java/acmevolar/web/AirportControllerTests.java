@@ -14,6 +14,7 @@ import java.util.HashSet;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -151,6 +152,28 @@ public class AirportControllerTests {
 				.param("maxNumberOfClients", "600").param("latitude", "37.4180000").param("longitude", "-5.8931100")
 				.param("code", "SVQ").param("city", "Sevilla")).andExpect(status().is3xxRedirection());;
 	}
+	
+	@WithMockUser(value = "spring")
+	@ParameterizedTest 
+	@CsvSource({
+	    "Madrid Airport, 35, 500, 55.55, 49.112, MAC, Madrid",
+	    "Tongoliki Airport, 25, 350, 72.10, 87.123, ATC, Togoliki Menor",
+	    "Chicago Airport, 40, 650, 82.92, -73.9012, CKP, Chicago",
+	    "Arellano Airport, 1, 1, -1.1111111, 1.1111111, EGD, La casa de Dani",
+	}) 
+	void testProcessCreationFormSuccess(String name, String maxNumberOfPlanes, String maxNumberOfClients, String latitude, 
+			String longitude, String code, String city) throws Exception {    
+		this.mockMvc.perform(post("/airports/new").with(csrf())
+				.param("name", name)
+				.param("maxNumberOfPlanes", maxNumberOfPlanes)
+				.param("maxNumberOfClients", maxNumberOfClients)
+				.param("latitude", latitude)
+				.param("longitude", longitude)
+				.param("code", code)
+				.param("city", city))
+
+				.andExpect(status().is3xxRedirection());
+	} 
 
 	@WithMockUser(value = "spring")
 	@Test
@@ -162,6 +185,29 @@ public class AirportControllerTests {
 				.param("code", "VGA").param("city", "Sevilla")).andExpect(model().attributeHasErrors("airport"))
 				.andExpect(view().name("airports/createAirportForm"));
 	}
+	
+	@WithMockUser(value = "spring")
+	@ParameterizedTest 
+	@CsvSource({
+	    "Madrid Airport, 35, 500, -100.89, 49.112, MAC, Madrid",
+	    "Tongoliki Airport, 25, 350, 72.10, 200.9172, ATC, Togoliki Menor",
+	    "Chicago Airport, 40, -12, 82.92, -73.9012, CKP, Chicago",
+	    "Arellano Airport, -1000, 1, -1.1111111, 1.1111111, EGD, La casa de Dani",
+	}) 
+	void testProcessCreationFormHasErrors(String name, String maxNumberOfPlanes, String maxNumberOfClients, String latitude, 
+			String longitude, String code, String city) throws Exception {    
+		this.mockMvc.perform(post("/airports/new").with(csrf())
+				.param("name", name)
+				.param("maxNumberOfPlanes", maxNumberOfPlanes)
+				.param("maxNumberOfClients", maxNumberOfClients)
+				.param("latitude", latitude)
+				.param("longitude", longitude)
+				.param("code", code)
+				.param("city", city))
+		
+				.andExpect(model().attributeHasErrors("airport"))
+				.andExpect(view().name("airports/createAirportForm"));
+	} 
 
 	@WithMockUser(value = "spring")
 	@Test
@@ -177,6 +223,28 @@ public class AirportControllerTests {
 				.param("maxNumberOfClients", "100").param("latitude", "11.98").param("longitude", "78.987")
 				.param("code", "VBA").param("city", "Madrid")).andExpect(status().is3xxRedirection());
 	}
+	
+	@WithMockUser(value = "spring")
+	@ParameterizedTest 
+	@CsvSource({
+	    "Madrid Airport, 35, 500, 55.55, 49.112, MAC, Madrid",
+	    "Tongoliki Airport, 25, 350, 72.10, 87.123, ATC, Togoliki Menor",
+	    "Chicago Airport, 40, 650, 82.92, -73.9012, CKP, Chicago",
+	    "Arellano Airport, 1, 1, -1.1111111, 1.1111111, EGD, La casa de Dani",
+	}) 
+	void testProcessUpdateFormSuccess(String name, String maxNumberOfPlanes, String maxNumberOfClients, String latitude, 
+			String longitude, String code, String city) throws Exception {    
+		this.mockMvc.perform(post("/airports/{airportId}/edit", TEST_AIRPORT_ID).with(csrf())
+				.param("name", name)
+				.param("maxNumberOfPlanes", maxNumberOfPlanes)
+				.param("maxNumberOfClients", maxNumberOfClients)
+				.param("latitude", latitude)
+				.param("longitude", longitude)
+				.param("code", code)
+				.param("city", city))
+
+				.andExpect(status().is3xxRedirection());
+	} 
 
 	@WithMockUser(value = "spring")
 	@Test
@@ -185,5 +253,28 @@ public class AirportControllerTests {
 				.param("code", "DEP").param("latitude", "190.345")).andExpect(model().attributeHasErrors("airport"))
 				.andExpect(status().isOk()).andExpect(view().name("airports/createAirportForm"));
 	}
+	
+	@WithMockUser(value = "spring")
+	@ParameterizedTest 
+	@CsvSource({
+		"123, 35, -2, 10.89, 49.112, MAC, Madrid",
+	    "Tongoliki Airport, 25, 350, 72.10, 200.9172, ATC, Togoliki Menor",
+	    "Chicago Airport, 40, -12, 82.92, -73.9012, CKP, Chicago",
+	    "Arellano Airport, 0, 1, -1.1111111, 1.1111111, 123, La casa de Dani",
+	}) 
+	void testProcessUpdateFormHasErrors(String name, String maxNumberOfPlanes, String maxNumberOfClients, String latitude, 
+			String longitude, String code, String city) throws Exception {    
+		this.mockMvc.perform(post("/airports/{airportId}/edit", TEST_AIRPORT_ID).with(csrf())
+				.param("name", name)
+				.param("maxNumberOfPlanes", maxNumberOfPlanes)
+				.param("maxNumberOfClients", maxNumberOfClients)
+				.param("latitude", latitude)
+				.param("longitude", longitude)
+				.param("code", code)
+				.param("city", city))
+				
+				.andExpect(model().attributeHasErrors("airport"))
+				.andExpect(view().name("airports/createAirportForm"));
+	} 
 
 }

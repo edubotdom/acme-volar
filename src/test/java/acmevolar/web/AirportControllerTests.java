@@ -28,9 +28,16 @@ import acmevolar.model.Airline;
 import acmevolar.model.Airport;
 import acmevolar.model.Flight;
 import acmevolar.model.Plane;
+import acmevolar.model.api.Clouds;
+import acmevolar.model.api.Coord;
+import acmevolar.model.api.Forecast;
+import acmevolar.model.api.Main;
+import acmevolar.model.api.Sys;
+import acmevolar.model.api.Wind;
 import acmevolar.service.AirportService;
 import acmevolar.service.ForecastService;
 import acmevolar.service.RunwayService;
+import reactor.core.publisher.Mono;
 
 @WebMvcTest(value = AirportController.class, excludeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = WebSecurityConfigurer.class), excludeAutoConfiguration = SecurityConfiguration.class)
 public class AirportControllerTests {
@@ -43,8 +50,12 @@ public class AirportControllerTests {
 	@MockBean
 	private AirportService airportService;
 
+	//@Autowired
 	@MockBean
 	private ForecastService forecastService;
+	
+	@MockBean
+	private Mono<Forecast> mono;
 
 	@MockBean
 	protected RunwayService runwayService;
@@ -66,6 +77,47 @@ public class AirportControllerTests {
 		a1.setCity("Sevilla");
 
 		given(this.airportService.findAirportById(AirportControllerTests.TEST_AIRPORT_ID)).willReturn(a1);
+		
+		
+		Forecast f1 = new Forecast();
+		f1.setBase("base");
+		
+		Clouds c = new Clouds();
+		c.setAll(0);
+		Coord co = new Coord();
+		co.setLat(0);
+		co.setLon(0);
+		Main m = new Main();
+		m.setFeels_like(0);
+		m.setHumidity(0);
+		m.setPressure(0);
+		m.setTemp(0);
+		m.setTemp_max(0);
+		m.setTemp_min(0);
+		Sys s = new Sys();
+		s.setCountry("country");
+		s.setSunrise(0);
+		s.setSunset(0);
+		s.setType(0);
+		Wind w = new Wind();
+		w.setDeg(0);
+		w.setSpeed(0);
+	
+		f1.setClouds(c);
+		f1.setCod(0);
+		f1.setCoord(co);
+		f1.setDt(0);
+		f1.setMain(m);
+		f1.setName("name");
+		f1.setSys(s);
+		f1.setTimezone(0);
+		f1.setVisibility(0);
+		f1.setWind(w);
+		
+		given(this.forecastService.searchForecastByCity(a1.getCity())).willReturn(mono);
+		
+		given(this.forecastService.searchForecastByCity(a1.getCity()).block()).willReturn(f1);
+		
 
 	}
 

@@ -11,6 +11,7 @@ import javax.validation.Valid;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -31,7 +32,6 @@ public class AirportController {
 
 	private final AirportService	airportService;
 	private final ForecastService	forecastService;
-	
 
 	private static final String		VIEWS_AIRPORT_CREATE_FORM	= "airports/createAirportForm";
 
@@ -56,14 +56,15 @@ public class AirportController {
 	@GetMapping("/airports/{airportId}")
 	public ModelAndView showAirport(@PathVariable("airportId") final int airportId) {
 		ModelAndView mav = new ModelAndView("airports/airportDetails");
-		Airport airport = airportService.findAirportById(airportId);
-		Forecast forecast = forecastService.searchForecastByCity(airport.getCity()).block();
+		Airport airport = this.airportService.findAirportById(airportId);
+		Forecast forecast = this.forecastService.searchForecastByCity(airport.getCity()).block();
 		mav.addObject(airport);
 		mav.addObject(forecast);
 		return mav;
 	}
 
 	@GetMapping(value = "/airports/new")
+	@PreAuthorize("hasAuthority('airline')")
 	public String initCreationForm(final Map<String, Object> model) {
 		Airport airport = new Airport();
 
@@ -73,15 +74,16 @@ public class AirportController {
 	}
 
 	@PostMapping(value = "/airports/new")
+	@PreAuthorize("hasAuthority('airline')")
 	public String processCreationForm(@Valid final Airport airport, final BindingResult result) {
 
 		if (result.hasErrors()) {
 			return AirportController.VIEWS_AIRPORT_CREATE_FORM;
-		} else if(this.airportService.findAirportsByName(airport.getName()).size()!=0){
+		} else if (this.airportService.findAirportsByName(airport.getName()).size() != 0) {
 			result.rejectValue("name", "duplicate", "Already exists");
 			return AirportController.VIEWS_AIRPORT_CREATE_FORM;
 		} else {
-		
+
 			try {
 				this.airportService.saveAirport(airport);
 			} catch (DataAccessException e) {
@@ -93,12 +95,12 @@ public class AirportController {
 				return AirportController.VIEWS_AIRPORT_CREATE_FORM;
 			}
 
-
 			return "redirect:/airports/" + airport.getId();
 		}
 	}
 
 	@GetMapping(value = "/airports/{airportId}/edit")
+	@PreAuthorize("hasAuthority('airline')")
 	public String initUpdateForm(@PathVariable("airportId") final int airportId, final ModelMap model) {
 		Airport airport = this.airportService.findAirportById(airportId);
 
@@ -108,9 +110,13 @@ public class AirportController {
 	}
 
 	@PostMapping(value = "/airports/{airportId}/edit")
+	@PreAuthorize("hasAuthority('airline')")
 	public String processUpdateForm(@Valid final Airport airport, final BindingResult result, @PathVariable("airportId") final int airportId, final ModelMap model) {
 		if (result.hasErrors()) {
 			model.put("airport", airport);
+			return AirportController.VIEWS_AIRPORT_CREATE_FORM;
+		} else if (this.airportService.findAirportsByName(airport.getName()).size() != 0) {
+			result.rejectValue("name", "duplicate", "Already exists");
 			return AirportController.VIEWS_AIRPORT_CREATE_FORM;
 		} else {
 			Airport airportToUpdate = this.airportService.findAirportById(airportId);
@@ -130,6 +136,7 @@ public class AirportController {
 	}
 
 	@GetMapping(value = "/airports/{airportId}/delete")
+	@PreAuthorize("hasAuthority('airline')")
 	public String deleteAirport(@PathVariable("airportId") final int airportId) {
 		Optional<Airport> airport = this.airportService.findById(airportId);
 		if (airport.isPresent()) {

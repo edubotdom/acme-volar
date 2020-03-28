@@ -59,7 +59,7 @@ public class FlightController {
 		this.flightService = flightService;
 		this.planeService = planeService;
 	}
-	@PreAuthorize("hasAuthority('client') || isAnonymous()")
+	//@PreAuthorize("hasAuthority('client') || isAnonymous()")
 	@GetMapping(value = {
 		"/flights"
 	})
@@ -196,9 +196,38 @@ public class FlightController {
 
 	@GetMapping("/flights/{flightId}")
 	public ModelAndView showFlight(@PathVariable("flightId") final int flightId) {
-		ModelAndView mav = new ModelAndView("flights/flightDetails");
-		mav.addObject(this.flightService.findFlightById(flightId));
-		return mav;
+		Flight flight = this.flightService.findFlightById(flightId);
+		String username = SecurityContextHolder.getContext().getAuthentication().getName();
+		Airline airline = this.flightService.findAirlineByUsername(username);
+
+		if (airline == null && flight.getPublished()) {
+			ModelAndView mav = new ModelAndView("flights/flightDetails");
+			mav.addObject(flight);
+			return mav;
+		} else if (airline == null && !flight.getPublished()) {
+
+			ModelAndView mav2 = new ModelAndView("flights/flightList");
+			Collection<Flight> flights = new ArrayList<Flight>();
+			flights.addAll(this.flightService.findPublishedFutureFlight());
+			mav2.addObject("flights", flights);
+
+			return mav2;
+		}
+
+		if (flight.getPublished() || flight.getAirline().getName().equals(airline.getName())) {
+
+			ModelAndView mav = new ModelAndView("flights/flightDetails");
+			mav.addObject(flight);
+			return mav;
+		} else {
+			ModelAndView mav2 = new ModelAndView("flights/flightList");
+			Collection<Flight> flights = new ArrayList<Flight>();
+			flights.addAll(this.flightService.findPublishedFutureFlight());
+			mav2.addObject("flights", flights);
+
+			return mav2;
+		}
+
 	}
 
 	// @Secured("hasRole('airline')")

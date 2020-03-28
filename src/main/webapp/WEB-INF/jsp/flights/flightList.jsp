@@ -33,12 +33,16 @@
 							<spring:param name="airlineId" value="${flight.airline.id}" />
 						</spring:url> <a href="${fn:escapeXml(airlineUrl)}"><c:out value="${flight.airline.name}" /></a></td>
 					
-					<td><c:out value="${flight.departes.airport.city}" /></td>
-				
-					<td><c:out value="${flight.departDate}" /></td>
+					<td><spring:url value="/airports/{airportId}" var="departesUrl">
+							<spring:param name="airportId" value="${flight.departes.airport.id}" />
+						</spring:url> <a href="${fn:escapeXml(departesUrl)}"><c:out value="${flight.departes.airport.city}" /></a></td>
 					
-					<td><c:out value="${flight.lands.airport.city}" /></td>
-	
+					<td><c:out value="${flight.departDate}" /></td>
+						
+					<td><spring:url value="/airports/{airportId}" var="landsUrl">
+							<spring:param name="airportId" value="${flight.lands.airport.id}" />
+						</spring:url> <a href="${fn:escapeXml(landsUrl)}"><c:out value="${flight.lands.airport.city}" /></a></td>
+							
 					<td><c:out value="${flight.landDate}" /></td>
 					
 					<td><spring:url value="/planes/{planeId}" var="planeUrl">

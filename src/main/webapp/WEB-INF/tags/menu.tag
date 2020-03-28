@@ -26,12 +26,12 @@
 					</petclinic:menuItem>
 				</sec:authorize>
 				
-				<sec:authorize access="!hasAuthority('airline')">
+<%--				<sec:authorize access="!hasAuthority('airline')"> --%>
 					<petclinic:menuItem active="${name eq 'airlines'}" url="/airlines" title="List airlines">
 						<span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
 						<span>Airlines</span>
 					</petclinic:menuItem>
-				</sec:authorize>
+<%--				</sec:authorize> --%>
 
 				<sec:authorize access="hasAnyAuthority('client','airline')">
 					<petclinic:menuItem active="${name eq 'airports'}" url="/airports" title="Airports">
@@ -41,12 +41,12 @@
 				</sec:authorize>
 				
 
-				<sec:authorize access="!hasAuthority('airline')">
+<%--				<sec:authorize access="!hasAuthority('airline')"> --%>
 					<petclinic:menuItem active="${name eq 'flights'}" url="/flights" title="List flights">
 						<span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
 						<span>Flights</span>
 					</petclinic:menuItem>
-				</sec:authorize>
+<%--				</sec:authorize> --%>
 				
 				<sec:authorize access="hasAuthority('airline')">
 					<petclinic:menuItem active="${name eq 'clients'}" url="/my_flights" title="List clients">
@@ -67,8 +67,10 @@
 			<ul class="nav navbar-nav navbar-right">
 				<sec:authorize access="!isAuthenticated()">
 					<li><a href="<c:url value="/login" />">Login</a></li>
-					<li><a href="<c:url value="/clients/new" />">Register</a></li>
+					<li><a href="<c:url value="/clients/new" />">Register as a client</a></li>
+					<li><a href="<c:url value="/airlines/new" />">Register as an airline</a></li>
 				</sec:authorize>
+				
 				<sec:authorize access="isAuthenticated()">
 					<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown"> <span
 							class="glyphicon glyphicon-user"></span> <strong><sec:authentication property="name" /></strong> <span

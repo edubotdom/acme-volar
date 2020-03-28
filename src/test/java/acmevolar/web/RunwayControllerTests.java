@@ -9,7 +9,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
+import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -22,11 +24,17 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
 import org.springframework.security.config.annotation.web.WebSecurityConfigurer;
+import org.springframework.security.test.context.support.TestExecutionEvent;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.web.servlet.MockMvc;
 
 import acmevolar.configuration.SecurityConfiguration;
+import acmevolar.model.Airline;
 import acmevolar.model.Airport;
+import acmevolar.model.Flight;
+import acmevolar.model.FlightStatusType;
+import acmevolar.model.Plane;
 import acmevolar.model.Runway;
 import acmevolar.model.RunwayType;
 import acmevolar.service.AirportService;
@@ -84,6 +92,18 @@ class RunwayControllerTests {
 		runway.setName("Example Runway");
 		runway.setRunwayType(runwayType1);
 		given(this.runwayService.findRunwayById(RunwayControllerTests.TEST_RUNWAY_ID1)).willReturn(runway);
+		
+		Runway runway2 = new Runway();
+		runway.setId(2);
+		runway.setName("Example Runway 2");
+		runway.setRunwayType(runwayType1);
+		given(this.runwayService.findRunwayById(2)).willReturn(runway2);
+		
+		Runway runway3 = new Runway();
+		runway.setId(3);
+		runway.setName("Example Runway 3");
+		runway.setRunwayType(runwayType2);
+		given(this.runwayService.findRunwayById(3)).willReturn(runway3);
 
 		Airport airport = new Airport();
 		airport.setId(1);
@@ -95,9 +115,27 @@ class RunwayControllerTests {
 		airport.setCode("VGA");
 		airport.setCity("Sevilla");
 		given(this.runwayService.findAirportById(RunwayControllerTests.TEST_AIRPORT_ID1)).willReturn(airport);
+		
+		Flight flight1 = new Flight();
+		flight1.setId(1);
+		flight1.setAirline(new Airline());
+		flight1.setDepartDate(Date.from(Instant.now().minusSeconds(6000)));
+		flight1.setDepartes(runway2);
+		flight1.setFlightStatus(new FlightStatusType());
+		flight1.setLandDate(Date.from(Instant.now().plusSeconds(6000)));
+		flight1.setLands(runway3);
+		flight1.setPlane(new Plane());
+		flight1.setPrice(0.);
+		flight1.setPublished(false);
+		flight1.setReference("F-01");
+		flight1.setSeats(10);
+		
+		List<Flight> flights = new ArrayList<Flight>();
+		flights.add(flight1);
+		given(this.flightService.findFlights()).willReturn(flights);
 	}
 
-	@WithMockUser(value = "airline1", authorities = { "airline" })
+	@WithMockUser(value = "client1"/*, authorities = { "airline" }*/)
 	@Test
 	void testShowRunwayList() throws Exception {
 		this.mockMvc.perform(get("/airports/{airportId}/runways", TEST_AIRPORT_ID1)).andExpect(status().isOk())
@@ -112,6 +150,11 @@ class RunwayControllerTests {
 				.andExpect(view().name("runways/createOrUpdateRunwaysForm"));
 	}
 
+	@Test
+	void testUnauthorizedInitCreationForm() throws Exception {
+		this.mockMvc.perform(get("/airports/{airportId}/runways/new", TEST_AIRPORT_ID1)).andExpect(status().is4xxClientError());
+	}
+	
 	@WithMockUser(value = "airline1", authorities = { "airline" })
 	@Test
 	void testProcessCreationFormSuccess() throws Exception {
@@ -119,6 +162,14 @@ class RunwayControllerTests {
 				.perform(post("/airports/{airportId}/runways/new", TEST_AIRPORT_ID1).with(csrf())
 						.param("name", "Runway Example").param("runwayType", "landing"))
 				.andExpect(status().is3xxRedirection());
+	}
+	
+	@Test
+	void testUnauthorizedProcessCreationForm() throws Exception {
+		this.mockMvc
+				.perform(post("/airports/{airportId}/runways/new", TEST_AIRPORT_ID1).with(csrf())
+						.param("name", "Runway Example").param("runwayType", "landing"))
+				.andExpect(status().is4xxClientError());
 	}
 	
 	@WithMockUser(value = "airline1", authorities = {
@@ -156,6 +207,12 @@ void testProcessCreationFormSuccess(String name, String runwayType) throws Excep
 				.andExpect(view().name("runways/createOrUpdateRunwaysForm"));
 	}
 
+	@Test
+	void testUnauthorizedInitUpdateForm() throws Exception {
+		mockMvc.perform(get("/airports/{airportId}/runways/{runwayId}/edit", TEST_AIRPORT_ID1, TEST_RUNWAY_ID1))
+				.andExpect(status().is4xxClientError());
+	}
+	
 	@WithMockUser(value = "airline1", authorities = { "airline" })
 	@Test
 	void testProcessUpdateFormSuccess() throws Exception {
@@ -163,6 +220,34 @@ void testProcessCreationFormSuccess(String name, String runwayType) throws Excep
 				.with(csrf()).param("name", "Runway Example").param("runwayType", "landing"))
 				.andExpect(status().is3xxRedirection())
 				.andExpect(view().name("redirect:/airports/{airportId}/runways"));
+	}
+	
+	@Test
+	void testUnauthorizedProcessUpdateForm() throws Exception {
+		mockMvc.perform(post("/airports/{airportId}/runways/{runwayId}/edit", TEST_AIRPORT_ID1, TEST_RUNWAY_ID1)
+				.with(csrf()))
+				.andExpect(status().is4xxClientError());
+	}
+	
+	@WithMockUser(value = "airline1", authorities = { "airline" })
+	@Test
+	void testDeleteSuccess() throws Exception {
+		mockMvc.perform(get("/airports/{airportId}/runways/{runwayId}/delete", TEST_AIRPORT_ID1, TEST_RUNWAY_ID1))
+				.andExpect(status().is3xxRedirection())
+				.andExpect(view().name("redirect:/airports/{airportId}/runways"));
+	}
+	
+	@WithMockUser(value = "airline1", authorities = { "airline" })
+	@Test
+	void testDeleteHasErrors() throws Exception {
+		mockMvc.perform(get("/airports/{airportId}/runways/{runwayId}/delete", TEST_AIRPORT_ID1, 2))
+				.andExpect(view().name("exception"));
+	}
+	
+	@Test
+	void testDeleteUnauthorized() throws Exception {
+		mockMvc.perform(get("/airports/{airportId}/runways/{runwayId}/delete", TEST_AIRPORT_ID1, TEST_RUNWAY_ID1))
+				.andExpect(status().is4xxClientError());
 	}
 
 }

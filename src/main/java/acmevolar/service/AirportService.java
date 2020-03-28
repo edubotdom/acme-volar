@@ -51,6 +51,7 @@ public class AirportService {
 		this.airportRepository.save(airport);
 	}
 
+	@Transactional(readOnly = true)
 	public void deleteAirport(final Airport airport) {
 		this.airportRepository.delete(airport);
 	}

@@ -26,17 +26,20 @@ import org.springframework.transaction.annotation.Transactional;
 import acmevolar.model.Airport;
 import acmevolar.model.Runway;
 import acmevolar.model.RunwayType;
+import acmevolar.repository.AirportRepository;
 import acmevolar.repository.RunwayRepository;
 
 @Service
 public class RunwayService {
 
 	private RunwayRepository runwayRepository;
+	private AirportRepository airportRepository;
 
 
 	@Autowired
-	public RunwayService(final RunwayRepository runwayRepository) {
+	public RunwayService(final RunwayRepository runwayRepository, final AirportRepository airportRepository) {
 		this.runwayRepository = runwayRepository;
+		this.airportRepository=airportRepository;
 	}
 
 	@Transactional(readOnly = true)

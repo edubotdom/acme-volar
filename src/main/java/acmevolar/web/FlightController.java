@@ -199,21 +199,21 @@ public class FlightController {
 		Flight flight = this.flightService.findFlightById(flightId);
 		String username = SecurityContextHolder.getContext().getAuthentication().getName();
 		Airline airline = this.flightService.findAirlineByUsername(username);
-		
-		if(airline==null&&flight.getPublished()) {
+
+		if (airline == null && flight.getPublished()) {
 			ModelAndView mav = new ModelAndView("flights/flightDetails");
 			mav.addObject(flight);
 			return mav;
-		} else if (airline==null&&!flight.getPublished()) {
-			
+		} else if (airline == null && !flight.getPublished()) {
+
 			ModelAndView mav2 = new ModelAndView("flights/flightList");
 			Collection<Flight> flights = new ArrayList<Flight>();
 			flights.addAll(this.flightService.findPublishedFutureFlight());
 			mav2.addObject("flights", flights);
-			
+
 			return mav2;
 		}
-		
+
 		if (flight.getPublished() || flight.getAirline().getName().equals(airline.getName())) {
 
 			ModelAndView mav = new ModelAndView("flights/flightDetails");
@@ -224,10 +224,10 @@ public class FlightController {
 			Collection<Flight> flights = new ArrayList<Flight>();
 			flights.addAll(this.flightService.findPublishedFutureFlight());
 			mav2.addObject("flights", flights);
-			
+
 			return mav2;
 		}
-		
+
 	}
 
 	// @Secured("hasRole('airline')")

@@ -83,6 +83,10 @@ public class Airport extends NamedEntity {
 		this.getRunwaysInternal().add(runway);
 		runway.setAirport(this);
 	}
+	
+	public void removeRunway(final Runway runway) {
+		this.getRunwaysInternal().remove(runway);
+	}
 
 	@Override
 	public String getName() {

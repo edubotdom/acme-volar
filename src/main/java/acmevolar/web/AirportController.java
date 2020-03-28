@@ -83,7 +83,6 @@ public class AirportController {
 			result.rejectValue("name", "duplicate", "Already exists");
 			return AirportController.VIEWS_AIRPORT_CREATE_FORM;
 		} else {
-
 			try {
 				this.airportService.saveAirport(airport);
 			} catch (DataAccessException e) {
@@ -94,7 +93,6 @@ public class AirportController {
 				result.rejectValue("name", "duplicate", "Already exists");
 				return AirportController.VIEWS_AIRPORT_CREATE_FORM;
 			}
-
 			return "redirect:/airports/" + airport.getId();
 		}
 	}
@@ -131,18 +129,18 @@ public class AirportController {
 			} catch (DuplicatedAirportNameException e) {
 				e.printStackTrace();
 			}
-			return "redirect:/airports/" + airport.getId();
+			return "redirect:/airports/{airportId}";
 		}
 	}
 
-	@GetMapping(value = "/airports/{airportId}/delete")
 	@PreAuthorize("hasAuthority('airline')")
+	@GetMapping(value = "/airports/{airportId}/delete")
 	public String deleteAirport(@PathVariable("airportId") final int airportId) {
 		Optional<Airport> airport = this.airportService.findById(airportId);
 		if (airport.isPresent()) {
 			this.airportService.deleteAirport(airport.get());
 		}
-		return "redirect:/airports/";
+		return "redirect:/airports";
 
 	}
 

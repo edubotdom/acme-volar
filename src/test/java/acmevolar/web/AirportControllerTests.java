@@ -21,6 +21,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import acmevolar.configuration.SecurityConfiguration;
 import acmevolar.model.Airport;
 import acmevolar.service.AirportService;
+import acmevolar.service.FlightService;
 import acmevolar.service.ForecastService;
 import acmevolar.service.RunwayService;
 
@@ -40,6 +41,9 @@ public class AirportControllerTests {
 
 	@MockBean
 	protected RunwayService runwayService;
+	
+	@MockBean
+	protected FlightService flightService;
 
 	@Autowired
 	private MockMvc mockMvc;

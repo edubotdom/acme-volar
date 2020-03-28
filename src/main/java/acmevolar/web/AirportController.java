@@ -22,24 +22,29 @@ import org.springframework.web.servlet.ModelAndView;
 
 import acmevolar.model.Airport;
 import acmevolar.model.api.Forecast;
+import acmevolar.repository.FlightRepository;
 import acmevolar.service.AirportService;
+import acmevolar.service.FlightService;
 import acmevolar.service.ForecastService;
 import acmevolar.service.exceptions.DuplicatedAirportNameException;
 import acmevolar.service.exceptions.IncorrectCartesianCoordinatesException;
+import acmevolar.service.exceptions.NonDeletableAirportException;
 
 @Controller
 public class AirportController {
 
 	private final AirportService	airportService;
 	private final ForecastService	forecastService;
+	private final FlightService flightService;
 
 	private static final String		VIEWS_AIRPORT_CREATE_FORM	= "airports/createAirportForm";
 
 
 	@Autowired
-	public AirportController(final AirportService airportService, final ForecastService forecastService) {
+	public AirportController(final AirportService airportService, final ForecastService forecastService, final FlightService flightService) {
 		this.airportService = airportService;
 		this.forecastService = forecastService;
+		this.flightService = flightService;
 	}
 
 	@GetMapping(value = {
@@ -135,10 +140,13 @@ public class AirportController {
 
 	@PreAuthorize("hasAuthority('airline')")
 	@GetMapping(value = "/airports/{airportId}/delete")
-	public String deleteAirport(@PathVariable("airportId") final int airportId) {
+	public String deleteAirport(@PathVariable("airportId") final int airportId) throws NonDeletableAirportException {
 		Optional<Airport> airport = this.airportService.findById(airportId);
-		if (airport.isPresent()) {
-			this.airportService.deleteAirport(airport.get());
+		boolean deletable = !this.flightService.findFlights().stream().anyMatch(f->f.getDepartes().getAirport().equals(airport.get())||f.getLands().getAirport().equals(airport.get()));
+		if (deletable) {
+				this.airportService.deleteAirport(airport.get());
+		} else {
+			throw new NonDeletableAirportException();
 		}
 		return "redirect:/airports";
 

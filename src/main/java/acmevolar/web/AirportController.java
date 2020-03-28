@@ -23,25 +23,29 @@ import org.springframework.web.servlet.ModelAndView;
 
 import acmevolar.model.Airport;
 import acmevolar.model.api.Forecast;
+import acmevolar.repository.FlightRepository;
 import acmevolar.service.AirportService;
+import acmevolar.service.FlightService;
 import acmevolar.service.ForecastService;
 import acmevolar.service.exceptions.DuplicatedAirportNameException;
 import acmevolar.service.exceptions.IncorrectCartesianCoordinatesException;
+import acmevolar.service.exceptions.NonDeletableException;
 
 @Controller
 public class AirportController {
 
 	private final AirportService	airportService;
 	private final ForecastService	forecastService;
-	
+	private final FlightService flightService;
 
 	private static final String		VIEWS_AIRPORT_CREATE_FORM	= "airports/createAirportForm";
 
 
 	@Autowired
-	public AirportController(final AirportService airportService, final ForecastService forecastService) {
+	public AirportController(final AirportService airportService, final ForecastService forecastService, final FlightService flightService) {
 		this.airportService = airportService;
 		this.forecastService = forecastService;
+		this.flightService = flightService;
 	}
 
 	@GetMapping(value = {
@@ -69,6 +73,7 @@ public class AirportController {
 
 	@PreAuthorize("hasAuthority('airline')")
 	@GetMapping(value = "/airports/new")
+	@PreAuthorize("hasAuthority('airline')")
 	public String initCreationForm(final Map<String, Object> model) {
 		Airport airport = new Airport();
 
@@ -79,15 +84,15 @@ public class AirportController {
 
 	@PreAuthorize("hasAuthority('airline')")
 	@PostMapping(value = "/airports/new")
+	@PreAuthorize("hasAuthority('airline')")
 	public String processCreationForm(@Valid final Airport airport, final BindingResult result) {
 
 		if (result.hasErrors()) {
 			return AirportController.VIEWS_AIRPORT_CREATE_FORM;
-		} else if(this.airportService.findAirportsByName(airport.getName()).size()!=0){
+		} else if (this.airportService.findAirportsByName(airport.getName()).size() != 0) {
 			result.rejectValue("name", "duplicate", "Already exists");
 			return AirportController.VIEWS_AIRPORT_CREATE_FORM;
 		} else {
-		
 			try {
 				this.airportService.saveAirport(airport);
 			} catch (DataAccessException e) {
@@ -98,14 +103,13 @@ public class AirportController {
 				result.rejectValue("name", "duplicate", "Already exists");
 				return AirportController.VIEWS_AIRPORT_CREATE_FORM;
 			}
-
-
 			return "redirect:/airports/" + airport.getId();
 		}
 	}
 
 	@PreAuthorize("hasAuthority('airline')")
 	@GetMapping(value = "/airports/{airportId}/edit")
+	@PreAuthorize("hasAuthority('airline')")
 	public String initUpdateForm(@PathVariable("airportId") final int airportId, final ModelMap model) {
 		Airport airport = this.airportService.findAirportById(airportId);
 
@@ -116,9 +120,13 @@ public class AirportController {
 
 	@PreAuthorize("hasAuthority('airline')")
 	@PostMapping(value = "/airports/{airportId}/edit")
+	@PreAuthorize("hasAuthority('airline')")
 	public String processUpdateForm(@Valid final Airport airport, final BindingResult result, @PathVariable("airportId") final int airportId, final ModelMap model) {
 		if (result.hasErrors()) {
 			model.put("airport", airport);
+			return AirportController.VIEWS_AIRPORT_CREATE_FORM;
+		} else if (this.airportService.findAirportsByName(airport.getName()).size() != 0) {
+			result.rejectValue("name", "duplicate", "Already exists");
 			return AirportController.VIEWS_AIRPORT_CREATE_FORM;
 		} else {
 			Airport airportToUpdate = this.airportService.findAirportById(airportId);
@@ -139,12 +147,15 @@ public class AirportController {
 
 	@PreAuthorize("hasAuthority('airline')")
 	@GetMapping(value = "/airports/{airportId}/delete")
-	public String deleteAirport(@PathVariable("airportId") final int airportId) {
+	public String deleteAirport(@PathVariable("airportId") final int airportId) throws NonDeletableException {
 		Optional<Airport> airport = this.airportService.findById(airportId);
-		if (airport.isPresent()) {
-			this.airportService.deleteAirport(airport.get());
+		boolean deletable = !this.flightService.findFlights().stream().anyMatch(f->f.getDepartes().getAirport().equals(airport.get())||f.getLands().getAirport().equals(airport.get()));
+		if (deletable) {
+				this.airportService.deleteAirport(airport.get());
+		} else {
+			throw new NonDeletableException();
 		}
-		return "redirect:/airports/";
+		return "redirect:/airports";
 
 	}
 

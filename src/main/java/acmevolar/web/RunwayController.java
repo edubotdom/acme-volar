@@ -16,7 +16,6 @@
 
 package acmevolar.web;
 
-
 import java.util.List;
 import java.util.Map;
 
@@ -38,21 +37,26 @@ import org.springframework.web.bind.annotation.PostMapping;
 import acmevolar.model.Airport;
 import acmevolar.model.Runway;
 import acmevolar.model.RunwayType;
+import acmevolar.service.AirportService;
+import acmevolar.service.FlightService;
 import acmevolar.service.RunwayService;
-import acmevolar.service.exceptions.DuplicatedAirportNameException;
-import acmevolar.service.exceptions.IncorrectCartesianCoordinatesException;
+import acmevolar.service.exceptions.NonDeletableException;
 
 @Controller
 public class RunwayController {
 
-	private final RunwayService	runwayService;
+	private final RunwayService		runwayService;
+	private final AirportService	airportService;
+	private final FlightService	flightService;
 
-	private static final String	VIEWS_RUNWAYS_CREATE_OR_UPDATE_FORM	= "runways/createOrUpdateRunwaysForm";
+	private static final String		VIEWS_RUNWAYS_CREATE_OR_UPDATE_FORM	= "runways/createOrUpdateRunwaysForm";
 
 
 	@Autowired
-	public RunwayController(final RunwayService runwayService) {
+	public RunwayController(final RunwayService runwayService, final AirportService airportService, final FlightService flightService) {
 		this.runwayService = runwayService;
+		this.airportService = airportService;
+		this.flightService = flightService;
 	}
 
 	//LIST
@@ -66,33 +70,34 @@ public class RunwayController {
 		model.put("airport", airport);
 		return "runways/runwayList";
 	}
-	
-	public void insertData(Map<String, Object> model,@PathVariable("airportId") int airportId) {
+
+	public void insertData(Map<String, Object> model, @PathVariable("airportId") int airportId) {
 		List<RunwayType> runwayTypes = this.runwayService.findRunwaysTypes();
 		model.put("runwayTypes", runwayTypes);
 	}
-	
+
+
 	//CREATE
 	@PreAuthorize("hasAuthority('airline')")
 	@GetMapping(value = "/airports/{airportId}/runways/new")
-	public String initCreationForm(final Map<String, Object> model,@PathVariable("airportId") final int airportId) {
+	public String initCreationForm(final Map<String, Object> model, @PathVariable("airportId") final int airportId) {
 		Runway runway = new Runway();
-		
+
 		Airport airport = this.runwayService.findAirportById(airportId);
-		airport.addRunway(runway);		
+		airport.addRunway(runway);
 		runway.setAirport(airport);
-		
+
 		insertData(model, airportId);
-		
+
 		model.put("airport", airport);
 		model.put("runway", runway);
-		
+
 		return RunwayController.VIEWS_RUNWAYS_CREATE_OR_UPDATE_FORM;
 	}
 
 	@PreAuthorize("hasAuthority('airline')")
 	@PostMapping(value = "/airports/{airportId}/runways/new")
-	public String processCreationForm(Map<String, Object> model,@Valid Runway runway, BindingResult result,@PathVariable("airportId") int airportId) {// throws DataAccessException, IncorrectCartesianCoordinatesException, DuplicatedAirportNameException {
+	public String processCreationForm(Map<String, Object> model, @Valid Runway runway, BindingResult result, @PathVariable("airportId") int airportId) {// throws DataAccessException, IncorrectCartesianCoordinatesException, DuplicatedAirportNameException {
 		Airport airport = this.runwayService.findAirportById(airportId);
 		airport.addRunway(runway);
 		runway.setAirport(airport);
@@ -100,76 +105,77 @@ public class RunwayController {
 			insertData(model, airportId);
 			model.put("runway", runway);
 			return RunwayController.VIEWS_RUNWAYS_CREATE_OR_UPDATE_FORM;
-			
-		} else if(this.runwayService.findRunwaysByName(runway.getName()).size()!=0) {
+
+		} else if (this.runwayService.findRunwaysByName(runway.getName()).size() != 0) {
 			//insertData(model, airportId);
 			result.rejectValue("name", "NameIsAlreadyUsed", "Name is already used");
 			return RunwayController.VIEWS_RUNWAYS_CREATE_OR_UPDATE_FORM;
-			
+
 		} else {
 			try {
 				this.runwayService.saveRunway(runway);
 			} catch (DataAccessException e) {
 				e.printStackTrace();
 			}
-			
+
 			return "redirect:/airports/" + airportId + "/runways/";
 		}
 	}
 
-	
 	//UPDATE
 	@PreAuthorize("hasAuthority('airline')")
 	@GetMapping(value = "/airports/{airportId}/runways/{runwayId}/edit")
 	public String initUpdateForm(@PathVariable("runwayId") int runwayId, @PathVariable("airportId") final int airportId, ModelMap model) {
 		Runway runway = this.runwayService.findRunwayById(runwayId);
 
-		
 		insertData(model, airportId);
-		
+
 		model.put("runway", runway);
 		return RunwayController.VIEWS_RUNWAYS_CREATE_OR_UPDATE_FORM;
 	}
 
 	@PreAuthorize("hasAuthority('airline')")
-    @PostMapping(value = "/airports/{airportId}/runways/{runwayId}/edit")
+  @PostMapping(value = "/airports/{airportId}/runways/{runwayId}/edit")
 	public String processUpdateForm(@Valid Runway runway, BindingResult result, @PathVariable("runwayId") int runwayId, @PathVariable("airportId") final int airportId, ModelMap model) {
-        	if (result.hasErrors()) {
-        		insertData(model, airportId);
-    			return RunwayController.VIEWS_RUNWAYS_CREATE_OR_UPDATE_FORM;
-    			
-        	} else if(this.runwayService.findRunwaysByName(runway.getName()).size()!=0 && runwayId!=runway.getId().intValue()) {
-        		insertData(model, airportId);
-        		result.rejectValue("name", "NameIsAlreadyUsed", "Name is already used");
-        		return RunwayController.VIEWS_RUNWAYS_CREATE_OR_UPDATE_FORM;
-        		
-        	}else {
-	        	Runway runwayToUpdate = this.runwayService.findRunwayById(runwayId);
-				BeanUtils.copyProperties(runwayToUpdate, runway, "name", "runwayType");
-				try {
-					this.runwayService.saveRunway(runway);
-				} catch (DataAccessException e) {
-					e.printStackTrace();
-				}
-				return "redirect:/airports/{airportId}/runways" /*" + runway.getId()*/;
-        	}
+		if (result.hasErrors()) {
+			insertData(model, airportId);
+			return RunwayController.VIEWS_RUNWAYS_CREATE_OR_UPDATE_FORM;
+
+		} else if (this.runwayService.findRunwaysByName(runway.getName()).size() != 0 && runwayId != runway.getId().intValue()) {
+			insertData(model, airportId);
+			result.rejectValue("name", "NameIsAlreadyUsed", "Name is already used");
+			return RunwayController.VIEWS_RUNWAYS_CREATE_OR_UPDATE_FORM;
+
+		} else {
+			Runway runwayToUpdate = this.runwayService.findRunwayById(runwayId);
+			BeanUtils.copyProperties(runwayToUpdate, runway, "name", "runwayType");
+			try {
+				this.runwayService.saveRunway(runway);
+			} catch (DataAccessException e) {
+				e.printStackTrace();
+			}
+			return "redirect:/airports/{airportId}/runways";
+		}
 	}
-    
+  
 	@PreAuthorize("hasAuthority('airline')")
-    @GetMapping(value = "/airports/{airportId}/runways/{runwayId}/delete")
-	public String deleteRunway(@PathVariable("runwayId") final int runwayId,@PathVariable("airportId") final int airportId) {
+	@GetMapping(value = "/airports/{airportId}/runways/{runwayId}/delete")
+	public String deleteRunway(@PathVariable("runwayId") final int runwayId, @PathVariable("airportId") final int airportId) throws NonDeletableException {
 		Runway runway = this.runwayService.findRunwayById(runwayId);
-		if (runway != null) {
+		boolean authorized = flightService.findFlights().stream().noneMatch(f->f.getDepartes().equals(runway)||f.getLands().equals(runway));
+		//Optional<Airport> airport = this.airportService.findById(airportId);
+		if (runway != null && authorized) {
+			//airport.get().removeRunway(runway);
 			this.runwayService.deleteRunwayById(runway.getId());
+		} else {
+			throw new NonDeletableException();
 		}
 		return "redirect:/airports/{airportId}/runways";
-
 	}
-	
+
 	@InitBinder("runway")
 	public void initFlightBinder(WebDataBinder dataBinder) {
 		dataBinder.setValidator(new RunwayValidator());
 	}
-    
-}
 
+}

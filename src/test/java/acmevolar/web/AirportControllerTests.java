@@ -30,6 +30,7 @@ import acmevolar.model.api.Main;
 import acmevolar.model.api.Sys;
 import acmevolar.model.api.Wind;
 import acmevolar.service.AirportService;
+import acmevolar.service.FlightService;
 import acmevolar.service.ForecastService;
 import acmevolar.service.RunwayService;
 import reactor.core.publisher.Mono;
@@ -54,6 +55,9 @@ public class AirportControllerTests {
 
 	@MockBean
 	protected RunwayService runwayService;
+	
+	@MockBean
+	protected FlightService flightService;
 
 	@Autowired
 	private MockMvc mockMvc;

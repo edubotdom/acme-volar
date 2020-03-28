@@ -111,9 +111,9 @@ INSERT INTO runway(id,name,runway_type_id,airport_id) VALUES (15,'A-15',1 ,4);
 INSERT INTO runway(id,name,runway_type_id,airport_id) VALUES (16,'A-16',2 ,4);
 
 INSERT INTO flights(id, reference, seats, price, flight_status_id, plane_id, published, departes_id, lands_id, airline_id, land_date, depart_date) 
-	VALUES (1, 'R-01', 250, 150.0, 1, 1, TRUE, 1, 2, 1,'2020-06-06 14:05','2020-06-06 15:00');
+	VALUES (1, 'R-01', 250, 150.0, 1, 1, TRUE, 1, 2, 1,'2020-06-06 15:00','2020-06-06 14:05');
 	
 INSERT INTO flights(id, reference, seats, price, flight_status_id, plane_id, published, departes_id, lands_id, airline_id, land_date, depart_date) 
-	VALUES (2, 'R-02', 215, 100.5, 1, 1, FALSE, 9, 15, 2,'2020-06-07 15:05','2020-06-07 16:30');
+	VALUES (2, 'R-02', 215, 100.5, 1, 1, FALSE, 9, 15, 2,'2020-06-07 16:30','2020-06-07 15:05');
 
 

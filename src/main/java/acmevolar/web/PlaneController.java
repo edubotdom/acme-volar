@@ -9,6 +9,7 @@ import javax.validation.Valid;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -23,7 +24,6 @@ import org.springframework.web.servlet.ModelAndView;
 import acmevolar.model.Airline;
 import acmevolar.model.Plane;
 import acmevolar.service.FlightService;
-
 import acmevolar.service.PlaneService;
 
 @Controller
@@ -77,6 +77,7 @@ public class PlaneController {
 		dataBinder.setDisallowedFields("id");
 	}
 
+	@PreAuthorize("hasAuthority('airline')")
 	@GetMapping(value = "/planes/new")
 	public String initCreationForm(final Map<String, Object> model) {
 		Plane plane = new Plane();
@@ -91,6 +92,7 @@ public class PlaneController {
 		return PlaneController.VIEWS_PLANES_CREATE_OR_UPDATE_FORM;
 	}
 
+	@PreAuthorize("hasAuthority('airline')")
 	@PostMapping(value = "/planes/new")
 	public String processCreationForm(@Valid final Plane plane, final BindingResult result) {
 
@@ -118,6 +120,7 @@ public class PlaneController {
 		}
 	}
 	
+	@PreAuthorize("hasAuthority('airline')")
 	@GetMapping(value = "/planes/{planeId}/edit")
 	public String initUpdateForm(@PathVariable("planeId") final int planeId, final ModelMap model) {
 		Plane plane = this.planeService.findPlaneById(planeId);
@@ -127,6 +130,7 @@ public class PlaneController {
 		return PlaneController.VIEWS_PLANES_CREATE_OR_UPDATE_FORM;
 	}
 
+	@PreAuthorize("hasAuthority('airline')")
 	@PostMapping(value = "/planes/{planeId}/edit")
 	public String processUpdateForm(@Valid final Plane plane, final BindingResult result, @PathVariable("planeId") final int planeId, final ModelMap model) {
 		if (result.hasErrors()) {

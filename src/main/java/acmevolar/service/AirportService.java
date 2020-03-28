@@ -14,6 +14,7 @@ import acmevolar.model.Airport;
 import acmevolar.repository.AirportRepository;
 import acmevolar.service.exceptions.DuplicatedAirportNameException;
 import acmevolar.service.exceptions.IncorrectCartesianCoordinatesException;
+import acmevolar.service.exceptions.NonDeletableException;
 
 @Service
 public class AirportService {
@@ -51,8 +52,9 @@ public class AirportService {
 		this.airportRepository.save(airport);
 	}
 
+	@Transactional
 	public void deleteAirport(final Airport airport) {
-		this.airportRepository.delete(airport);
+			this.airportRepository.delete(airport);
 	}
 
 	@Transactional(readOnly = true)

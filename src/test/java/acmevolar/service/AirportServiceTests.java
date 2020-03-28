@@ -1,12 +1,13 @@
+
 package acmevolar.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.Collection;
 
 import javax.validation.ConstraintViolationException;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -25,6 +26,7 @@ public class AirportServiceTests {
 
 	@Autowired
 	protected AirportService airportService;
+
 
 	@Test
 	void shouldFindAirportsByName() {
@@ -86,11 +88,11 @@ public class AirportServiceTests {
 		airportWithIncorretCardinalCoordinates.setCode("JFK");
 		airportWithIncorretCardinalCoordinates.setCity("New York");
 
-		Assertions.assertThrows(IncorrectCartesianCoordinatesException.class, () -> {
+		assertThrows(IncorrectCartesianCoordinatesException.class, () -> {
 			airportService.saveAirport(airportWithIncorretCardinalCoordinates);
 		});
 	}
-	
+
 	@Test
 	@Transactional
 	public void shouldThrowDuplicatedAirportNameException() {
@@ -102,7 +104,7 @@ public class AirportServiceTests {
 		firstAirport.setLongitude(-73.789288);
 		firstAirport.setCode("JFK");
 		firstAirport.setCity("New York");
-		
+
 		try {
 			airportService.saveAirport(firstAirport);
 		} catch (DataAccessException e) {
@@ -112,7 +114,7 @@ public class AirportServiceTests {
 		} catch (DuplicatedAirportNameException e) {
 			e.printStackTrace();
 		}
-		
+
 		Airport secondAirport = new Airport();
 		secondAirport.setName("JFK Airport");
 		secondAirport.setMaxNumberOfPlanes(100);
@@ -121,13 +123,13 @@ public class AirportServiceTests {
 		secondAirport.setLongitude(-173.789288);
 		secondAirport.setCode("NYC");
 		secondAirport.setCity("New York City");
-		
-		Assertions.assertThrows(DuplicatedAirportNameException.class, () -> {
+
+		assertThrows(DuplicatedAirportNameException.class, () -> {
 			airportService.saveAirport(secondAirport);
 		});
-				
+
 	}
-	
+
 	@Test
 	@Transactional
 	public void shouldNotInsertNegativeMaxNumberOfPlanes() {
@@ -139,17 +141,17 @@ public class AirportServiceTests {
 		airport.setLongitude(-73.789288);
 		airport.setCode("JFK");
 		airport.setCity("New York");
-		
-		Assertions.assertThrows(ConstraintViolationException.class, () -> {
+
+		assertThrows(ConstraintViolationException.class, () -> {
 			airportService.saveAirport(airport);
 		});
-		
+
 	}
-	
+
 	@Test
 	@Transactional
 	public void shouldNotInsertNegativeMaxNumberOfClients() {
-		
+
 		Airport airport = new Airport();
 		airport.setName("JFK Airport");
 		airport.setMaxNumberOfPlanes(1000);
@@ -158,13 +160,13 @@ public class AirportServiceTests {
 		airport.setLongitude(-73.789288);
 		airport.setCode("JFK");
 		airport.setCity("New York");
-		
-		Assertions.assertThrows(ConstraintViolationException.class, () -> {
+
+		assertThrows(ConstraintViolationException.class, () -> {
 			airportService.saveAirport(airport);
 		});
-		
+
 	}
-	
+
 	@Test
 	@Transactional
 	public void shouldInsert0MaxNumberOfPlanes() {
@@ -176,7 +178,7 @@ public class AirportServiceTests {
 		airport.setLongitude(-73.789288);
 		airport.setCode("JFK");
 		airport.setCity("New York");
-		
+
 		try {
 			this.airportService.saveAirport(airport);
 		} catch (DataAccessException | IncorrectCartesianCoordinatesException | DuplicatedAirportNameException e) {
@@ -189,13 +191,13 @@ public class AirportServiceTests {
 		int found = airports.size();
 
 		assertThat(found).isEqualTo(1);
-		
+
 	}
-	
+
 	@Test
 	@Transactional
 	public void shouldInsert0MaxNumberOfClients() {
-		
+
 		Airport airport = new Airport();
 		airport.setName("JFK Airport");
 		airport.setMaxNumberOfPlanes(1000);
@@ -204,7 +206,7 @@ public class AirportServiceTests {
 		airport.setLongitude(-73.789288);
 		airport.setCode("JFK");
 		airport.setCity("New York");
-		
+
 		try {
 			this.airportService.saveAirport(airport);
 		} catch (DataAccessException | IncorrectCartesianCoordinatesException | DuplicatedAirportNameException e) {
@@ -217,13 +219,13 @@ public class AirportServiceTests {
 		int found = airports.size();
 
 		assertThat(found).isEqualTo(1);
-		
+
 	}
-	
+
 	@Test
 	@Transactional
 	public void shouldNotInsertBigMaxNumberOfPlanes() {
-		
+
 		Airport airport = new Airport();
 		airport.setName("JFK Airport");
 		airport.setMaxNumberOfPlanes(30001);
@@ -232,13 +234,13 @@ public class AirportServiceTests {
 		airport.setLongitude(-73.789288);
 		airport.setCode("JFK");
 		airport.setCity("New York");
-		
-		Assertions.assertThrows(ConstraintViolationException.class, () -> {
+
+		assertThrows(ConstraintViolationException.class, () -> {
 			airportService.saveAirport(airport);
 		});
-		
+
 	}
-	
+
 	@Test
 	@Transactional
 	public void shouldNotInsertBigMaxNumberOfClients() {
@@ -250,13 +252,12 @@ public class AirportServiceTests {
 		airport.setLongitude(-73.789288);
 		airport.setCode("JFK");
 		airport.setCity("New York");
-		
-		Assertions.assertThrows(ConstraintViolationException.class, () -> {
+
+		assertThrows(ConstraintViolationException.class, () -> {
 			airportService.saveAirport(airport);
 		});
 	}
-	
-	
+
 	@Test
 	@Transactional
 	public void shouldNotInsertCodeWithMoreThan3Letters() {
@@ -268,16 +269,16 @@ public class AirportServiceTests {
 		airport.setLongitude(-73.789288);
 		airport.setCode("JFKF");
 		airport.setCity("New York");
-		
-		Assertions.assertThrows(ConstraintViolationException.class, () -> {
+
+		assertThrows(ConstraintViolationException.class, () -> {
 			airportService.saveAirport(airport);
 		});
 	}
-		
+
 	@Test
 	@Transactional
 	public void shouldNotInsertCodeWithNumbers() {
-		
+
 		Airport airport = new Airport();
 		airport.setName("JFK Airport");
 		airport.setMaxNumberOfPlanes(12125);
@@ -286,17 +287,17 @@ public class AirportServiceTests {
 		airport.setLongitude(-73.789288);
 		airport.setCode("JF4");
 		airport.setCity("New York");
-		
-		Assertions.assertThrows(ConstraintViolationException.class, () -> {
+
+		assertThrows(ConstraintViolationException.class, () -> {
 			airportService.saveAirport(airport);
 		});
-		
+
 	}
-	
+
 	@Test
 	@Transactional
 	public void shouldNotInsertCodeWithLessThan3Letters() {
-		
+
 		Airport airport = new Airport();
 		airport.setName("JFK Airport");
 		airport.setMaxNumberOfPlanes(12125);
@@ -305,14 +306,13 @@ public class AirportServiceTests {
 		airport.setLongitude(-73.789288);
 		airport.setCode("JF");
 		airport.setCity("New York");
-		
-		Assertions.assertThrows(ConstraintViolationException.class, () -> {
+
+		assertThrows(ConstraintViolationException.class, () -> {
 			airportService.saveAirport(airport);
 		});
-		
+
 	}
-	
-	
+
 	@Test
 	@Transactional
 	public void shouldNotInsertCityWithNumbers() {
@@ -324,10 +324,10 @@ public class AirportServiceTests {
 		airport.setLongitude(-73.789288);
 		airport.setCode("JFK");
 		airport.setCity("New York 1");
-		
-		Assertions.assertThrows(ConstraintViolationException.class, () -> {
+
+		assertThrows(ConstraintViolationException.class, () -> {
 			airportService.saveAirport(airport);
 		});
 	}
-	
+
 }

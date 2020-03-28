@@ -1,4 +1,3 @@
-
 package acmevolar.web;
 
 import static org.hamcrest.Matchers.hasProperty;

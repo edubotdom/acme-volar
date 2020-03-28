@@ -1,7 +1,9 @@
 package acmevolar.service;
 
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import acmevolar.model.api.Forecast;
@@ -25,8 +27,9 @@ public class ForecastService {
 	                .build();
 	    }
 
+		
 	    public Mono<Forecast> searchForecastByCity(String city) {
-	          return webClient.post()
+	    	return webClient.post()
 	                .uri("?q="+city+"&APPID=d2f0a2704a754d4725df51ffd0749391")
 	                  .retrieve()
 	                  .bodyToMono(Forecast.class);

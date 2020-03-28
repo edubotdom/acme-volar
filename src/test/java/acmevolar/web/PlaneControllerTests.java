@@ -193,8 +193,17 @@ class PlaneControllerTests {
 		"reference4, 500, description4, manufacturer4, model4, 400, 800, 2014-07-20",
 	})
 	void testProcessUpdateFormSuccess(String reference, String maxSeats, String description, String manufacturer, String model, String numberOfKm, String maxDistance, String lastMaintenance) throws Exception {
-		mockMvc.perform(post("/planes/{planeId}/edit", TEST_PLANE_ID).with(csrf()).param("reference", reference).param("maxSeats", maxSeats).param("description", description).param("manufacter", manufacturer).param("model", model)
-			.param("numberOfKm", numberOfKm).param("maxDistance", maxDistance).param("lastMaintenance", lastMaintenance)).andExpect(status().is3xxRedirection());
+		mockMvc.perform(post("/planes/{planeId}/edit", TEST_PLANE_ID).with(csrf())
+			.param("reference", reference)
+			.param("maxSeats", maxSeats)
+			.param("description", description)
+			.param("manufacter", manufacturer)
+			.param("model", model)
+			.param("numberOfKm", numberOfKm)
+			.param("maxDistance", maxDistance)
+			.param("lastMaintenance", lastMaintenance))
+			.andExpect(status().is3xxRedirection())
+			.andExpect(view().name("redirect:/planes/{planeId}"));
 	}
 
 	@WithMockUser(value = "airline1", authorities = {

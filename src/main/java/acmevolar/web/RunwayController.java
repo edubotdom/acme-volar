@@ -60,10 +60,9 @@ public class RunwayController {
 	}
 
 	//LIST
-	@GetMapping(value = {
-		"/airports/{airportId}/runways"
-	})
-	public String showRunwayList(final Map<String, Object> model, @PathVariable("airportId") final int airportId) {
+	@PreAuthorize("hasAuthority('airline')")
+	@GetMapping(value = {"/airports/{airportId}/runways"})
+	public String showRunwayList(final Map<String, Object> model,@PathVariable("airportId") final int airportId) {
 
 		List<Runway> runways = this.runwayService.findRunwaysByAirportId(airportId);
 		Airport airport = this.runwayService.findAirportById(airportId);
@@ -95,6 +94,7 @@ public class RunwayController {
 
 		return RunwayController.VIEWS_RUNWAYS_CREATE_OR_UPDATE_FORM;
 	}
+
 	@PreAuthorize("hasAuthority('airline')")
 	@PostMapping(value = "/airports/{airportId}/runways/new")
 	public String processCreationForm(Map<String, Object> model, @Valid Runway runway, BindingResult result, @PathVariable("airportId") int airportId) {// throws DataAccessException, IncorrectCartesianCoordinatesException, DuplicatedAirportNameException {
@@ -135,7 +135,7 @@ public class RunwayController {
 	}
 
 	@PreAuthorize("hasAuthority('airline')")
-	@PostMapping(value = "/airports/{airportId}/runways/{runwayId}/edit")
+  @PostMapping(value = "/airports/{airportId}/runways/{runwayId}/edit")
 	public String processUpdateForm(@Valid Runway runway, BindingResult result, @PathVariable("runwayId") int runwayId, @PathVariable("airportId") final int airportId, ModelMap model) {
 		if (result.hasErrors()) {
 			insertData(model, airportId);
@@ -157,6 +157,7 @@ public class RunwayController {
 			return "redirect:/airports/{airportId}/runways";
 		}
 	}
+  
 	@PreAuthorize("hasAuthority('airline')")
 	@GetMapping(value = "/airports/{airportId}/runways/{runwayId}/delete")
 	public String deleteRunway(@PathVariable("runwayId") final int runwayId, @PathVariable("airportId") final int airportId) throws NonDeletableException {

@@ -71,7 +71,6 @@ public class AirportController {
 		return mav;
 	}
 
-	@PreAuthorize("hasAuthority('airline')")
 	@GetMapping(value = "/airports/new")
 	@PreAuthorize("hasAuthority('airline')")
 	public String initCreationForm(final Map<String, Object> model) {
@@ -82,7 +81,6 @@ public class AirportController {
 		return AirportController.VIEWS_AIRPORT_CREATE_FORM;
 	}
 
-	@PreAuthorize("hasAuthority('airline')")
 	@PostMapping(value = "/airports/new")
 	@PreAuthorize("hasAuthority('airline')")
 	public String processCreationForm(@Valid final Airport airport, final BindingResult result) {
@@ -107,7 +105,6 @@ public class AirportController {
 		}
 	}
 
-	@PreAuthorize("hasAuthority('airline')")
 	@GetMapping(value = "/airports/{airportId}/edit")
 	@PreAuthorize("hasAuthority('airline')")
 	public String initUpdateForm(@PathVariable("airportId") final int airportId, final ModelMap model) {
@@ -118,7 +115,6 @@ public class AirportController {
 		return AirportController.VIEWS_AIRPORT_CREATE_FORM;
 	}
 
-	@PreAuthorize("hasAuthority('airline')")
 	@PostMapping(value = "/airports/{airportId}/edit")
 	@PreAuthorize("hasAuthority('airline')")
 	public String processUpdateForm(@Valid final Airport airport, final BindingResult result, @PathVariable("airportId") final int airportId, final ModelMap model) {

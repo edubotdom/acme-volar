@@ -13,8 +13,6 @@ import javax.validation.ConstraintViolationException;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
@@ -72,41 +70,7 @@ class PlaneServiceTests {
 		// comprueba si está insertado
 		assertThat(plane.getId()).isNotNull();
 	}
-/*	
-	@Test
-	@Transactional
-	@ParameterizedTest 
-	@CsvSource({
-	    "reference1, 200, description1, manufacturer1, model1, 100, 500",
-	    "reference2, 300, description2, manufacturer2, model2, 200, 600",
-	    "reference4, 500, description4, manufacturer4, model4, 400, 800"
-	}) 
-	public void shouldInsertPlanes(String reference, Integer maxSeats, String description, String manufacturer, String model, Double numberOfKm, Double maxDistance) {
-
-		Airline a1 = this.airlineService.findAirlineById(1);
-		Flight f1 = this.flightService.findFlightById(1);
-		
-		Plane plane = new Plane();
-		plane.setAirline(a1);
-		plane.setReference(reference);
-		plane.setMaxSeats(maxSeats);
-		plane.setDescription(description);
-		plane.setManufacter(manufacturer);
-		plane.setNumberOfKm(numberOfKm.doubleValue());
-		plane.setMaxDistance(maxDistance.doubleValue());
-		plane.setLastMaintenance(Date.from(Instant.now().minusSeconds(90000)));
-		
-		f1.setPlane(plane);
-		assertThat(f1.getPlane()).isEqualTo(plane);
-
-        this.planeService.savePlane(plane);
-
-		this.flightService.saveFlight(f1);
-
-		// comprueba si está insertado
-		assertThat(plane.getId()).isNotNull();
-	}
-*/	
+	
 	//No puede insertarse un avión con plazas negativas
 	@Test
 	@Transactional
@@ -307,40 +271,6 @@ class PlaneServiceTests {
 		Long nActualAviones = planeService.findPlanes().stream().count();
 		assertThat(nActualAviones.equals(nPrevioAviones));
 	}
-
-	/*
-	@Test
-	@Transactional
-	public void shouldUpdatePlane() throws Exception {
-
-		//Creo un avión para eliminarlo
-		Airline a1 = this.airlineService.findAirlineById(1);
-		
-		Plane plane = new Plane();
-		plane.setAirline(a1);
-		plane.setDescription("Mock description");
-		plane.setFlightsInternal(new HashSet<Flight>());
-		plane.setLastMaintenance(Date.from(Instant.now().minusSeconds(1)));
-		plane.setManufacter("Boeing");
-		plane.setMaxDistance(45000.);
-		plane.setMaxSeats(300);
-		plane.setModel("Renton 737");
-		plane.setNumberOfKm(34200.);
-		plane.setReference("REF1");
-		
-        this.planeService.savePlane(plane);
-
-        
-		String oldName = plane.getDescription();
-
-		String newName = oldName + " Updated description.";
-		plane.setDescription(newName);
-		this.planeService.updatePlane(plane);
-
-		Plane p2 = this.planeService.findPlaneById(plane.getId());//this.planeService.findPlanes().stream().max(Comparator.comparing(p->p.getId())).orElse(null);
-		assertThat(p2.getDescription()).isEqualTo(newName);
-	}
-*/	
 	
 	@Test
 	void shouldFindPlanes() {

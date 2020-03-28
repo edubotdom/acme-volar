@@ -86,6 +86,11 @@ class PlaneControllerTests {
 	void testShowPlaneList() throws Exception {
 		this.mockMvc.perform(get("/planes")).andExpect(status().isOk()).andExpect(model().attributeExists("planes")).andExpect(view().name("planes/planesList"));
 	}
+	
+	@Test
+	void testShowPlaneListUnauthorized() throws Exception {
+		this.mockMvc.perform(get("/planes")).andExpect(status().is4xxClientError());
+	}
 
 	@WithMockUser(value = "airline1", authorities = {
 		"airline"
@@ -95,6 +100,11 @@ class PlaneControllerTests {
 		this.mockMvc.perform(get("/my_planes")).andExpect(status().isOk()).andExpect(model().attributeExists("planes")).andExpect(view().name("planes/planesList"));
 	}
 
+	@Test
+	void testShowMyPlaneListUnauthorized() throws Exception {
+		this.mockMvc.perform(get("/my_planes")).andExpect(status().is4xxClientError());
+	}
+	
 	@WithMockUser(value = "airline1", authorities = {
 		"airline"
 	})
@@ -103,6 +113,11 @@ class PlaneControllerTests {
 		this.mockMvc.perform(get("/planes/{planeId}", PlaneControllerTests.TEST_PLANE_ID)).andExpect(status().isOk()).andExpect(model().attributeExists("plane")).andExpect(view().name("planes/planeDetails"));
 	}
 
+	@Test
+	void testShowPlaneUnauthorized()throws Exception {
+		this.mockMvc.perform(get("/planes/{planeId}", PlaneControllerTests.TEST_PLANE_ID)).andExpect(status().isUnauthorized());
+	}
+	
 	@WithMockUser(username = "airline1", value = "airline1", authorities = {
 		"airline"
 	})
@@ -120,6 +135,11 @@ class PlaneControllerTests {
 	@Test
 	void testInitCreationForm() throws Exception {
 		this.mockMvc.perform(get("/planes/new")).andExpect(status().isOk()).andExpect(model().attributeExists("plane")).andExpect(view().name("planes/createPlaneForm"));
+	}
+	
+	@Test
+	void testInitCreationFormUnauthorized() throws Exception {
+		this.mockMvc.perform(get("/planes/new")).andExpect(status().isUnauthorized());
 	}
 
 	@WithMockUser(value = "airline1", authorities = {
@@ -149,6 +169,16 @@ class PlaneControllerTests {
 			.param("lastMaintenance", "2011-04-17"))
 
 			.andExpect(status().is3xxRedirection());
+	}
+	
+	@Test
+	void testProcessCreationFormUnauthorized() throws Exception {
+		this.mockMvc.perform(post("/planes/new").with(csrf())
+
+			.param("reference", "reference").param("maxSeats", "200").param("description", "description").param("manufacter", "manufacter").param("model", "model").param("numberOfKm", "100").param("maxDistance", "500")
+			.param("lastMaintenance", "2011-04-17"))
+
+			.andExpect(status().is4xxClientError());
 	}
 
 	@WithMockUser(value = "airline1", authorities = {
@@ -183,6 +213,11 @@ class PlaneControllerTests {
 	void testInitUpdateForm() throws Exception {
 		mockMvc.perform(get("/planes/{planeId}/edit", TEST_PLANE_ID)).andExpect(status().isOk()).andExpect(model().attributeExists("plane")).andExpect(view().name("planes/createPlaneForm"));
 	}
+	
+	@Test
+	void testInitUpdateFormUnauthorized() throws Exception {
+		mockMvc.perform(get("/planes/{planeId}/edit", TEST_PLANE_ID)).andExpect(status().isUnauthorized());
+	}
 
 	@WithMockUser(value = "airline1", authorities = {
 		"airline"
@@ -205,6 +240,12 @@ class PlaneControllerTests {
 		mockMvc.perform(post("/planes/{planeId}/edit", TEST_PLANE_ID).with(csrf()).param("reference", "reference2").param("maxSeats", "200").param("description", "description2").param("manufacter", "manufacter2").param("model", "model2")
 			.param("numberOfKm", "100").param("maxDistance", "500").param("lastMaintenance", "2011-04-17")).andExpect(status().is3xxRedirection()).andExpect(view().name("redirect:/planes/{planeId}"));
 	}
+	
+	@Test
+	void testProcessUpdateFormUnauthorized() throws Exception {
+		mockMvc.perform(post("/planes/{planeId}/edit", TEST_PLANE_ID).with(csrf()).param("reference", "reference2").param("maxSeats", "200").param("description", "description2").param("manufacter", "manufacter2").param("model", "model2")
+			.param("numberOfKm", "100").param("maxDistance", "500").param("lastMaintenance", "2011-04-17")).andExpect(status().isUnauthorized());
+	}
 
 	@WithMockUser(value = "airline1", authorities = {
 		"airline"
@@ -222,7 +263,6 @@ class PlaneControllerTests {
 	@WithMockUser(value = "airline1", authorities = {
 		"airline"
 	})
-
 	@Test
 	void testProcessUpdateFormHasErrors() throws Exception {
 		mockMvc.perform(post("/planes/{planeId}/edit", TEST_PLANE_ID).with(csrf()).param("reference", "reference").param("maxSeats", "-200").param("description", "description2").param("manufacter", "manufacter2").param("model", "model2")

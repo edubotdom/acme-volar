@@ -28,7 +28,7 @@ import acmevolar.service.FlightService;
 import acmevolar.service.ForecastService;
 import acmevolar.service.exceptions.DuplicatedAirportNameException;
 import acmevolar.service.exceptions.IncorrectCartesianCoordinatesException;
-import acmevolar.service.exceptions.NonDeletableAirportException;
+import acmevolar.service.exceptions.NonDeletableException;
 
 @Controller
 public class AirportController {
@@ -140,13 +140,13 @@ public class AirportController {
 
 	@PreAuthorize("hasAuthority('airline')")
 	@GetMapping(value = "/airports/{airportId}/delete")
-	public String deleteAirport(@PathVariable("airportId") final int airportId) throws NonDeletableAirportException {
+	public String deleteAirport(@PathVariable("airportId") final int airportId) throws NonDeletableException {
 		Optional<Airport> airport = this.airportService.findById(airportId);
 		boolean deletable = !this.flightService.findFlights().stream().anyMatch(f->f.getDepartes().getAirport().equals(airport.get())||f.getLands().getAirport().equals(airport.get()));
 		if (deletable) {
 				this.airportService.deleteAirport(airport.get());
 		} else {
-			throw new NonDeletableAirportException();
+			throw new NonDeletableException();
 		}
 		return "redirect:/airports";
 

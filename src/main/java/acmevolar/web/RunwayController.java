@@ -38,21 +38,25 @@ import acmevolar.model.Airport;
 import acmevolar.model.Runway;
 import acmevolar.model.RunwayType;
 import acmevolar.service.AirportService;
+import acmevolar.service.FlightService;
 import acmevolar.service.RunwayService;
+import acmevolar.service.exceptions.NonDeletableException;
 
 @Controller
 public class RunwayController {
 
 	private final RunwayService		runwayService;
 	private final AirportService	airportService;
+	private final FlightService	flightService;
 
 	private static final String		VIEWS_RUNWAYS_CREATE_OR_UPDATE_FORM	= "runways/createOrUpdateRunwaysForm";
 
 
 	@Autowired
-	public RunwayController(final RunwayService runwayService, final AirportService airportService) {
+	public RunwayController(final RunwayService runwayService, final AirportService airportService, final FlightService flightService) {
 		this.runwayService = runwayService;
 		this.airportService = airportService;
+		this.flightService = flightService;
 	}
 
 	//LIST
@@ -73,8 +77,9 @@ public class RunwayController {
 		model.put("runwayTypes", runwayTypes);
 	}
 
-	@PreAuthorize("hasAuthority('airline')")
+
 	//CREATE
+	@PreAuthorize("hasAuthority('airline')")
 	@GetMapping(value = "/airports/{airportId}/runways/new")
 	public String initCreationForm(final Map<String, Object> model, @PathVariable("airportId") final int airportId) {
 		Runway runway = new Runway();
@@ -154,12 +159,15 @@ public class RunwayController {
 	}
 	@PreAuthorize("hasAuthority('airline')")
 	@GetMapping(value = "/airports/{airportId}/runways/{runwayId}/delete")
-	public String deleteRunway(@PathVariable("runwayId") final int runwayId, @PathVariable("airportId") final int airportId) {
+	public String deleteRunway(@PathVariable("runwayId") final int runwayId, @PathVariable("airportId") final int airportId) throws NonDeletableException {
 		Runway runway = this.runwayService.findRunwayById(runwayId);
+		boolean authorized = flightService.findFlights().stream().noneMatch(f->f.getDepartes().equals(runway)||f.getLands().equals(runway));
 		//Optional<Airport> airport = this.airportService.findById(airportId);
-		if (runway != null) {
+		if (runway != null && authorized) {
 			//airport.get().removeRunway(runway);
 			this.runwayService.deleteRunwayById(runway.getId());
+		} else {
+			throw new NonDeletableException();
 		}
 		return "redirect:/airports/{airportId}/runways";
 	}

@@ -14,7 +14,7 @@ import acmevolar.model.Airport;
 import acmevolar.repository.AirportRepository;
 import acmevolar.service.exceptions.DuplicatedAirportNameException;
 import acmevolar.service.exceptions.IncorrectCartesianCoordinatesException;
-import acmevolar.service.exceptions.NonDeletableAirportException;
+import acmevolar.service.exceptions.NonDeletableException;
 
 @Service
 public class AirportService {

@@ -18,12 +18,10 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
 
 import acmevolar.model.Airport;
 import acmevolar.model.api.Forecast;
-import acmevolar.repository.FlightRepository;
 import acmevolar.service.AirportService;
 import acmevolar.service.FlightService;
 import acmevolar.service.ForecastService;

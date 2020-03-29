@@ -50,7 +50,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 		
 		.antMatchers("/airlines").permitAll()
 		.antMatchers("/airlines/{^[\\d]$}").permitAll()
-		.antMatchers("/airlines/new/").hasAuthority("airline")
+		.antMatchers("/airlines/new/").permitAll()
 		
 		.antMatchers("/airports/{^[\\d]$}/runways/new").hasAuthority("airline")
 		.antMatchers("/airports").permitAll()

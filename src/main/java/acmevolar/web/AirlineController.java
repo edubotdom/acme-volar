@@ -50,11 +50,15 @@ public class AirlineController {
 	private static final String		VIEWS_AIRLINE_CREATE_FORM	= "airlines/createAirlineForm";
 
 	private final AirlineService	airlineService;
+	private final UserService	userService;
+/*	private final AuthoritiesService	authoritiesService;*/
 
 
 	@Autowired
-	public AirlineController(final AirlineService airlineService, final UserService userService, final AuthoritiesService authoritiesService) {
+	public AirlineController(final AirlineService airlineService, final UserService userService/*, final AuthoritiesService authoritiesService*/) {
 		this.airlineService = airlineService;
+		this.userService = userService;
+/*		this.authoritiesService = authoritiesService;*/
 	}
 
 	@InitBinder

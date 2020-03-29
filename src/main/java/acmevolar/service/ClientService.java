@@ -61,7 +61,6 @@ public class ClientService {
 		return clientRepository.findById(id);
 	}
 
-
 	@Transactional
 	public void saveClient(Client client) throws DataAccessException,ConstraintViolationException,BirthDateIsAfterCreationDateException {
 		

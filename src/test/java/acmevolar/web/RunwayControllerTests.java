@@ -10,9 +10,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
 import java.time.Instant;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -32,14 +34,19 @@ import org.springframework.test.web.servlet.MockMvc;
 import acmevolar.configuration.SecurityConfiguration;
 import acmevolar.model.Airline;
 import acmevolar.model.Airport;
+import acmevolar.model.Authorities;
+import acmevolar.model.Client;
 import acmevolar.model.Flight;
 import acmevolar.model.FlightStatusType;
 import acmevolar.model.Plane;
 import acmevolar.model.Runway;
 import acmevolar.model.RunwayType;
+import acmevolar.model.User;
+import acmevolar.service.AirlineService;
 import acmevolar.service.AirportService;
 import acmevolar.service.FlightService;
 import acmevolar.service.RunwayService;
+import acmevolar.service.UserService;
 
 @WebMvcTest(value = RunwayController.class, 
 includeFilters = @ComponentScan.Filter(value = RunwayTypeFormatter.class, type = FilterType.ASSIGNABLE_TYPE),
@@ -66,12 +73,43 @@ class RunwayControllerTests {
 
 	@MockBean
 	protected FlightService flightService;
+	
+	@MockBean
+	protected UserService		userService;
+
+	@MockBean
+	protected AirlineService	airlineService;
 
 	@Autowired
 	private MockMvc mockMvc;
 
 	@BeforeEach
 	void setup() {
+		//////////////////////////////////////////////////////////////
+		User user1 = new User();
+		user1.setUsername("client1");
+		user1.setPassword("client1");
+		user1.setEnabled(true);
+
+		Optional<User> opt_user = Optional.of(user1);
+		given(this.userService.findUserById("client1")).willReturn(opt_user);
+		
+		Authorities authority1 = new Authorities();
+		authority1.setUsername("client1");
+		authority1.setAuthority("client");
+
+		Client client1=new Client();
+		client1.setId(1);
+		client1.setName("Sergio Pérez");
+		client1.setIdentification("53933261-P");
+		client1.setPhone("644584458");
+		client1.setEmail("minardi@gmail.com");
+		LocalDate localDate2 = LocalDate.parse("1994-09-07");
+		client1.setBirthDate(localDate2);
+		client1.setCreationDate(localDate2);
+		client1.setUser(user1);
+		///////////////////////////////////////////////////////////////
+		
 		RunwayType runwayType1 = new RunwayType();
 		runwayType1.setName("take_off");
 		runwayType1.setId(1);
@@ -135,13 +173,18 @@ class RunwayControllerTests {
 		given(this.flightService.findFlights()).willReturn(flights);
 	}
 
-	@WithMockUser(value = "client1"/*, authorities = { "airline" }*/)
+	@WithMockUser(value = "airline1"/*, authorities = { "airline" }*/)
 	@Test
 	void testShowRunwayList() throws Exception {
 		this.mockMvc.perform(get("/airports/{airportId}/runways", TEST_AIRPORT_ID1)).andExpect(status().isOk())
 				.andExpect(model().attributeExists("runways", "airport")).andExpect(view().name("runways/runwayList"));
 	}
 
+	@Test
+	void testUnauthorizedShowRunwayList() throws Exception {
+		this.mockMvc.perform(get("/airports/{airportId}/runways", TEST_AIRPORT_ID1)).andExpect(status().is4xxClientError());
+	}
+	
 	@WithMockUser(value = "airline1", authorities = { "airline" })
 	@Test
 	void testInitCreationForm() throws Exception {

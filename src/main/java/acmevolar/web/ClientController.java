@@ -20,9 +20,11 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
 
+import javax.validation.ConstraintViolationException;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -37,6 +39,7 @@ import acmevolar.model.Client;
 import acmevolar.service.AuthoritiesService;
 import acmevolar.service.ClientService;
 import acmevolar.service.UserService;
+import acmevolar.service.exceptions.BirthDateIsAfterCreationDateException;
 
 /**
  * @author Juergen Hoeller
@@ -74,7 +77,17 @@ public class ClientController {
 			return ClientController.VIEWS_CLIENT_CREATE_FORM;
 		} else {
 			//creating owner, user and authorities
-			this.clientService.saveClient(client);
+			try {
+				this.clientService.saveClient(client);
+			} catch (DataAccessException e) {
+				e.printStackTrace();
+			} catch (ConstraintViolationException e) {
+				e.printStackTrace();
+				return ClientController.VIEWS_CLIENT_CREATE_FORM;
+			} catch (BirthDateIsAfterCreationDateException e) {
+				result.rejectValue("birthDate", "BirthDateMustBePast", "Birthdate must be a past date");
+				return ClientController.VIEWS_CLIENT_CREATE_FORM;
+			}
 
 			//return "redirect:/clients/" + client.getId();
 			return "redirect:/";

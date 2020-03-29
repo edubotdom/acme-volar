@@ -15,7 +15,7 @@
  */
 package acmevolar.service;
 
-
+import java.util.Collection;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,9 +49,13 @@ public class UserService {
 	}
 	
 	@Transactional
+	public Collection<User> findAllUsers() throws DataAccessException{
+		return userRepository.findAll();
+	}
+
+  @Transactional
 	public Optional<User> findUserById(String userId) throws DataAccessException {
 		return userRepository.findById(userId);
 	}
-	
-	
+
 }

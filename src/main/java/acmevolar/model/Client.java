@@ -24,7 +24,10 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.Digits;
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Past;
+import javax.validation.constraints.PastOrPresent;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -41,7 +44,8 @@ public class Client extends NamedEntity {
 	@NotEmpty
 	private String identification;
 
-	@Column(name = "birth_date")        
+	@Column(name = "birth_date")  
+	@Past
 	@DateTimeFormat(pattern = "yyyy/MM/dd")
 	private LocalDate birthDate;
 	
@@ -51,10 +55,11 @@ public class Client extends NamedEntity {
 	private String phone;
 	
 	@Column(name = "email")
+	@Email
 	@NotEmpty
 	private String email;
 	
-	@Column(name = "creation_date")        
+	@Column(name = "creation_date")  
 	@DateTimeFormat(pattern = "yyyy/MM/dd")
 	private LocalDate creationDate;
 	

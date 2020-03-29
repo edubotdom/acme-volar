@@ -60,7 +60,6 @@ public class Client extends NamedEntity {
 	private String email;
 	
 	@Column(name = "creation_date")  
-	@PastOrPresent
 	@DateTimeFormat(pattern = "yyyy/MM/dd")
 	private LocalDate creationDate;
 	

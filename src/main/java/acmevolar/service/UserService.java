@@ -16,6 +16,8 @@
 package acmevolar.service;
 
 
+import java.util.Collection;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
@@ -44,5 +46,10 @@ public class UserService {
 	public void saveUser(User user) throws DataAccessException {
 		user.setEnabled(true);
 		userRepository.save(user);
+	}
+	
+	@Transactional
+	public Collection<User> findAllUsers() throws DataAccessException{
+		return userRepository.findAll();
 	}
 }

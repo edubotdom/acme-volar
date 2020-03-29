@@ -9,15 +9,17 @@ import java.util.stream.Collectors;
 
 import javax.validation.ConstraintViolationException;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import acmevolar.model.Client;
 import acmevolar.model.User;
+import acmevolar.service.exceptions.BirthDateIsAfterCreationDateException;
 
 @DataJpaTest(includeFilters = @ComponentScan.Filter(Service.class))
 public class ClientServiceTests {
@@ -54,17 +56,16 @@ public class ClientServiceTests {
 	
 	@Test
 	@Transactional
-	public void shouldInsertClientIntoDatabaseAndGenerateId() {
+	public void shouldInsertClientIntoDatabaseAndGenerateId() throws DataAccessException, ConstraintViolationException, BirthDateIsAfterCreationDateException {
 		User user = new User();
-		user.setUsername("pepito1");
-		user.setPassword("pepito1");
+		user.setUsername("p1246");
+		user.setPassword("pepitoERmeho");
 		user.setEnabled(true);
-		this.userService.saveUser(user);
 		
 		Client client = new Client();
 		client.setName("Pepito Palotes");
 		client.setBirthDate(LocalDate.of(1995, 10, 19));
-		client.setCreationDate(LocalDate.of(2019, 4, 3));
+		client.setCreationDate(LocalDate.of(2001, 10, 19));
 		client.setEmail("pepitopalotes@gmail.com");
 		client.setPhone("666333666");
 		client.setUser(user);
@@ -81,7 +82,6 @@ public class ClientServiceTests {
 		user.setUsername("pepito1");
 		user.setPassword("pepito1");
 		user.setEnabled(true);
-		this.userService.saveUser(user);
 		
 		Client client = new Client();
 		client.setName("Pepito Palotes");
@@ -105,7 +105,6 @@ public class ClientServiceTests {
 		user.setUsername("pepito1");
 		user.setPassword("pepito1");
 		user.setEnabled(true);
-		this.userService.saveUser(user);
 		
 		Client client = new Client();
 		client.setName("Pepito Palotes");
@@ -129,7 +128,6 @@ public class ClientServiceTests {
 		user.setUsername("pepito1");
 		user.setPassword("pepito1");
 		user.setEnabled(true);
-		this.userService.saveUser(user);
 		
 		Client client = new Client();
 		client.setName("Pepito Palotes");
@@ -140,31 +138,7 @@ public class ClientServiceTests {
 		client.setUser(user);
 		client.setIdentification("53933123X");
 		
-		assertThrows(ConstraintViolationException.class, () -> {
-			this.clientService.saveClient(client);
-		});		
-	}
-	
-	@Test
-	@Transactional
-	public void shouldThrowExceptionCreatingClientWithFutureCreationDate() {
-		
-		User user = new User();
-		user.setUsername("pepito1");
-		user.setPassword("pepito1");
-		user.setEnabled(true);
-		this.userService.saveUser(user);
-		
-		Client client = new Client();
-		client.setName("Pepito Palotes");
-		client.setBirthDate(LocalDate.of(1995, 10, 19));
-		client.setCreationDate(LocalDate.of(2021, 4, 3));
-		client.setEmail("pepitopalotes@gmail.com");
-		client.setPhone("666999666");
-		client.setUser(user);
-		client.setIdentification("53933123X");
-		
-		assertThrows(ConstraintViolationException.class, () -> {
+		assertThrows(BirthDateIsAfterCreationDateException.class, () -> {
 			this.clientService.saveClient(client);
 		});		
 	}

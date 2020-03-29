@@ -18,6 +18,8 @@ package acmevolar.service;
 import java.time.LocalDate;
 import java.util.Collection;
 
+import javax.validation.ConstraintViolationException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
@@ -25,6 +27,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import acmevolar.model.Client;
 import acmevolar.repository.ClientRepository;
+import acmevolar.service.exceptions.BirthDateIsAfterCreationDateException;
 
 /**
  * Mostly used as a facade for all Petclinic controllers Also a placeholder
@@ -60,8 +63,11 @@ public class ClientService {
 
 
 	@Transactional
-	public void saveClient(Client client) throws DataAccessException {
+	public void saveClient(Client client) throws DataAccessException,ConstraintViolationException,BirthDateIsAfterCreationDateException {
 		
+		if(client.getBirthDate().isAfter(LocalDate.now())) {
+			throw new BirthDateIsAfterCreationDateException();
+		}
 		client.setCreationDate(LocalDate.now());
 		//creating owner
 		clientRepository.save(client);		

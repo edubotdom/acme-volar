@@ -11,6 +11,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import java.time.LocalDate;
 import java.util.HashSet;
+import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -22,6 +23,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
 import org.springframework.security.config.annotation.web.WebSecurityConfigurer;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import acmevolar.configuration.SecurityConfiguration;
@@ -51,12 +53,15 @@ class AirlineControllerTests {
 	@BeforeEach
 	void setup() {
 
+		
 		User user1 = new User();
 		user1.setUsername("airline1");
 		user1.setPassword("airline1");
 		user1.setEnabled(true);
 
-		given(this.userService.findUserById("airline1").get()).willReturn(user1);
+		Optional<User> opt_user = Optional.of(user1);
+		given(this.userService.findUserById("airline1")).willReturn(opt_user);
+		//given(this.userService.findUserById("airline1").get()).willReturn(user1);
 
 		//Authorities authority1 = new Authorities();
 		//authority1.setUsername("airline");
@@ -78,21 +83,25 @@ class AirlineControllerTests {
 		given(this.airlineService.findAirlineById(1)).willReturn(airline1);
 	}
 
+	@WithMockUser(value = "anonymous")
 	@Test
 	void testAirlineList() throws Exception {
 		this.mockMvc.perform(get("/airlines")).andExpect(status().isOk()).andExpect(model().attributeExists("airlines")).andExpect(view().name("airlines/airlinesList"));
 	}
 
+	@WithMockUser(value = "anonymous")
 	@Test
 	void testShowAirline() throws Exception {
 		this.mockMvc.perform(get("/airlines/{airlineId}", AirlineControllerTests.TEST_AIRLINE_ID)).andExpect(status().isOk()).andExpect(model().attributeExists("airline")).andExpect(view().name("airlines/airlineDetails"));
 	}
-
+	
+	@WithMockUser(value = "anonymous")
 	@Test
 	void testInitCreationForm() throws Exception {
 		this.mockMvc.perform(get("/airlines/new")).andExpect(status().isOk()).andExpect(model().attributeExists("airline")).andExpect(view().name("airlines/createAirlineForm"));
 	}
 
+	@WithMockUser(value = "anonymous")
 	@ParameterizedTest
 	@CsvSource({
 		"Betis Airways, 61335444-N, Spain, 666333111, airline@gmail.com, 2011-04-17, SEO-001", 
@@ -112,6 +121,7 @@ class AirlineControllerTests {
 			.andExpect(status().is3xxRedirection());
 	}
 
+	@WithMockUser(value = "anonymous")
 	@Test
 	void testProcessCreationFormSuccess() throws Exception {
 		this.mockMvc.perform(post("/planes/new").with(csrf())
@@ -123,6 +133,7 @@ class AirlineControllerTests {
 			.andExpect(status().is3xxRedirection());
 	}
 
+	@WithMockUser(value = "anonymous")
 	@Test
 	void testProcessCreationFormHasErrors() throws Exception {
 		this.mockMvc.perform(post("/planes/new").with(csrf()).param("name", "").param("identification", "61335444-N")
@@ -130,6 +141,7 @@ class AirlineControllerTests {
 			.param("creationDate", "2011-04-17").param("reference", "SEO-001")).andExpect(model().attributeHasErrors("airline")).andExpect(view().name("airlines/createAirlineForm"));
 	}
 
+	@WithMockUser(value = "anonymous")
 	@ParameterizedTest
 	@CsvSource({
 		", 61335444-N, Spain, 666333111, airline@gmail.com, 2011-04-17, SEO-001", 

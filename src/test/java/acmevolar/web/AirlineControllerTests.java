@@ -61,11 +61,6 @@ class AirlineControllerTests {
 
 		Optional<User> opt_user = Optional.of(user1);
 		given(this.userService.findUserById("airline1")).willReturn(opt_user);
-		//given(this.userService.findUserById("airline1").get()).willReturn(user1);
-
-		//Authorities authority1 = new Authorities();
-		//authority1.setUsername("airline");
-		//authority1.setUsername("airline");
 
 		Airline airline1 = new Airline();
 		airline1.setId(1);
@@ -104,8 +99,8 @@ class AirlineControllerTests {
 	@WithMockUser(value = "anonymous")
 	@ParameterizedTest
 	@CsvSource({
-		"Betis Airways, 61335444-N, Spain, 666333111, airline@gmail.com, 2011-04-17, SEO-001", 
-		"Montella Airways, 61835494-N, Spain, 669363111, airline2@gmail.com, 2013-04-17, SEO-051",
+		"Betis Airways, 61335444-N, Spain, 666333111, airline@gmail.com, 2011/04/17, SEO-001", 
+		"Montella Airways, 61835494-N, Spain, 669363111, airline2@gmail.com, 2013/04/17, SEO-051",
 	})
 	void testProcessCreationFormSuccess(String name, String identification, String country, String phone, String email, String creationDate, String reference) throws Exception {
 		this.mockMvc
@@ -124,11 +119,11 @@ class AirlineControllerTests {
 	@WithMockUser(value = "anonymous")
 	@Test
 	void testProcessCreationFormSuccess() throws Exception {
-		this.mockMvc.perform(post("/planes/new").with(csrf())
+		this.mockMvc.perform(post("/airlines/new").with(csrf())
 
 			.param("name", "Betis Airways").param("identification", "61335444-N")
 			.param("country", "Spain").param("phone", "666333111").param("email", "airline@gmail.com")
-			.param("creationDate", "2011-04-17").param("reference", "SEO-001"))
+			.param("creationDate", "2011/04/17").param("reference", "SEO-001"))
 
 			.andExpect(status().is3xxRedirection());
 	}
@@ -136,24 +131,24 @@ class AirlineControllerTests {
 	@WithMockUser(value = "anonymous")
 	@Test
 	void testProcessCreationFormHasErrors() throws Exception {
-		this.mockMvc.perform(post("/planes/new").with(csrf()).param("name", "").param("identification", "61335444-N")
+		this.mockMvc.perform(post("/airlines/new").with(csrf()).param("name", "").param("identification", "61335444-N")
 			.param("country", "Spain").param("phone", "666333111").param("email", "airline@gmail.com")
-			.param("creationDate", "2011-04-17").param("reference", "SEO-001")).andExpect(model().attributeHasErrors("airline")).andExpect(view().name("airlines/createAirlineForm"));
+			.param("creationDate", "2011/03/27").param("reference", "SEO-001")).andExpect(model().attributeHasErrors("airline")).andExpect(view().name("airlines/createAirlineForm"));
 	}
 
 	@WithMockUser(value = "anonymous")
 	@ParameterizedTest
 	@CsvSource({
-		", 61335444-N, Spain, 666333111, airline@gmail.com, 2011-04-17, SEO-001", 
-		"Montella Airways, , Spain, 669363111, airline2@gmail.com, 2013-04-17, SEO-051",
-		"Betis Airways, 61335444-N, , 666333111, airline@gmail.com, 2011-04-17, SEO-001", 
-		"Montella Airways, 61835494-N, Spain, , airline2@gmail.com, 2013-04-17, SEO-051",
-		"Betis Airways, 61335444-N, Spain, 666333111, , 2011-04-17, SEO-001", 
-		"Montella Airways, 61835494-N, Spain, 669363111, airline2@gmail.com, 2013-04-17, ",
+		"Fecha sin barra, 61335444-N, Spain, 666333111, airline@gmail.com, 2011-04-17, SEO-001", 
+		"Montellano Airways, , Spain, 669363111, airline2@gmail.com, 2013/04/17, SEO-051",
+		"Betis Airways, 61335444-N, , 666333111, airline@gmail.com, 2011/04/17, SEO-001", 
+		"Montella Airways, 61835494-N, Spain, , airline2@gmail.com, 2013/04/17, SEO-051",
+		"Betis Airways, 61335444-N, Spain, 666333111, , 2011/04/17, SEO-001", 
+		"Montella Airways, 61835494-N, Spain, 669363111, airline2@gmail.com, 2013/04/17, ",
 	})
 	void testProcessCreationFormHasErrors(String name, String identification, String country, String phone, String email, String creationDate, String reference) throws Exception {
 		this.mockMvc
-			.perform(post("/planes/new").with(csrf())
+			.perform(post("/airlines/new").with(csrf())
 				.param("name", name)
 				.param("identification", identification)
 				.param("country", country)

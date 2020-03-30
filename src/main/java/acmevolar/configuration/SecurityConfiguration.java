@@ -43,32 +43,33 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 		.antMatchers("/resources/**", "/webjars/**", "/h2-console/**").permitAll()
 		.antMatchers(HttpMethod.GET, "/", "/oups").permitAll()
 		.antMatchers("/users/new").permitAll()
-		
+		/*Clients*/
 		.antMatchers("/clients").hasAuthority("airline")
 		.antMatchers("/clients/new").anonymous()
 		.antMatchers("/clients/{^[\\d]$}").hasAnyAuthority("airline")
-		
+		/*Airlines*/
 		.antMatchers("/airlines").permitAll()
 		.antMatchers("/airlines/{^[\\d]$}").permitAll()
-		.antMatchers("/airlines/new/").permitAll()
-		
-		.antMatchers("/airports/{^[\\d]$}/runways/new").hasAuthority("airline")
-		.antMatchers("/airports").permitAll()
-		.antMatchers("/airports/{^[\\d]$}").permitAll()
+		.antMatchers("/airlines/new/").anonymous()
+		/*Airports*/
+		.antMatchers("/airports").hasAnyAuthority("airline","client")
+		.antMatchers("/airports/{^[\\d]$}").hasAnyAuthority("airline","client")
 		.antMatchers("/airports/new").hasAuthority("airline")
 		.antMatchers("/airports/{^[\\d]$}/edit").hasAuthority("airline")
 		.antMatchers("/airports/{^[\\d]$}/delete").hasAuthority("airline")
-		.antMatchers("/airports/{^[\\d]$}/runways").permitAll()
+		/*Runways*/
+		.antMatchers("/airports/{^[\\d]$}/runways").hasAnyAuthority("airline","client")
+		.antMatchers("/airports/{^[\\d]$}/runways/new").hasAuthority("airline")
 		.antMatchers("/airports/{^[\\d]$}/runways/{^[\\d]$}/edit").hasAuthority("airline")
 		.antMatchers("/airports/{^[\\d]$}/runways/{^[\\d]$}/delete").hasAuthority("airline")
-		
+		/*Flights*/
 		.antMatchers("/flights").permitAll()
 		.antMatchers("/my_flights").hasAuthority("airline")
 		.antMatchers("/flights/{^[\\d]$}").permitAll()
 		.antMatchers("/flights/new").hasAuthority("airline")
 		.antMatchers("/flights/{^[\\d]$}/edit").hasAuthority("airline")
 		.antMatchers("/flights/{^[\\d]$}/delete").hasAuthority("airline")
-		
+		/*Planes*/
 		.antMatchers("/my_planes").hasAuthority("airline")
 		.antMatchers("/planes/new").hasAuthority("airline")
 		.antMatchers("/planes/{^[\\d]$}").hasAnyAuthority("client","airline")

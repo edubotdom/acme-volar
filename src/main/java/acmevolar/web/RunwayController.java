@@ -60,7 +60,7 @@ public class RunwayController {
 	}
 
 	//LIST
-	@PreAuthorize("hasAuthority('airline')")
+	@PreAuthorize("hasAuthority('airline') || hasAuthority('client')")
 	@GetMapping(value = {"/airports/{airportId}/runways"})
 	public String showRunwayList(final Map<String, Object> model,@PathVariable("airportId") final int airportId) {
 

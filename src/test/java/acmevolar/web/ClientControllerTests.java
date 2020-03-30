@@ -116,5 +116,24 @@ public class ClientControllerTests {
 				.param("email", email))
 				.andExpect(status().is3xxRedirection());
 	}
+	
+	@WithMockUser(value = "spring")
+	@ParameterizedTest
+	@CsvSource({
+		"Pepito Pinotes, 123456789X, 2050/10/10, 987654321, pepitopinotes@alum.us.es",
+		"JU4N N06UER01, 666999666T, 1925/11/10, notanumber, jnogtir@alum.us.es",
+		"DIOS DANNY, 4458X, 1997/10/10, 4458, diosDanny4458.dany.god",
+	})
+	void testProcessCreateFormHasErrors(String name, String identification, String birthDate, String phone, String email) throws Exception {
+		this.mockMvc.perform(post("/clients/new").with(csrf())
+				.param("name", name)
+				.param("identification", identification)
+				.param("birthDate", birthDate)
+				.param("phone", phone)
+				.param("email", email))
+				.andExpect(model().attributeHasErrors("client"))
+				.andExpect(view().name("clients/createClientForm"));
+		
+	}
 
 }

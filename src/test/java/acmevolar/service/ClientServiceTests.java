@@ -51,7 +51,7 @@ public class ClientServiceTests {
 	public void shouldFindAllClients() {
 		List<Client> clients = this.clientService.findClients().stream()
 				.collect(Collectors.toList());
-		assertThat(clients.size()).isEqualTo(1);
+		assertThat(clients.size()).isGreaterThan(0);
 	}
 	
 	@Test

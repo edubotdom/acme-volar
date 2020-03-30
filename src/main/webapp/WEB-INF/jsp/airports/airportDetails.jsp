@@ -39,10 +39,13 @@
 			<td><c:out value="${airport.city}" /></td>
 		</tr>
 	</table>
-		
-		<h2>Weather in <c:out value="${airport.city}" /></h2>
 
-		<table class="table table-striped">
+	<h2>
+		Weather in
+		<c:out value="${airport.city}" />
+	</h2>
+
+	<table class="table table-striped">
 		<tr>
 			<th>Temperature</th>
 			<td><c:out value="${forecast.main.temp}" /></td>
@@ -67,17 +70,18 @@
 		</spring:url>
 
 		<button class="btn btn-default" onclick="window.location.href='${fn:escapeXml(airportEditUrl)}'">Edit</button>
-		
+
 		<spring:url value="/airports/{airportId}/delete" var="airportDeleteUrl">
 			<spring:param name="airportId" value="${airport.id}" />
 		</spring:url>
 
 		<button class="btn btn-default" onclick="window.location.href='${fn:escapeXml(airportDeleteUrl)}'">Delete</button>
-		
-		<spring:url value="/airports/{airportId}/runways" var="runwayListUrl">
+	</sec:authorize>
+	
+	<sec:authorize access="hasAuthority('airline') || hasAuthority('client')">
+	<spring:url value="/airports/{airportId}/runways" var="runwayListUrl">
 			<spring:param name="airportId" value="${airport.id}" />
 		</spring:url>
-
 		<button class="btn btn-default" onclick="window.location.href='${fn:escapeXml(runwayListUrl)}'">List Runways</button>
 	</sec:authorize>
 

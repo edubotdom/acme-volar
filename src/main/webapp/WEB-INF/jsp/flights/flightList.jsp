@@ -14,12 +14,14 @@
 			<tr>
 				<th>Reference</th>
 				<th>Airline</th>
-				<th>Departure City</th>
 				<th>Departure Hour</th>
-				<th>Arrival City</th>
 				<th>Arrival Hour</th>
 				<th>Plane</th>
 				<th>Price</th>
+<sec:authorize access="hasAuthority('airline')||hasAuthority('client')">
+				<th>Departure City</th>
+				<th>Arrival City</th>
+</sec:authorize>
 			</tr>
 		</thead>
 		<tbody>
@@ -32,16 +34,8 @@
 					<td><spring:url value="/airlines/{airlineId}" var="airlineUrl">
 							<spring:param name="airlineId" value="${flight.airline.id}" />
 						</spring:url> <a href="${fn:escapeXml(airlineUrl)}"><c:out value="${flight.airline.name}" /></a></td>
-					
-					<td><spring:url value="/airports/{airportId}" var="departesUrl">
-							<spring:param name="airportId" value="${flight.departes.airport.id}" />
-						</spring:url> <a href="${fn:escapeXml(departesUrl)}"><c:out value="${flight.departes.airport.city}" /></a></td>
-					
+
 					<td><c:out value="${flight.departDate}" /></td>
-						
-					<td><spring:url value="/airports/{airportId}" var="landsUrl">
-							<spring:param name="airportId" value="${flight.lands.airport.id}" />
-						</spring:url> <a href="${fn:escapeXml(landsUrl)}"><c:out value="${flight.lands.airport.city}" /></a></td>
 							
 					<td><c:out value="${flight.landDate}" /></td>
 					
@@ -50,6 +44,17 @@
 						</spring:url> <a href="${fn:escapeXml(planeUrl)}"><c:out value="${flight.plane.model}" /></a></td>
 					
 					<td><c:out value="${flight.price}" /></td>
+
+					<sec:authorize access="hasAuthority('airline')||hasAuthority('client')">					
+					<td><spring:url value="/airports/{airportId}" var="departesUrl">
+							<spring:param name="airportId" value="${flight.departes.airport.id}" />
+					</spring:url> <a href="${fn:escapeXml(departesUrl)}"><c:out value="${flight.departes.airport.city}" /></a></td>
+						
+					<td><spring:url value="/airports/{airportId}" var="landsUrl">
+							<spring:param name="airportId" value="${flight.lands.airport.id}" />
+					</spring:url> <a href="${fn:escapeXml(landsUrl)}"><c:out value="${flight.lands.airport.city}" /></a></td>
+					</sec:authorize>
+					
 				</tr>
 			</c:forEach>
 		</tbody>

@@ -29,8 +29,4 @@
 		</tbody>
 	</table>
 
-	<sec:authorize access="hasAuthority('airline')">
-		<button class="btn btn-default" onclick="window.location.href='/airlines/new'">New</button>
-	</sec:authorize>
-
 </petclinic:layout>

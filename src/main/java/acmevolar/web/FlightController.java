@@ -152,23 +152,7 @@ public class FlightController {
 				// day
 				result.rejectValue("lands", "AirportFullOfPlanes", "This airport is full of planes this day");
 
-			} /*
-				 * if (flight.getDepartes().getAirport().getName().equals(flight.getLands().getAirport().getName())) {
-				 * result.rejectValue("lands", "PathClosed", "This path is close, choose another airport(runway)");
-				 *
-				 *
-				 * } if (flight.getDepartDate().after(flight.getLandDate())) {
-				 * result.rejectValue("landDate", "LandingBeforeDepartDate",
-				 * "Landing date can't be programmed before departing date");
-				 *
-				 *
-				 * }if (flight.getDepartDate().before(Calendar.getInstance().getTime())) {
-				 * result.rejectValue("departDate", "DepartBeforePresentDate",
-				 * "Depart date can't be programmed before the present");
-				 *
-				 *
-				 * }
-				 */
+			}
 
 			if (result.hasErrors()) {
 				model.put("flight", flight);
@@ -274,19 +258,7 @@ public class FlightController {
 				// day
 				result.rejectValue("lands", "AirportFullOfPlanes", "This airport is full of planes this day");
 
-			} /*
-				 * if (flight.getDepartes().getAirport().getName().equals(flight.getLands().getAirport().getName())) {
-				 * result.rejectValue("lands", "PathClosed", "This path is close, choose another airport(runway)");
-				 *
-				 * } if (flight.getDepartDate().after(flight.getLandDate())) {
-				 * result.rejectValue("landDate", "LandingBeforeDepartDate",
-				 * "Landing date can't be programmed before departing date");
-				 *
-				 * } if (flight.getDepartDate().before(Calendar.getInstance().getTime())) {
-				 * result.rejectValue("departDate", "DepartBeforePresentDate",
-				 * "Depart date can't be programmed before the present");
-				 * }
-				 */
+			}
 
 			if (result.hasErrors()) {
 				model.put("flight", flight);

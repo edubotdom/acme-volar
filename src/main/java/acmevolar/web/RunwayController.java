@@ -118,7 +118,7 @@ public class RunwayController {
 				e.printStackTrace();
 			}
 
-			return "redirect:/airports/" + airportId + "/runways/";
+			return "redirect:/airports/" + airportId + "/runways";
 		}
 	}
 

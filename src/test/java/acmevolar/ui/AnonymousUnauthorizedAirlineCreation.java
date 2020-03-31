@@ -1,7 +1,8 @@
+
 package acmevolar.ui;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import java.util.concurrent.TimeUnit;
 
@@ -21,57 +22,33 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class FullyFledgedUITest {
+public class AnonymousUnauthorizedAirlineCreation {
 
 	@LocalServerPort
-	private int port;
+	private int				port;
 
-	private String username;
-	private WebDriver driver;
-	private String baseUrl;
-	private boolean acceptNextAlert = true;
-	private StringBuffer verificationErrors = new StringBuffer();
+	private WebDriver		driver;
+	private String			baseUrl;
+	private boolean			acceptNextAlert		= true;
+	private StringBuffer	verificationErrors	= new StringBuffer();
+
+	public static void main(String[] args) {
+		System.out.println(System.getenv("webdriver.gecko.driver"));
+	}
+
 
 	@BeforeEach
 	public void setUp() throws Exception {
 		System.setProperty("webdriver.gecko.driver", System.getenv("webdriver.gecko.driver"));
-/*		 String pathToGeckoDriver="C:\\Users\\EdMig\\Documents\\UNIVERSIDAD\\CURSO 3\\DP2\\Proyecto\\Proyecto\\Cosecha propia\\geckodriver-v0.26.0-win64";
-		 System.setProperty("webdriver.gecko.driver", pathToGeckoDriver +
-		 "\\geckodriver.exe");*/
 		driver = new FirefoxDriver();
 		baseUrl = "https://www.google.com/";
 		driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
 	}
 
 	@Test
-	public void testLoginAsAdmin() throws Exception {
-		as("admin1").whenIamLoggedIntheSystem().thenISeeMyUsernameInTheMenuBar();
-	}
-
-	private void thenISeeMyUsernameInTheMenuBar() {
-		assertEquals(username.toUpperCase(),
-				driver.findElement(By.xpath("//div[@id='main-navbar']/ul[2]/li/a/strong")).getText());
-
-	}
-
-	private FullyFledgedUITest whenIamLoggedIntheSystem() {
-		return this;
-	}
-
-	private FullyFledgedUITest as(String username) {
-		this.username = username;
-		driver.get("http://localhost:"+port);
-		driver.findElement(By.xpath("//div[@id='main-navbar']/ul[2]/li/a")).click();
-		driver.findElement(By.id("password")).clear();
-		driver.findElement(By.id("password")).sendKeys(passwordOf(username));
-		driver.findElement(By.id("username")).clear();
-		driver.findElement(By.id("username")).sendKeys(username);
-		driver.findElement(By.xpath("//button[@type='submit']")).click();
-		return this;
-	}
-
-	private CharSequence passwordOf(String username) {
-		return "4dm1n";
+	public void testAnonymousUnauthorizedAirlineCreation() throws Exception {
+		driver.get("http://localhost:" + port + "/airlines/create");
+		assertEquals("Something happened...", driver.findElement(By.xpath("//h2")).getText());
 	}
 
 	@AfterEach

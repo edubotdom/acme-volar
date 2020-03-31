@@ -1,7 +1,8 @@
+
 package acmevolar.ui;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import java.util.concurrent.TimeUnit;
 
@@ -21,57 +22,48 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class FullyFledgedUITest {
+public class AnonymousAirlineListAndShow {
 
 	@LocalServerPort
-	private int port;
+	private int				port;
 
-	private String username;
-	private WebDriver driver;
-	private String baseUrl;
-	private boolean acceptNextAlert = true;
-	private StringBuffer verificationErrors = new StringBuffer();
+	private WebDriver		driver;
+	private String			baseUrl;
+	private boolean			acceptNextAlert		= true;
+	private StringBuffer	verificationErrors	= new StringBuffer();
+
 
 	@BeforeEach
 	public void setUp() throws Exception {
+
 		System.setProperty("webdriver.gecko.driver", System.getenv("webdriver.gecko.driver"));
-/*		 String pathToGeckoDriver="C:\\Users\\EdMig\\Documents\\UNIVERSIDAD\\CURSO 3\\DP2\\Proyecto\\Proyecto\\Cosecha propia\\geckodriver-v0.26.0-win64";
-		 System.setProperty("webdriver.gecko.driver", pathToGeckoDriver +
-		 "\\geckodriver.exe");*/
+
 		driver = new FirefoxDriver();
 		baseUrl = "https://www.google.com/";
 		driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
 	}
 
 	@Test
-	public void testLoginAsAdmin() throws Exception {
-		as("admin1").whenIamLoggedIntheSystem().thenISeeMyUsernameInTheMenuBar();
-	}
-
-	private void thenISeeMyUsernameInTheMenuBar() {
-		assertEquals(username.toUpperCase(),
-				driver.findElement(By.xpath("//div[@id='main-navbar']/ul[2]/li/a/strong")).getText());
-
-	}
-
-	private FullyFledgedUITest whenIamLoggedIntheSystem() {
-		return this;
-	}
-
-	private FullyFledgedUITest as(String username) {
-		this.username = username;
-		driver.get("http://localhost:"+port);
-		driver.findElement(By.xpath("//div[@id='main-navbar']/ul[2]/li/a")).click();
-		driver.findElement(By.id("password")).clear();
-		driver.findElement(By.id("password")).sendKeys(passwordOf(username));
-		driver.findElement(By.id("username")).clear();
-		driver.findElement(By.id("username")).sendKeys(username);
-		driver.findElement(By.xpath("//button[@type='submit']")).click();
-		return this;
-	}
-
-	private CharSequence passwordOf(String username) {
-		return "4dm1n";
+	public void testAnonymousAirlineListAndShow() throws Exception {
+		driver.get("http://localhost:" + port + "/");
+		driver.findElement(By.xpath("//div[@id='main-navbar']/ul/li/a/span[2]")).click();
+		assertEquals("Airlines", driver.findElement(By.xpath("//h2")).getText());
+		driver.findElement(By.linkText("Sevilla Este Airways")).click();
+		assertEquals("Airline Information", driver.findElement(By.xpath("//h2")).getText());
+		assertEquals("Name", driver.findElement(By.xpath("//th")).getText());
+		assertEquals("Identification", driver.findElement(By.xpath("//tr[2]/th")).getText());
+		assertEquals("Reference", driver.findElement(By.xpath("//tr[3]/th")).getText());
+		assertEquals("Email", driver.findElement(By.xpath("//tr[4]/th")).getText());
+		assertEquals("Country", driver.findElement(By.xpath("//tr[5]/th")).getText());
+		assertEquals("Phone", driver.findElement(By.xpath("//tr[6]/th")).getText());
+		assertEquals("Creation Date", driver.findElement(By.xpath("//tr[7]/th")).getText());
+		driver.findElement(By.xpath("//body/div/div")).click();
+		assertEquals("Sevilla Este Airways", driver.findElement(By.xpath("//b")).getText());
+		assertEquals("61333744-N", driver.findElement(By.xpath("//tr[2]/td")).getText());
+		assertEquals("SEA-001", driver.findElement(By.xpath("//tr[3]/td")).getText());
+		assertEquals("minardi@gmail.com", driver.findElement(By.xpath("//tr[4]/td")).getText());
+		assertEquals("Spain", driver.findElement(By.xpath("//tr[5]/td")).getText());
+		assertEquals("2010-11-07", driver.findElement(By.xpath("//tr[7]/td")).getText());
 	}
 
 	@AfterEach

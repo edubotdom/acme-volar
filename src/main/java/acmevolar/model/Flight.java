@@ -16,38 +16,47 @@
 
 package acmevolar.model;
 
-import java.time.LocalDateTime;
+import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
+import org.hibernate.validator.constraints.UniqueElements;
 import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
-@Table(name = "flights")
+@Table(name = "flights"/*, uniqueConstraints = @UniqueConstraint(columnNames = { "reference" })*/)
+
 public class Flight extends BaseEntity {
 
 	@NotEmpty
 	@Column(name = "reference")
+	//@UniqueElements
 	private String				reference;
 
 	@NotNull
 	@Column(name = "seats")
+	@Min(value = 0, message = "Can't be negative" )
 	private Integer				seats;
 
 	@NotNull
 	@Column(name = "price")
+	@Min(value = 0, message = "Can't be negative" )
 	private Double				price;
 
+	@NotNull
 	@ManyToOne
 	@JoinColumn(name = "flight_status_id")
 	private FlightStatusType	flightStatus;
 
+	@NotNull
 	@ManyToOne
 	@JoinColumn(name = "plane_id")
 	private Plane				plane;
@@ -66,114 +75,112 @@ public class Flight extends BaseEntity {
 	@JoinColumn(name = "lands_id")
 	private Runway				lands;
 
-	@NotNull
+	//@NotNull
 	@ManyToOne
 	@JoinColumn(name = "airline_id")
 	private Airline				airline;
 
-	@NotNull
-	@Column(name = "land_date")
-	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
-	private LocalDateTime landDate;
-	
-	@NotNull
-	@Column(name = "depart_date")
-	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
-	private LocalDateTime departDate;
+	@Column(name = "land_date", nullable = false)
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	private Date		landDate;
+
+	@Column(name = "depart_date", nullable = false)
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	private Date		departDate;
+
 
 	public String getReference() {
-		return reference;
+		return this.reference;
 	}
 
-	public void setReference(String reference) {
+	public void setReference(final String reference) {
 		this.reference = reference;
 	}
 
 	public Integer getSeats() {
-		return seats;
+		return this.seats;
 	}
 
-	public void setSeats(Integer seats) {
+	public void setSeats(final Integer seats) {
 		this.seats = seats;
 	}
 
 	public Double getPrice() {
-		return price;
+		return this.price;
 	}
 
-	public void setPrice(Double price) {
+	public void setPrice(final Double price) {
 		this.price = price;
 	}
 
 	public FlightStatusType getFlightStatus() {
-		return flightStatus;
+		return this.flightStatus;
 	}
 
-	public void setFlightStatus(FlightStatusType flightStatus) {
+	public void setFlightStatus(final FlightStatusType flightStatus) {
 		this.flightStatus = flightStatus;
 	}
 
 	public Plane getPlane() {
-		return plane;
+		return this.plane;
 	}
 
-	public void setPlane(Plane plane) {
+	public void setPlane(final Plane plane) {
 		this.plane = plane;
 	}
 
 	public Boolean getPublished() {
-		return published;
+		return this.published;
 	}
 
-	public void setPublished(Boolean published) {
+	public void setPublished(final Boolean published) {
 		this.published = published;
 	}
 
 	public Runway getDepartes() {
-		return departes;
+		return this.departes;
 	}
 
-	public void setDepartes(Runway departes) {
+	public void setDepartes(final Runway departes) {
 		this.departes = departes;
 	}
 
 	public Runway getLands() {
-		return lands;
+		return this.lands;
 	}
 
-	public void setLands(Runway lands) {
+	public void setLands(final Runway lands) {
 		this.lands = lands;
 	}
 
 	public Airline getAirline() {
-		return airline;
+		return this.airline;
 	}
 
-	public void setAirline(Airline airline) {
+	public void setAirline(final Airline airline) {
 		this.airline = airline;
 	}
 
-	public LocalDateTime getLandDate() {
-		return landDate;
+	public Date getLandDate() {
+		return this.landDate;
 	}
 
-	public void setLandDate(LocalDateTime landDate) {
+	public void setLandDate(final Date landDate) {
 		this.landDate = landDate;
 	}
 
-	public LocalDateTime getDepartDate() {
-		return departDate;
+	public Date getDepartDate() {
+		return this.departDate;
 	}
 
-	public void setDepartDate(LocalDateTime departDate) {
+	public void setDepartDate(final Date departDate) {
 		this.departDate = departDate;
 	}
 
 	@Override
 	public String toString() {
-		return "Flight [reference=" + reference + ", seats=" + seats + ", price=" + price + ", flightStatus="
-				+ flightStatus + ", plane=" + plane + ", published=" + published + ", departes=" + departes + ", lands="
-				+ lands + ", airline=" + airline + ", landDate=" + landDate + ", departDate=" + departDate + "]";
+		return "Flight [id=" + this.id + "reference=" + this.reference + ", seats=" + this.seats + ", price=" + this.price + ", flightStatus=" + this.flightStatus + ", plane=" + this.plane + ", published=" + this.published + ", departes=" + this.departes + ", lands="
+			+ this.lands + ", airline=" + this.airline + ", landDate=" + this.landDate + ", departDate=" + this.departDate + "]";
 	}
 
 }

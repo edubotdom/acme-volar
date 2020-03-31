@@ -20,9 +20,12 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
 
+import javax.validation.ConstraintViolationException;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
@@ -36,6 +39,7 @@ import acmevolar.model.Client;
 import acmevolar.service.AuthoritiesService;
 import acmevolar.service.ClientService;
 import acmevolar.service.UserService;
+import acmevolar.service.exceptions.BirthDateIsAfterCreationDateException;
 
 /**
  * @author Juergen Hoeller
@@ -60,26 +64,36 @@ public class ClientController {
 	public void setAllowedFields(final WebDataBinder dataBinder) {
 		dataBinder.setDisallowedFields("id");
 	}
-
-	@GetMapping(value = "/clients/new")
+	@PreAuthorize("!hasAuthority('airline') && !hasAuthority('client')")	@GetMapping(value = "/clients/new")
 	public String initCreationForm(final Map<String, Object> model) {
 		Client client = new Client();
 		model.put("client", client);
 		return ClientController.VIEWS_CLIENT_CREATE_FORM;
 	}
-
+	@PreAuthorize("!hasAuthority('airline') && !hasAuthority('client')")
 	@PostMapping(value = "/clients/new")
 	public String processCreationForm(@Valid final Client client, final BindingResult result) {
 		if (result.hasErrors()) {
 			return ClientController.VIEWS_CLIENT_CREATE_FORM;
 		} else {
 			//creating owner, user and authorities
-			this.clientService.saveClient(client);
+			try {
+				this.clientService.saveClient(client);
+			} catch (DataAccessException e) {
+				e.printStackTrace();
+			} catch (ConstraintViolationException e) {
+				e.printStackTrace();
+				return ClientController.VIEWS_CLIENT_CREATE_FORM;
+			} catch (BirthDateIsAfterCreationDateException e) {
+				result.rejectValue("birthDate", "BirthDateMustBePast", "Birthdate must be a past date");
+				return ClientController.VIEWS_CLIENT_CREATE_FORM;
+			}
 
-			return "redirect:/clients/" + client.getId();
+			//return "redirect:/clients/" + client.getId();
+			return "redirect:/";
 		}
 	}
-
+	@PreAuthorize("hasAuthority('airline')")
 	@GetMapping(value = {
 		"/clients"
 	})
@@ -98,6 +112,7 @@ public class ClientController {
 	 *            the ID of the owner to display
 	 * @return a ModelMap with the model attributes for the view
 	 */
+	@PreAuthorize("hasAuthority('airline')")
 	@GetMapping("/clients/{clientId}")
 	public ModelAndView showClient(@PathVariable("clientId") final int clientId) {
 		ModelAndView mav = new ModelAndView("clients/clientDetails");

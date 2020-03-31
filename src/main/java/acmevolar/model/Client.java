@@ -24,7 +24,10 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.Digits;
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Past;
+import javax.validation.constraints.PastOrPresent;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -40,6 +43,31 @@ public class Client extends NamedEntity {
 	@Column(name = "identification")
 	@NotEmpty
 	private String identification;
+
+	@Column(name = "birth_date")  
+	@Past
+	@DateTimeFormat(pattern = "yyyy/MM/dd")
+	private LocalDate birthDate;
+	
+	@Column(name = "phone")
+	@NotEmpty
+	@Digits(fraction = 0, integer = 10)
+	private String phone;
+	
+	@Column(name = "email")
+	@Email
+	@NotEmpty
+	private String email;
+	
+	@Column(name = "creation_date")  
+	@DateTimeFormat(pattern = "yyyy/MM/dd")
+	private LocalDate creationDate;
+	
+	//
+	@OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "username", referencedColumnName = "username")
+	private User user;
+	//
 
 	public void setIdentification(String identification) {
 		this.identification = identification;
@@ -64,33 +92,7 @@ public class Client extends NamedEntity {
 	public void setUser(User user) {
 		this.user = user;
 	}
-
-
-	@Column(name = "birth_date")        
-	@DateTimeFormat(pattern = "yyyy/MM/dd")
-	private LocalDate birthDate;
 	
-	@Column(name = "phone")
-	@NotEmpty
-	@Digits(fraction = 0, integer = 10)
-	private String phone;
-	
-	@Column(name = "email")
-	@NotEmpty
-	private String email;
-	
-	@Column(name = "creation_date")        
-	@DateTimeFormat(pattern = "yyyy/MM/dd")
-	private LocalDate creationDate;
-	
-	
-	//
-	@OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "username", referencedColumnName = "username")
-	private User user;
-	//
-
-
 	public String getIdentification() {
 		return identification;
 	}

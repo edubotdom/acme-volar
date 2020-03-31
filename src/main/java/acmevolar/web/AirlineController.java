@@ -23,6 +23,7 @@ import java.util.Map;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
@@ -49,11 +50,15 @@ public class AirlineController {
 	private static final String		VIEWS_AIRLINE_CREATE_FORM	= "airlines/createAirlineForm";
 
 	private final AirlineService	airlineService;
+	private final UserService	userService;
+/*	private final AuthoritiesService	authoritiesService;*/
 
 
 	@Autowired
-	public AirlineController(final AirlineService airlineService, final UserService userService, final AuthoritiesService authoritiesService) {
+	public AirlineController(final AirlineService airlineService, final UserService userService/*, final AuthoritiesService authoritiesService*/) {
 		this.airlineService = airlineService;
+		this.userService = userService;
+/*		this.authoritiesService = authoritiesService;*/
 	}
 
 	@InitBinder
@@ -61,6 +66,7 @@ public class AirlineController {
 		dataBinder.setDisallowedFields("id");
 	}
 
+	@PreAuthorize("!hasAuthority('airline') && !hasAuthority('client')")
 	@GetMapping(value = "/airlines/new")
 	public String initCreationForm(final Map<String, Object> model) {
 		Airline airline = new Airline();
@@ -68,6 +74,7 @@ public class AirlineController {
 		return AirlineController.VIEWS_AIRLINE_CREATE_FORM;
 	}
 
+	@PreAuthorize("!hasAuthority('airline') && !hasAuthority('client')")
 	@PostMapping(value = "/airlines/new")
 	public String processCreationForm(@Valid final Airline airline, final BindingResult result) {
 		if (result.hasErrors()) {
@@ -79,7 +86,7 @@ public class AirlineController {
 			return "redirect:/airlines/" + airline.getId();
 		}
 	}
-
+	//@PreAuthorize("!hasAuthority('airline')")
 	@GetMapping(value = {
 		"/airlines"
 	})
@@ -98,6 +105,7 @@ public class AirlineController {
 	 *            the ID of the owner to display
 	 * @return a ModelMap with the model attributes for the view
 	 */
+	//@PreAuthorize("!hasAuthority('airline')")
 	@GetMapping("/airlines/{airlineId}")
 	public ModelAndView showAirline(@PathVariable("airlineId") final int airlineId) {
 		ModelAndView mav = new ModelAndView("airlines/airlineDetails");

@@ -27,38 +27,33 @@ import org.springframework.transaction.annotation.Transactional;
 import acmevolar.model.Airline;
 import acmevolar.model.Flight;
 import acmevolar.model.FlightStatusType;
+import acmevolar.model.Plane;
+import acmevolar.model.Runway;
+import acmevolar.repository.AirlineRepository;
 import acmevolar.repository.FlightRepository;
-import acmevolar.repository.springdatajpa.SpringDataAirlineRepository;
-import acmevolar.repository.springdatajpa.SpringDataFlightRepository;
+import acmevolar.repository.PlaneRepository;
+import acmevolar.repository.RunwayRepository;
 
 @Service
 public class FlightService {
 
-	private FlightRepository			flightRepository;
-	private SpringDataFlightRepository	springDataFlightRepository;
-	private SpringDataAirlineRepository	springDataAirlineRepository;
+	private FlightRepository		flightRepository;
+	private AirlineRepository		airlineRepository;
+	private final PlaneRepository	planeRepository;
+	private final RunwayRepository	runwayRepository;
 
 
 	@Autowired
-	public FlightService(final FlightRepository flightRepository, final SpringDataFlightRepository springDataFlightRepository, final SpringDataAirlineRepository springDataAirlineRepository) {
+	public FlightService(final FlightRepository flightRepository, final AirlineRepository airlineRepository, final PlaneRepository planeRepository, final RunwayRepository runwayRepository) {
 		this.flightRepository = flightRepository;
-		this.springDataFlightRepository = springDataFlightRepository;
-		this.springDataAirlineRepository = springDataAirlineRepository;
-	}
-
-	@Transactional(readOnly = true)
-	public List<FlightStatusType> findFlightStatusTypes() throws DataAccessException {
-		return this.flightRepository.findFlightStatusTypes();
+		this.airlineRepository = airlineRepository;
+		this.planeRepository = planeRepository;
+		this.runwayRepository = runwayRepository;
 	}
 
 	@Transactional(readOnly = true)
 	public Flight findFlightById(final int id) throws DataAccessException {
 		return this.flightRepository.findById(id);
-	}
-
-	@Transactional(readOnly = true)
-	public Airline findAirlineByUsername(final String username) throws DataAccessException {
-		return this.springDataAirlineRepository.findByUsername(username);
 	}
 
 	@Transactional
@@ -73,12 +68,50 @@ public class FlightService {
 
 	@Transactional(readOnly = true)
 	public Collection<Flight> findPublishedFlight() {
-		return this.springDataFlightRepository.findPublishedFlight();
+		return this.flightRepository.findPublishedFlight();
+	}
+	
+	@Transactional(readOnly = true)
+	public Collection<Flight> findPublishedFutureFlight() {
+		return this.flightRepository.findPublishedFutureFlight();
 	}
 
 	@Transactional(readOnly = true)
 	public Collection<Flight> findAirlineFlight(final String username) {
-		return this.springDataFlightRepository.findAirlineFlight(username);
+		return this.flightRepository.findAirlineFlight(username);
 	}
 
+	@Transactional(readOnly = true)
+	public Flight findFlightByReference(final String reference) {
+		return this.flightRepository.findFlightByReference(reference);
+	}
+	
+	//FlightStatusType
+	@Transactional(readOnly = true)
+	public List<FlightStatusType> findFlightStatusTypes() throws DataAccessException {
+		return this.flightRepository.findFlightStatusTypes();
+	}
+
+	//Airline
+	@Transactional(readOnly = true)
+	public Airline findAirlineByUsername(final String username) throws DataAccessException {
+		return this.airlineRepository.findByUsername(username);
+	}
+
+	//Plane
+	@Transactional(readOnly = true)
+	public List<Plane> findPlanesbyAirline(final String airline) throws DataAccessException {
+		return this.planeRepository.findPlanesbyAirline(airline);
+	}
+
+	//Runway
+	@Transactional(readOnly = true)
+	public List<Runway> findDepartingRunways() throws DataAccessException {
+		return this.runwayRepository.findDepartingRunways();
+	}
+
+	public List<Runway> findLandingRunways() throws DataAccessException {
+		return this.runwayRepository.findLandingRunways();
+	}
+	
 }

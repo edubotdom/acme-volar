@@ -16,7 +16,7 @@
 
 package acmevolar.service;
 
-import java.util.Collection;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -25,38 +25,68 @@ import org.springframework.transaction.annotation.Transactional;
 
 import acmevolar.model.Airport;
 import acmevolar.model.Runway;
+import acmevolar.model.RunwayType;
+import acmevolar.repository.AirportRepository;
 import acmevolar.repository.RunwayRepository;
-
 
 @Service
 public class RunwayService {
 
-private RunwayRepository runwayRepository;
-	
+	private RunwayRepository runwayRepository;
+	private AirportRepository airportRepository;
+
+
 	@Autowired
-	public RunwayService(RunwayRepository runwayRepository) {
+	public RunwayService(final RunwayRepository runwayRepository, final AirportRepository airportRepository) {
 		this.runwayRepository = runwayRepository;
-	}
-	
-	@Transactional(readOnly = true)
-	public Runway findRunwayById(int id) throws DataAccessException {
-		return runwayRepository.findById(id);
-	}
-	
-	@Transactional(readOnly = true)
-	public Collection<Runway> findAllRunway() throws DataAccessException {
-		return runwayRepository.findAll();
-	}
-	
-	public void saveRunway(Runway runway) throws DataAccessException {
-		runwayRepository.save(runway);                
+		this.airportRepository=airportRepository;
 	}
 
-	public Airport findAirportById(Integer airportId) throws DataAccessException {
-		Airport airport = runwayRepository.findAirportById(airportId);
+	@Transactional(readOnly = true)
+	public Runway findRunwayById(final int id) throws DataAccessException {
+		return this.runwayRepository.findById(id);
+	}
+
+	@Transactional(readOnly = true)
+	public RunwayType findRunwayTypeById(final Integer runwayTypeId) throws DataAccessException {
+		return this.runwayRepository.findRunwayTypeById(runwayTypeId);
+	}
+
+	@Transactional(readOnly = true)
+	public List<Runway> findAllRunway() throws DataAccessException {
+		return this.runwayRepository.findAll();
+	}
+
+	@Transactional(readOnly = true)
+	public List<Runway> findRunwaysByAirportId(final Integer airportId) throws DataAccessException {
+		return this.runwayRepository.findRunwaysByAirportId(airportId);
+	}
+
+	//FlightStatusType
+	@Transactional(readOnly = true)
+	public List<RunwayType> findRunwaysTypes() throws DataAccessException {
+		return this.runwayRepository.findRunwaysTypes();
+	}
+
+	@Transactional
+	public void saveRunway(final Runway runway) throws DataAccessException {
+		runway.setName(runway.getName().replace(",", ""));
+		this.runwayRepository.save(runway);
+	}
+
+	@Transactional(readOnly = true)
+	public Airport findAirportById(final Integer airportId) throws DataAccessException {
+		Airport airport = this.runwayRepository.findAirportById(airportId);
 		return airport;
 	}
-	
-	//Hay que agregar un método para buscar el airport correspondiente a un runway
+
+	public void deleteRunwayById(final Integer runwayId) throws DataAccessException {
+		this.runwayRepository.deleteById(runwayId);
+	}
+
+	@Transactional(readOnly = true)
+	public List<Runway> findRunwaysByName(final String runwayName) {
+		return this.runwayRepository.findRunwaysByName(runwayName);
+	}
 
 }

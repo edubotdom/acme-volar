@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -25,6 +26,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
  */
 @Configuration
 @EnableWebSecurity
+@EnableGlobalMethodSecurity(
+		  prePostEnabled = true, 
+		  securedEnabled = true, 
+		  jsr250Enabled = true)
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
 	@Autowired
@@ -38,28 +43,38 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 		.antMatchers("/resources/**", "/webjars/**", "/h2-console/**").permitAll()
 		.antMatchers(HttpMethod.GET, "/", "/oups").permitAll()
 		.antMatchers("/users/new").permitAll()
-		
-		.antMatchers("/clients/").hasAuthority("airline")
-		.antMatchers("/clients/**/").hasAuthority("airline")
-		
-		.antMatchers("/airlines/").permitAll()
-		.antMatchers("/airlines/**/").permitAll()
-		.antMatchers("/airlines/new/").hasAuthority("airline")
-		
-		.antMatchers("/airports/").permitAll()
-		.antMatchers("/airports/**/").permitAll()
+		/*Clients*/
+		.antMatchers("/clients").hasAuthority("airline")
+		.antMatchers("/clients/new").anonymous()
+		.antMatchers("/clients/{^[\\d]$}").hasAnyAuthority("airline")
+		/*Airlines*/
+		.antMatchers("/airlines").permitAll()
+		.antMatchers("/airlines/{^[\\d]$}").permitAll()
+		.antMatchers("/airlines/new/").anonymous()
+		/*Airports*/
+		.antMatchers("/airports").hasAnyAuthority("airline","client")
+		.antMatchers("/airports/{^[\\d]$}").hasAnyAuthority("airline","client")
 		.antMatchers("/airports/new").hasAuthority("airline")
-		.antMatchers("/airports/**/edit").hasAuthority("airline")
-		.antMatchers("/airports/**/delete").hasAuthority("airline")
-		
-		.antMatchers("/flights/").permitAll()
-		.antMatchers("/flights/**/").permitAll()
+		.antMatchers("/airports/{^[\\d]$}/edit").hasAuthority("airline")
+		.antMatchers("/airports/{^[\\d]$}/delete").hasAuthority("airline")
+		/*Runways*/
+		.antMatchers("/airports/{^[\\d]$}/runways").hasAnyAuthority("airline","client")
+		.antMatchers("/airports/{^[\\d]$}/runways/new").hasAuthority("airline")
+		.antMatchers("/airports/{^[\\d]$}/runways/{^[\\d]$}/edit").hasAuthority("airline")
+		.antMatchers("/airports/{^[\\d]$}/runways/{^[\\d]$}/delete").hasAuthority("airline")
+		/*Flights*/
+		.antMatchers("/flights").permitAll()
+		.antMatchers("/my_flights").hasAuthority("airline")
+		.antMatchers("/flights/{^[\\d]$}").permitAll()
 		.antMatchers("/flights/new").hasAuthority("airline")
-		.antMatchers("/flights/**/edit").hasAuthority("airline")
-		.antMatchers("/flights/**/delete").hasAuthority("airline")
+		.antMatchers("/flights/{^[\\d]$}/edit").hasAuthority("airline")
+		.antMatchers("/flights/{^[\\d]$}/delete").hasAuthority("airline")
+		/*Planes*/
+		.antMatchers("/my_planes").hasAuthority("airline")
+		.antMatchers("/planes/new").hasAuthority("airline")
+		.antMatchers("/planes/{^[\\d]$}").hasAnyAuthority("client","airline")
+		.antMatchers("/planes/{^[\\d]$}/edit").hasAuthority("airline")
 		
-		.antMatchers("/planes/").hasAuthority("airline")
-		.antMatchers("/planes/**/").hasAuthority("airline")
 		
 		.antMatchers("/admin/**").hasAnyAuthority("admin")
 		.antMatchers("/owners/**").hasAnyAuthority("owner", "admin")

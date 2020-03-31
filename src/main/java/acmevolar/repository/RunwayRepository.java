@@ -16,22 +16,36 @@
 
 package acmevolar.repository;
 
-import java.util.Collection;
-
+import java.util.List;
 
 import org.springframework.dao.DataAccessException;
 
 import acmevolar.model.Airport;
 import acmevolar.model.Runway;
+import acmevolar.model.RunwayType;
 
 public interface RunwayRepository {
 
 	Runway findById(int id) throws DataAccessException;
-	
+
 	void save(Runway runway) throws DataAccessException;
-	
-	Collection<Runway> findAll() throws DataAccessException;
+
+	List<Runway> findAll() throws DataAccessException;
 
 	Airport findAirportById(Integer airportId) throws DataAccessException;
+
+	List<Runway> findDepartingRunways() throws DataAccessException;
+
+	List<Runway> findLandingRunways() throws DataAccessException;
+
+	List<Runway> findRunwaysByAirportId(Integer airportid) throws DataAccessException;
+
+	List<RunwayType> findRunwaysTypes() throws DataAccessException;
+
+	void deleteById(Integer runwayId) throws DataAccessException;
+
+	List<Runway> findRunwaysByName(String runwayName) throws DataAccessException;
+
+	RunwayType findRunwayTypeById(Integer runwayTypeId) throws DataAccessException;
 
 }

@@ -2,6 +2,7 @@
 package acmevolar.service;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +12,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import acmevolar.model.Airport;
 import acmevolar.repository.AirportRepository;
-import acmevolar.service.exceptions.DuplicatedPetNameException;
+import acmevolar.service.exceptions.DuplicatedAirportNameException;
+import acmevolar.service.exceptions.IncorrectCartesianCoordinatesException;
+import acmevolar.service.exceptions.NonDeletableException;
 
 @Service
 public class AirportService {
@@ -33,14 +36,25 @@ public class AirportService {
 	public Collection<Airport> findAirports() throws DataAccessException {
 		return this.airportRepository.findAll();
 	}
+	
+	public List<Airport> findAirportsByName(String airportName) throws DataAccessException{
+		return this.airportRepository.findAirportsByName(airportName);
+	}
 
-	@Transactional(rollbackFor = DuplicatedPetNameException.class)
-	public void saveAirport(final Airport airport) throws DataAccessException, DuplicatedPetNameException {
+	@Transactional(rollbackFor = IncorrectCartesianCoordinatesException.class, noRollbackFor = DuplicatedAirportNameException.class)
+	public void saveAirport(final Airport airport) throws DataAccessException,IncorrectCartesianCoordinatesException,DuplicatedAirportNameException {
+		if((airport.getLatitude()<=-90.) || (airport.getLatitude()>=90.)
+				|| (airport.getLongitude()<=-180.) || (airport.getLongitude()>=180.)) {
+			throw new IncorrectCartesianCoordinatesException();
+		} else if(this.airportRepository.findAirportsByName(airport.getName()).size()!=0) {
+			throw new DuplicatedAirportNameException();
+		}
 		this.airportRepository.save(airport);
 	}
 
+	@Transactional
 	public void deleteAirport(final Airport airport) {
-		this.airportRepository.delete(airport);
+			this.airportRepository.delete(airport);
 	}
 
 	@Transactional(readOnly = true)

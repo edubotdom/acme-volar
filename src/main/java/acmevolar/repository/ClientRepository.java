@@ -17,11 +17,11 @@ package acmevolar.repository;
 
 import java.util.Collection;
 
+
 import org.springframework.dao.DataAccessException;
 
 import acmevolar.model.BaseEntity;
 import acmevolar.model.Client;
-import acmevolar.model.Owner;
 
 /**
  * Repository class for <code>Owner</code> domain objects All method names are compliant

@@ -41,19 +41,12 @@ public class FlightValidator implements Validator {
 	@Override
 	public void validate(final Object obj, final Errors errors) {
 		Flight flight = (Flight) obj;
+		Boolean notNullorEmpty = (flight.getLands() == null || flight.getDepartes() == null || flight.getDepartDate() == null || flight.getLandDate() == null || flight.getSeats() == null || flight.getPrice() == null || flight.getReference().isEmpty()
+			|| flight.getPlane() == null || flight.getPublished() == null || flight.getFlightStatus() == null);
 
-		if (flight.getLands() == null || flight.getDepartes() == null || flight.getDepartDate() == null || flight.getLandDate() == null || flight.getSeats() == null || flight.getPrice() == null || flight.getReference().isEmpty()) {
-			if (flight.getLands() == null) {
-				errors.rejectValue("lands", "NullLandValue", "You must fill land's information.");
-
-			} else if (flight.getDepartes() == null) {
-				errors.rejectValue("departes", "NullDepartValue", "You must fill depart's information.");
-
-			} else if (flight.getDepartDate() == null) {
-				errors.rejectValue("departDate", "NullDepartDateValue", "You must fill depart date.");
-
-			} else if (flight.getLandDate() == null) {
-				errors.rejectValue("landDate", "NullLandDateValue", "You must fill land date.");
+		if (notNullorEmpty) {
+			if (flight.getReference().isEmpty()) {
+				errors.rejectValue("reference", "NullReferenceValue", "You must fill reference information.");
 
 			} else if (flight.getSeats() == null) {
 				errors.rejectValue("seats", "NullSeatValue", "You must fill seat information.");
@@ -61,8 +54,26 @@ public class FlightValidator implements Validator {
 			} else if (flight.getPrice() == null) {
 				errors.rejectValue("price", "NullPriceValue", "You must fill price information.");
 
-			} else if (flight.getReference().isEmpty()) {
-				errors.rejectValue("reference", "NullReferenceValue", "You must fill reference information.");
+			} else if (flight.getFlightStatus() == null) {
+				errors.rejectValue("flightStatus", "NullFlightStatusValue", "You must fill status information.");
+
+			} else if (flight.getPublished() == null) {
+				errors.rejectValue("published", "NullPublishedValue", "You must fill visibility information.");
+
+			} else if (flight.getPlane() == null) {
+				errors.rejectValue("plane", "NullPlaneValue", "You must fill plane information.");
+
+			} else if (flight.getLands() == null) {
+				errors.rejectValue("lands", "NullLandValue", "You must fill land's information.");
+
+			} else if (flight.getLandDate() == null) {
+				errors.rejectValue("landDate", "NullLandDateValue", "You must fill land date.");
+
+			} else if (flight.getDepartes() == null) {
+				errors.rejectValue("departes", "NullDepartValue", "You must fill depart's information.");
+
+			} else if (flight.getDepartDate() == null) {
+				errors.rejectValue("departDate", "NullDepartDateValue", "You must fill depart date.");
 
 			}
 		} else {
@@ -91,9 +102,6 @@ public class FlightValidator implements Validator {
 		}
 	}
 
-	/**
-	 * This Validator validates *just* Pet instances
-	 */
 	@Override
 	public boolean supports(final Class<?> clazz) {
 		return Flight.class.isAssignableFrom(clazz);

@@ -95,9 +95,6 @@ public class AirportController {
 				e.printStackTrace();
 			} catch (IncorrectCartesianCoordinatesException e) {
 				e.printStackTrace();
-			} catch (DuplicatedAirportNameException e) {
-				result.rejectValue("name", "duplicate", "Already exists");
-				return AirportController.VIEWS_AIRPORT_CREATE_FORM;
 			}
 			return "redirect:/airports/" + airport.getId();
 		}
@@ -109,21 +106,22 @@ public class AirportController {
 		Airport airport = this.airportService.findAirportById(airportId);
 
 		model.put("airport", airport);
-
 		return AirportController.VIEWS_AIRPORT_CREATE_FORM;
 	}
 
 	@PostMapping(value = "/airports/{airportId}/edit")
 	@PreAuthorize("hasAuthority('airline')")
 	public String processUpdateForm(@Valid final Airport airport, final BindingResult result, @PathVariable("airportId") final int airportId, final ModelMap model) {
+		Airport airportToUpdate = this.airportService.findAirportById(airportId);
+		
 		if (result.hasErrors()) {
 			model.put("airport", airport);
 			return AirportController.VIEWS_AIRPORT_CREATE_FORM;
-		} else if (this.airportService.findAirportsByName(airport.getName()).size() != 0) {
+		} else if (this.airportService.findAirportsByName(airport.getName()).size() != 0 && !airport.getName().equalsIgnoreCase(airportToUpdate.getName())) {
 			result.rejectValue("name", "duplicate", "Already exists");
 			return AirportController.VIEWS_AIRPORT_CREATE_FORM;
 		} else {
-			Airport airportToUpdate = this.airportService.findAirportById(airportId);
+			//Airport airportToUpdate = this.airportService.findAirportById(airportId);
 			BeanUtils.copyProperties(airportToUpdate, airport, "name", "maxNumberOfPlanes", "maxNumberOfClients", "latitude", "longitude", "code", "city");
 
 			try {
@@ -131,8 +129,6 @@ public class AirportController {
 			} catch (DataAccessException e) {
 				e.printStackTrace();
 			} catch (IncorrectCartesianCoordinatesException e) {
-				e.printStackTrace();
-			} catch (DuplicatedAirportNameException e) {
 				e.printStackTrace();
 			}
 			return "redirect:/airports/{airportId}";

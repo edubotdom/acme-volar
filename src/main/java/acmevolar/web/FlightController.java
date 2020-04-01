@@ -152,23 +152,7 @@ public class FlightController {
 				// day
 				result.rejectValue("lands", "AirportFullOfPlanes", "This airport is full of planes this day");
 
-			} /*
-				 * if (flight.getDepartes().getAirport().getName().equals(flight.getLands().getAirport().getName())) {
-				 * result.rejectValue("lands", "PathClosed", "This path is close, choose another airport(runway)");
-				 *
-				 *
-				 * } if (flight.getDepartDate().after(flight.getLandDate())) {
-				 * result.rejectValue("landDate", "LandingBeforeDepartDate",
-				 * "Landing date can't be programmed before departing date");
-				 *
-				 *
-				 * }if (flight.getDepartDate().before(Calendar.getInstance().getTime())) {
-				 * result.rejectValue("departDate", "DepartBeforePresentDate",
-				 * "Depart date can't be programmed before the present");
-				 *
-				 *
-				 * }
-				 */
+			}
 
 			if (result.hasErrors()) {
 				model.put("flight", flight);
@@ -255,6 +239,10 @@ public class FlightController {
 			return FlightController.VIEWS_FLIGHT_CREATE_FORM;
 		} else {
 			Flight flightToUpdate = this.flightService.findFlightById(flightId);
+			if (this.flightService.findFlightByReference(flight.getReference())!=null&&!flight.getReference().equalsIgnoreCase(flightToUpdate.getReference())) {
+				result.rejectValue("reference", "referenceTaken", "Flight reference already taken.");
+			}
+
 			BeanUtils.copyProperties(flightToUpdate, flight, "reference", "seats", "price", "flightStatus", "published", "landDate", "departDate", "lands", "departes", "plane");
 
 			// we get the flight (one per plane) in the same day that depart airport
@@ -274,20 +262,8 @@ public class FlightController {
 				// day
 				result.rejectValue("lands", "AirportFullOfPlanes", "This airport is full of planes this day");
 
-			} /*
-				 * if (flight.getDepartes().getAirport().getName().equals(flight.getLands().getAirport().getName())) {
-				 * result.rejectValue("lands", "PathClosed", "This path is close, choose another airport(runway)");
-				 *
-				 * } if (flight.getDepartDate().after(flight.getLandDate())) {
-				 * result.rejectValue("landDate", "LandingBeforeDepartDate",
-				 * "Landing date can't be programmed before departing date");
-				 *
-				 * } if (flight.getDepartDate().before(Calendar.getInstance().getTime())) {
-				 * result.rejectValue("departDate", "DepartBeforePresentDate",
-				 * "Depart date can't be programmed before the present");
-				 * }
-				 */
-
+			}
+			
 			if (result.hasErrors()) {
 				model.put("flight", flight);
 				this.insertData(model, flight);

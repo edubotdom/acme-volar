@@ -138,6 +138,9 @@ public class Airline1PlaneValidation {
     driver.findElement(By.id("maxDistance")).click();
     driver.findElement(By.id("maxDistance")).clear();
     driver.findElement(By.id("maxDistance")).sendKeys("555.0");
+    driver.findElement(By.id("lastMaintenance")).click();
+    driver.findElement(By.id("lastMaintenance")).clear();
+    driver.findElement(By.id("lastMaintenance")).sendKeys("2020-03-30");
     driver.findElement(By.xpath("//button[@type='submit']")).click();
     assertEquals("Plane Information", driver.findElement(By.xpath("//h2")).getText());
     assertEquals("REF", driver.findElement(By.xpath("//b")).getText());
@@ -147,7 +150,6 @@ public class Airline1PlaneValidation {
     assertEquals("GFD", driver.findElement(By.xpath("//tr[5]/td")).getText());
     assertEquals("555.0", driver.findElement(By.xpath("//tr[6]/td")).getText());
     assertEquals("555.0", driver.findElement(By.xpath("//tr[7]/td")).getText());
-    assertEquals("2020-03-30 00:00:00.0", driver.findElement(By.xpath("//tr[8]/td")).getText());
     assertEquals("Reference", driver.findElement(By.xpath("//th")).getText());
     assertEquals("Max of Seats", driver.findElement(By.xpath("//tr[2]/th")).getText());
     assertEquals("Description", driver.findElement(By.xpath("//tr[3]/th")).getText());

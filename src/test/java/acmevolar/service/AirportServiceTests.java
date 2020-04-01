@@ -63,7 +63,7 @@ public class AirportServiceTests {
 
 		try {
 			this.airportService.saveAirport(airport);
-		} catch (DataAccessException | IncorrectCartesianCoordinatesException | DuplicatedAirportNameException e) {
+		} catch (DataAccessException | IncorrectCartesianCoordinatesException e) {
 			e.printStackTrace();
 		}
 
@@ -92,7 +92,7 @@ public class AirportServiceTests {
 			airportService.saveAirport(airportWithIncorretCardinalCoordinates);
 		});
 	}
-
+/*
 	@Test
 	@Transactional
 	public void shouldThrowDuplicatedAirportNameException() {
@@ -111,9 +111,7 @@ public class AirportServiceTests {
 			e.printStackTrace();
 		} catch (IncorrectCartesianCoordinatesException e) {
 			e.printStackTrace();
-		} catch (DuplicatedAirportNameException e) {
-			e.printStackTrace();
-		}
+		} 
 
 		Airport secondAirport = new Airport();
 		secondAirport.setName("JFK Airport");
@@ -129,7 +127,7 @@ public class AirportServiceTests {
 		});
 
 	}
-
+*/
 	@Test
 	@Transactional
 	public void shouldNotInsertNegativeMaxNumberOfPlanes() {
@@ -181,7 +179,7 @@ public class AirportServiceTests {
 
 		try {
 			this.airportService.saveAirport(airport);
-		} catch (DataAccessException | IncorrectCartesianCoordinatesException | DuplicatedAirportNameException e) {
+		} catch (DataAccessException | IncorrectCartesianCoordinatesException e) {
 			e.printStackTrace();
 		}
 
@@ -209,7 +207,7 @@ public class AirportServiceTests {
 
 		try {
 			this.airportService.saveAirport(airport);
-		} catch (DataAccessException | IncorrectCartesianCoordinatesException | DuplicatedAirportNameException e) {
+		} catch (DataAccessException | IncorrectCartesianCoordinatesException e) {
 			e.printStackTrace();
 		}
 

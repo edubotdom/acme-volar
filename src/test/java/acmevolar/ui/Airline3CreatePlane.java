@@ -84,7 +84,6 @@ public class Airline3CreatePlane {
     assertEquals("mod", driver.findElement(By.xpath("//tr[5]/td")).getText());
     assertEquals("56789.0", driver.findElement(By.xpath("//tr[6]/td")).getText());
     assertEquals("98765.0", driver.findElement(By.xpath("//tr[7]/td")).getText());
-    assertEquals("2020-03-30 00:00:00.0", driver.findElement(By.xpath("//tr[8]/td")).getText());
   }
 
   @AfterEach

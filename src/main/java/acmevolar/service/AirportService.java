@@ -41,13 +41,11 @@ public class AirportService {
 		return this.airportRepository.findAirportsByName(airportName);
 	}
 
-	@Transactional(rollbackFor = IncorrectCartesianCoordinatesException.class, noRollbackFor = DuplicatedAirportNameException.class)
-	public void saveAirport(final Airport airport) throws DataAccessException,IncorrectCartesianCoordinatesException,DuplicatedAirportNameException {
+	@Transactional(rollbackFor = IncorrectCartesianCoordinatesException.class)
+	public void saveAirport(final Airport airport) throws DataAccessException,IncorrectCartesianCoordinatesException{
 		if((airport.getLatitude()<=-90.) || (airport.getLatitude()>=90.)
 				|| (airport.getLongitude()<=-180.) || (airport.getLongitude()>=180.)) {
 			throw new IncorrectCartesianCoordinatesException();
-		} else if(this.airportRepository.findAirportsByName(airport.getName()).size()!=0) {
-			throw new DuplicatedAirportNameException();
 		}
 		this.airportRepository.save(airport);
 	}

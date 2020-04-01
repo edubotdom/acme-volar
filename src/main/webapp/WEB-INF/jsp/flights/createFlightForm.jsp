@@ -33,15 +33,13 @@
     <form:form modelAttribute="flight" class="form-horizontal" id="add-flight-form">
         <div class="form-group has-feedback">
 
-            <!--<petclinic:inputField label="Reference" name="reference" />-->
+            <petclinic:inputField label="Reference" name="reference" />
 
             <c:choose>
                     <c:when test="${flight['new']}">
-                        <petclinic:inputField label="Reference" name="reference" />
                     </c:when>
                     <c:otherwise>
                    		<input type="hidden" name="id" value="${flight.id}" />
-                    	<input type="hidden" name="reference" value="${flight.reference}" />
                     </c:otherwise>
             </c:choose>
 

@@ -117,10 +117,8 @@ public class Airline5CreateFlight {
     assertEquals("Sevilla Este Airways", driver.findElement(By.linkText("Sevilla Este Airways")).getText());
     assertEquals("Aeropuerto Federico García Lorca Granada-Jaén", driver.findElement(By.linkText("Aeropuerto Federico García Lorca Granada-Jaén")).getText());
     assertEquals("A-19", driver.findElement(By.linkText("A-19")).getText());
-    assertEquals("2021-02-01 00:00:00.0", driver.findElement(By.xpath("//tr[7]/td")).getText());
     assertEquals("Sevilla Airport", driver.findElement(By.linkText("Sevilla Airport")).getText());
     assertEquals("A-06", driver.findElement(By.linkText("A-06")).getText());
-    assertEquals("2021-02-02 00:00:00.0", driver.findElement(By.xpath("//tr[10]/td")).getText());
     assertEquals("An-124", driver.findElement(By.linkText("An-124")).getText());
     assertEquals("5.0", driver.findElement(By.xpath("//tr[12]/td")).getText());
   }

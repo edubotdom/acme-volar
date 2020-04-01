@@ -58,8 +58,8 @@ public class Airline2ShowMyPlanes {
     assertEquals("Number of Kilometers", driver.findElement(By.xpath("//table[@id='planesTable']/thead/tr/th[6]")).getText());
     assertEquals("Max Distance", driver.findElement(By.xpath("//table[@id='planesTable']/thead/tr/th[7]")).getText());
     assertEquals("Last maintenance", driver.findElement(By.xpath("//table[@id='planesTable']/thead/tr/th[8]")).getText());
-    driver.findElement(By.xpath("//table[@id='planesTable']/tbody/tr/td")).click();
-    //driver.findElement(By.linkText("V14-5")).click();
+//    driver.findElement(By.xpath("//table[@id='planesTable']/tbody/tr/td")).click();
+    driver.findElement(By.linkText("V14-5")).click();
     assertEquals("Plane Information", driver.findElement(By.xpath("//h2")).getText());
     assertEquals("Reference", driver.findElement(By.xpath("//th")).getText());
     assertEquals("Max of Seats", driver.findElement(By.xpath("//tr[2]/th")).getText());

@@ -88,6 +88,9 @@ INSERT INTO flight_status_type VALUES (3, 'cancelled');
 INSERT INTO runway_type VALUES (1, 'take_off');
 INSERT INTO runway_type VALUES (2, 'landing');
 
+INSERT INTO book_status_type VALUES (1, 'approved');
+INSERT INTO book_status_type VALUES (2, 'cancelled');
+
 INSERT INTO airports(id, name, max_number_of_planes, max_number_of_clients, latitude, longitude, code, city ) VALUES (1, 'Sevilla Airport', 50, 600, 37.4180000, -5.8931100, 'SVQ', 'Sevilla');
 INSERT INTO airports(id, name, max_number_of_planes, max_number_of_clients, latitude, longitude, code, city ) VALUES (2, 'Adolfo Suárez Madrid-Barajas Airport', 50, 600, 37.4180000, -5.8931100, 'MDR', 'Madrid');
 INSERT INTO airports(id, name, max_number_of_planes, max_number_of_clients, latitude, longitude, code, city ) VALUES (3, 'El Prat Airport', 50, 600, 37.4180000, -5.8931100, 'BCN', 'Barcelona');
@@ -217,4 +220,6 @@ INSERT INTO flights(id, reference, seats, price, flight_status_id, plane_id, pub
 	
 INSERT INTO flights(id, reference, seats, price, flight_status_id, plane_id, published, departes_id, lands_id, airline_id, land_date, depart_date) 
 	VALUES (11, 'R-11', 256, 354.5, 2, 2, TRUE, 51, 14, 1,'2025-06-07 16:30','2025-06-07 15:05');
-
+	
+	
+INSERT INTO books(id, quantity, price, moment, book_status_type_id, client_id, flight_id) VALUES (1, 2, 300.0, '2020-05-05', 1, 1, 1);

@@ -74,7 +74,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 		.antMatchers("/planes/new").hasAuthority("airline")
 		.antMatchers("/planes/{^[\\d]$}").hasAnyAuthority("client","airline")
 		.antMatchers("/planes/{^[\\d]$}/edit").hasAuthority("airline")
-		
+		/*Books*/
+		.antMatchers("/books/{^[\\\\d]$}/new").hasAuthority("client")
 		
 		.antMatchers("/admin/**").hasAnyAuthority("admin")
 		.antMatchers("/owners/**").hasAnyAuthority("owner", "admin")

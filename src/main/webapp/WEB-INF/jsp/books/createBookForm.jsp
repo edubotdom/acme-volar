@@ -1,16 +1,34 @@
 <%@ page session="false" trimDirectiveWhitespaces="true"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
-<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="petclinic" tagdir="/WEB-INF/tags"%>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags"%>
+<petclinic:layout pageName="book">
 
-<petclinic:layout pageName="flights">
+	<jsp:attribute name="customScript">
+        <script>
+        							function submitFunction(){
+										var quantity =$("#quantity")[0].value;
+										var price = ${flight.price}
+										var totalPrice = quantity * price;
+										var submit = confirm("The price would be "+totalPrice+". Confirm?");
+										if(submit == true){
+											$("#submit").submit();
+										}
+									}; 
+								</script>
+        
+    </jsp:attribute>
 
-	<h2>Flight Information</h2>
-
-
-	<table class="table table-striped">
+	<jsp:body>
+    <h2>
+        Book this flight!
+    </h2>
+    
+    <table class="table table-striped">
 
 		<tr>
 			<th>Reference</th>
@@ -92,23 +110,27 @@
 		</tr>
 
 	</table>
-	<c:if test="${flight.published==false}">
-		<sec:authorize access="hasAuthority('airline')">
-			<spring:url value="{flightId}/edit" var="editUrl">
-				<spring:param name="flightId" value="${flight.id}" />
-			</spring:url>
-			<a href="${fn:escapeXml(editUrl)}" class="btn btn-default">Edit Flight</a>
-		</sec:authorize>
-	</c:if>
-	
-	<c:if test="${flight.published==true}">
-		<sec:authorize access="hasAuthority('client')">
-			<spring:url value="/books/{flightId}/new" var="bookUrl">
-				<spring:param name="flightId" value="${flight.id}" />
-			</spring:url>
-			<a href="${fn:escapeXml(bookUrl)}" class="btn btn-default">Book Flight</a>
-		</sec:authorize>
-	</c:if>
-	
-</petclinic:layout>
+    
+    <form:form modelAttribute="book" class="form-horizontal" id="add-book-form">
+        <div class="form-group has-feedback">
+            <petclinic:inputField label="Quantity" name="quantity"/>
+            <input type="hidden" name="price" value="0">
+              
+        </div>
+        
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+             <c:choose>
+                    <c:when test="${book['new']}">
+                        <button class="btn btn-default" onclick="submitFunction()">Book Flight</button>
+                    </c:when>
+                    <c:otherwise>
+                        <button class="btn btn-default" type="submit" id="submit">Update book</button>
+                    </c:otherwise>
+            </c:choose>
+            </div>
 
+        </div>
+    </form:form>
+   	</jsp:body>
+</petclinic:layout>

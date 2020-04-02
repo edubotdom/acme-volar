@@ -136,7 +136,8 @@
             <div class="col-sm-offset-2 col-sm-10">
              <c:choose>
                     <c:when test="${book['new']}">
-                        <button class="btn btn-default" onclick="submitFunction()">Book Flight</button>
+                        <!-- <button class="btn btn-default" onclick="submitFunction()">Book Flight</button> -->
+                        <button class="btn btn-default" type="submit" id="submit">Book Flight</button>
                     </c:when>
                     <c:otherwise>
                         <button class="btn btn-default" type="submit" id="submit">Update Book</button>

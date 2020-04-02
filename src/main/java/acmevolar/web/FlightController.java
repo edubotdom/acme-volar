@@ -239,7 +239,7 @@ public class FlightController {
 			return FlightController.VIEWS_FLIGHT_CREATE_FORM;
 		} else {
 			Flight flightToUpdate = this.flightService.findFlightById(flightId);
-			if (this.flightService.findFlightByReference(flight.getReference())!=null&&!flight.getReference().equalsIgnoreCase(flightToUpdate.getReference())) {
+			if (this.flightService.findFlightByReference(flight.getReference()) != null && !flight.getReference().equalsIgnoreCase(flightToUpdate.getReference())) {
 				result.rejectValue("reference", "referenceTaken", "Flight reference already taken.");
 			}
 
@@ -263,7 +263,7 @@ public class FlightController {
 				result.rejectValue("lands", "AirportFullOfPlanes", "This airport is full of planes this day");
 
 			}
-			
+
 			if (result.hasErrors()) {
 				model.put("flight", flight);
 				this.insertData(model, flight);

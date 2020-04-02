@@ -26,10 +26,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
  */
 @Configuration
 @EnableWebSecurity
-@EnableGlobalMethodSecurity(
-		  prePostEnabled = true, 
-		  securedEnabled = true, 
-		  jsr250Enabled = true)
+@EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true, jsr250Enabled = true)
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
 	@Autowired
@@ -40,48 +37,29 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	protected void configure(final HttpSecurity http) throws Exception {
 		http.authorizeRequests()
 
-		.antMatchers("/resources/**", "/webjars/**", "/h2-console/**").permitAll()
-		.antMatchers(HttpMethod.GET, "/", "/oups").permitAll()
-		.antMatchers("/users/new").permitAll()
-		/*Clients*/
-		.antMatchers("/clients").hasAuthority("airline")
-		.antMatchers("/clients/new").anonymous()
-		.antMatchers("/clients/{^[\\d]$}").hasAnyAuthority("airline")
-		/*Airlines*/
-		.antMatchers("/airlines").permitAll()
-		.antMatchers("/airlines/{^[\\d]$}").permitAll()
-		.antMatchers("/airlines/new/").anonymous()
-		/*Airports*/
-		.antMatchers("/airports").hasAnyAuthority("airline","client")
-		.antMatchers("/airports/{^[\\d]$}").hasAnyAuthority("airline","client")
-		.antMatchers("/airports/new").hasAuthority("airline")
-		.antMatchers("/airports/{^[\\d]$}/edit").hasAuthority("airline")
-		.antMatchers("/airports/{^[\\d]$}/delete").hasAuthority("airline")
-		/*Runways*/
-		.antMatchers("/airports/{^[\\d]$}/runways").hasAnyAuthority("airline","client")
-		.antMatchers("/airports/{^[\\d]$}/runways/new").hasAuthority("airline")
-		.antMatchers("/airports/{^[\\d]$}/runways/{^[\\d]$}/edit").hasAuthority("airline")
-		.antMatchers("/airports/{^[\\d]$}/runways/{^[\\d]$}/delete").hasAuthority("airline")
-		/*Flights*/
-		.antMatchers("/flights").permitAll()
-		.antMatchers("/my_flights").hasAuthority("airline")
-		.antMatchers("/flights/{^[\\d]$}").permitAll()
-		.antMatchers("/flights/new").hasAuthority("airline")
-		.antMatchers("/flights/{^[\\d]$}/edit").hasAuthority("airline")
-		.antMatchers("/flights/{^[\\d]$}/delete").hasAuthority("airline")
-		/*Planes*/
-		.antMatchers("/my_planes").hasAuthority("airline")
-		.antMatchers("/planes/new").hasAuthority("airline")
-		.antMatchers("/planes/{^[\\d]$}").hasAnyAuthority("client","airline")
-		.antMatchers("/planes/{^[\\d]$}/edit").hasAuthority("airline")
-		
-		
-		.antMatchers("/admin/**").hasAnyAuthority("admin")
-		.antMatchers("/owners/**").hasAnyAuthority("owner", "admin")
-		.antMatchers("/vets/**").authenticated().anyRequest().denyAll().and().formLogin()
+			.antMatchers("/resources/**", "/webjars/**", "/h2-console/**").permitAll().antMatchers(HttpMethod.GET, "/", "/oups").permitAll().antMatchers("/users/new").permitAll()
+			/* Clients */
+			.antMatchers("/clients").hasAuthority("airline").antMatchers("/clients/new").anonymous().antMatchers("/clients/{^[\\d]$}").hasAnyAuthority("airline")
+			/* Airlines */
+			.antMatchers("/airlines").permitAll().antMatchers("/airlines/{^[\\d]$}").permitAll().antMatchers("/airlines/new/").anonymous()
+			/* Airports */
+			.antMatchers("/airports").hasAnyAuthority("airline", "client").antMatchers("/airports/{^[\\d]$}").hasAnyAuthority("airline", "client").antMatchers("/airports/new").hasAuthority("airline").antMatchers("/airports/{^[\\d]$}/edit")
+			.hasAuthority("airline").antMatchers("/airports/{^[\\d]$}/delete").hasAuthority("airline")
+			/* Runways */
+			.antMatchers("/airports/{^[\\d]$}/runways").hasAnyAuthority("airline", "client").antMatchers("/airports/{^[\\d]$}/runways/new").hasAuthority("airline").antMatchers("/airports/{^[\\d]$}/runways/{^[\\d]$}/edit").hasAuthority("airline")
+			.antMatchers("/airports/{^[\\d]$}/runways/{^[\\d]$}/delete").hasAuthority("airline")
+			/* Flights */
+			.antMatchers("/flights").permitAll().antMatchers("/my_flights").hasAuthority("airline").antMatchers("/flights/{^[\\d]$}").permitAll().antMatchers("/flights/new").hasAuthority("airline").antMatchers("/flights/{^[\\d]$}/edit")
+			.hasAuthority("airline").antMatchers("/flights/{^[\\d]$}/delete").hasAuthority("airline")
+			/* Planes */
+			.antMatchers("/my_planes").hasAuthority("airline").antMatchers("/planes/new").hasAuthority("airline").antMatchers("/planes/{^[\\d]$}").hasAnyAuthority("client", "airline").antMatchers("/planes/{^[\\d]$}/edit").hasAuthority("airline")
+			/* Books */
+			.antMatchers("/books/{^[\\\\d]$}/new").hasAuthority("client").antMatchers("/books/{^[\\\\d]$}").hasAnyAuthority("client", "airline").antMatchers("/books/{^[\\\\d]$}/edit").hasAnyAuthority("airline")
+
+			.antMatchers("/admin/**").hasAnyAuthority("admin").antMatchers("/owners/**").hasAnyAuthority("owner", "admin").antMatchers("/vets/**").authenticated().anyRequest().denyAll().and().formLogin()
 			/* .loginPage("/login") */
 			.failureUrl("/login-error").and().logout().logoutSuccessUrl("/");
-		// Configuración para que funcione la consola de administración 
+		// Configuración para que funcione la consola de administración
 		// de la BD H2 (deshabilitar las cabeceras de protección contra
 		// ataques de tipo csrf y habilitar los framesets si su contenido
 		// se sirve desde esta misma página.

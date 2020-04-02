@@ -25,7 +25,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Past;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -36,10 +35,10 @@ import org.springframework.format.annotation.DateTimeFormat;
  */
 @Entity
 @Table(name = "books")
-public class Book extends NamedEntity {
+public class Book extends BaseEntity {
 
 	@Column(name = "quantity")
-	@Min(value = 0)
+	@Min(value = 1)
 	@NotNull
 	private Integer			quantity;
 
@@ -48,22 +47,22 @@ public class Book extends NamedEntity {
 	@NotNull
 	private Double			price;
 
-	@Past
+	//@Past
 	@Column(name = "moment", nullable = false)
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private LocalDate		moment;
 
-	@NotNull
+	//@NotNull
 	@ManyToOne
 	@JoinColumn(name = "book_status_type_id")
 	private BookStatusType	bookStatusType;
 
-	@NotNull
+	//@NotNull
 	@ManyToOne
 	@JoinColumn(name = "flight_id")
 	private Flight			flight;
 
-	@NotNull
+	//@NotNull
 	@ManyToOne
 	@JoinColumn(name = "client_id")
 	private Client			client;

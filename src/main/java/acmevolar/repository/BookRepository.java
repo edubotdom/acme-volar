@@ -2,6 +2,7 @@
 package acmevolar.repository;
 
 import java.util.Collection;
+import java.util.List;
 
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.repository.query.Param;
@@ -23,5 +24,17 @@ public interface BookRepository {
 	BookStatusType findBookStatusTypeById(int bookStatusTypeId);
 
 	Client findClientByUsername(@Param("client") String client) throws DataAccessException;
+
+	List<BookStatusType> findBookStatusTypes();
+
+	Collection<Book> findAirlineBook(String username) throws DataAccessException;
+
+	Collection<Book> findClientBook(String username) throws DataAccessException;
+
+	Integer sumSeatsBooked(Integer flightId) throws DataAccessException;
+
+	Collection<Book> findAirlineBookFuture(String username);
+
+	Collection<Book> findClientBookFuture(String username);
 
 }

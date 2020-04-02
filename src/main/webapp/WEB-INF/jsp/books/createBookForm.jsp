@@ -113,10 +113,24 @@
     
     <form:form modelAttribute="book" class="form-horizontal" id="add-book-form">
         <div class="form-group has-feedback">
+        <sec:authorize access="hasAuthority('client')">
             <petclinic:inputField label="Quantity" name="quantity"/>
+        </sec:authorize>
             <input type="hidden" name="price" value="0">
+<!--           <input type="hidden" name="bookStatusType" value="${book.bookStatusType}">
+            <input type="hidden" name="client" value="${book.client.id}">
+            <input type="hidden" name="flight" value="${book.flight.id}">  --> 
+            <input type="hidden" name="moment" value="${book.moment}">
               
         </div>
+        
+        <sec:authorize access="hasAuthority('airline')">
+       		<div class="control-group">
+       			<input type="hidden" name="quantity" value="${book.quantity}">
+       			Quantity: <c:out value="${book.quantity}" />
+            	<petclinic:selectField label="Type" name="bookStatusType" size="2" names="${bookStatusTypes}" />
+			</div>
+        </sec:authorize>
         
         <div class="form-group">
             <div class="col-sm-offset-2 col-sm-10">
@@ -125,7 +139,7 @@
                         <button class="btn btn-default" onclick="submitFunction()">Book Flight</button>
                     </c:when>
                     <c:otherwise>
-                        <button class="btn btn-default" type="submit" id="submit">Update book</button>
+                        <button class="btn btn-default" type="submit" id="submit">Update Book</button>
                     </c:otherwise>
             </c:choose>
             </div>

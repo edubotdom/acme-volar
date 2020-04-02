@@ -62,6 +62,20 @@
 					</petclinic:menuItem>
 				</sec:authorize>
 				
+				<sec:authorize access="hasAuthority('airline')">
+					<petclinic:menuItem active="${name eq 'airline'}" url="/books/airline" title="List books">
+						<span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
+						<span>My Books</span>
+					</petclinic:menuItem>
+				</sec:authorize>
+				
+				<sec:authorize access="hasAuthority('client')">
+					<petclinic:menuItem active="${name eq 'client'}" url="/books/client" title="List books">
+						<span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
+						<span>My Books</span>
+					</petclinic:menuItem>
+				</sec:authorize>
+				
 			</ul>
 
 			<ul class="nav navbar-nav navbar-right">

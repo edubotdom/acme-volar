@@ -1,6 +1,9 @@
 
 package acmevolar.service;
 
+import java.util.Collection;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
@@ -27,12 +30,13 @@ public class BookService {
 		this.springPlaneRepository = springPlaneRepository;
 		this.airlineRepository = airlineRepository;
 	}
+
+	@Transactional(readOnly = true)
+	public Book findBookById(final int id) throws DataAccessException {
+		return this.bookRepository.findById(id);
+	}
+
 	/*
-	 * @Transactional(readOnly = true)
-	 * public Plane findPlaneById(final int id) throws DataAccessException {
-	 * return this.planeRepository.findById(id);
-	 * }
-	 *
 	 * @Transactional(readOnly = true)
 	 * public Plane findPlaneByReference(final String reference) throws DataAccessException {
 	 * return this.planeRepository.findByReference(reference);
@@ -49,6 +53,36 @@ public class BookService {
 
 	public Client findClientByUsername(final String clientUsername) throws DataAccessException {
 		return this.bookRepository.findClientByUsername(clientUsername);
+	}
+
+	@Transactional(readOnly = true)
+	public List<BookStatusType> findBookStatusTypes() throws DataAccessException {
+		return this.bookRepository.findBookStatusTypes();
+	}
+
+	@Transactional(readOnly = true)
+	public Collection<Book> findAirlineBook(final String username) {
+		return this.bookRepository.findAirlineBook(username);
+	}
+
+	@Transactional(readOnly = true)
+	public Collection<Book> findClientBook(final String username) {
+		return this.bookRepository.findClientBook(username);
+	}
+
+	@Transactional(readOnly = true)
+	public Integer sumSeatsBooked(final Integer flightId) {
+		return this.bookRepository.sumSeatsBooked(flightId);
+	}
+
+	@Transactional(readOnly = true)
+	public Collection<Book> findAirlineBookFuture(final String username) {
+		return this.bookRepository.findAirlineBookFuture(username);
+	}
+
+	@Transactional(readOnly = true)
+	public Collection<Book> findClientBookFuture(final String username) {
+		return this.bookRepository.findClientBookFuture(username);
 	}
 
 	/*

@@ -34,6 +34,59 @@ class ValidatorTests {
 	}
 
 	@Test
+	void shouldValidateBook() throws ParseException {
+		LocaleContextHolder.setLocale(Locale.ENGLISH);
+		Book book = new Book();
+		
+		BookStatusType bst1 = new BookStatusType();
+		bst1.setId(1);
+		bst1.setName("approved");
+		BookStatusType bst2 = new BookStatusType();
+		bst2.setId(1);
+		bst2.setName("cancelled");
+		
+		Client client = new Client();
+		client.setId(1);
+		client.setIdentification("identification");//
+		client.setBirthDate(LocalDate.of(1990, 12, 12));
+		client.setPhone("987456321");//
+		client.setEmail("email@email.com");//
+		client.setCreationDate(LocalDate.of(2010, 12, 12));
+	
+		String stringDate1 = "31/12/2020";
+		Date date1 = new SimpleDateFormat("dd/MM/yyyy").parse(stringDate1);
+		String stringDate2 = "31/12/2020";
+		Date date2 = new SimpleDateFormat("dd/MM/yyyy").parse(stringDate2);
+		Flight flight1 = new Flight();
+		flight1.setId(1);
+		flight1.setAirline(new Airline());
+		flight1.setDepartDate(date1);
+		flight1.setDepartes(new Runway());
+		flight1.setFlightStatus(new FlightStatusType());
+		flight1.setLandDate(date2);
+		flight1.setLands(new Runway());
+		flight1.setPlane(new Plane());
+		flight1.setPrice(500.);
+		flight1.setPublished(true);
+		flight1.setReference("REF78");
+		flight1.setSeats(255);
+		
+		book.setBookStatusType(bst1);
+		book.setClient(client);
+		book.setFlight(flight1);
+		book.setId(1);
+		book.setMoment(LocalDate.now());
+		book.setPrice(200.);
+		book.setQuantity(2);
+		
+		Validator validator = this.createValidator();
+		Set<ConstraintViolation<Book>> constraintViolations = validator.validate(book);
+
+		Assertions.assertThat(constraintViolations.size()).isEqualTo(0);
+		
+	}
+	
+	@Test
 	void shouldNotValidateWhenFirstNameEmpty() {
 
 		LocaleContextHolder.setLocale(Locale.ENGLISH);

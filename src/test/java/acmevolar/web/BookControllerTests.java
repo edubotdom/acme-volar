@@ -408,7 +408,7 @@ public class BookControllerTests {
 	})
 	@ParameterizedTest
 	@CsvSource({
-		"offered", "''",
+		"offered", "test_status",
 	})
 	void testProcessUpdateFormHasErrors(String bookStatusType) throws Exception {
 		this.mockMvc.perform(MockMvcRequestBuilders.post("/books/{bookId}/edit", BookControllerTests.TEST_BOOK_ID).with(SecurityMockMvcRequestPostProcessors.csrf()).param("bookStatusType", bookStatusType).param("quantity","2"))

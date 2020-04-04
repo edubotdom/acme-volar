@@ -31,6 +31,8 @@
         <spring-format.version>0.0.19</spring-format.version>
 
 		<selenium.version>3.141.59</selenium.version>
+		
+		<cucumber.version>5.5.0</cucumber.version>
 
     </properties>
 
@@ -152,6 +154,7 @@
             <optional>true</optional>
         </dependency>
 
+	<!-- Selenium dependences -->
 	<dependency>
 		<groupId>org.seleniumhq.selenium</groupId>
 		<artifactId>selenium-remote-driver</artifactId>
@@ -172,6 +175,31 @@
 		<artifactId>selenium-support</artifactId>
 		<version>${selenium.version}</version>
 	</dependency>
+        
+        <!-- Cucumber dependences -->
+		<dependency>
+			<groupId>io.cucumber</groupId>
+			<artifactId>cucumber-java</artifactId>
+			<version>${cucumber.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>io.cucumber</groupId>
+			<artifactId>cucumber-junit</artifactId>
+			<version>${cucumber.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>io.cucumber</groupId>
+			<artifactId>cucumber-spring</artifactId>
+			<version>${cucumber.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>io.cucumber</groupId>
+			<artifactId>cucumber-junit-platform-engine</artifactId>
+			<version>${cucumber.version}</version>
+		</dependency>    
         
         
     </dependencies>

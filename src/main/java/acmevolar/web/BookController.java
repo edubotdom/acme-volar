@@ -20,7 +20,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.servlet.ModelAndView;
 
 import acmevolar.model.Book;
 import acmevolar.model.BookStatusType;
@@ -174,12 +173,12 @@ public class BookController {
 	}
 
 	//show Book
-	@PreAuthorize("hasAuthority('airline')")
-	@GetMapping("/books/{bookId}")
-	public ModelAndView showBook(@PathVariable("bookId") final int bookId) {
-		ModelAndView mav = new ModelAndView("books/bookDetails");
-		mav.addObject(this.bookService.findBookById(bookId));
-		return mav;
-	}
+	//	@PreAuthorize("hasAuthority('airline')")
+	//	@GetMapping("/books/{bookId}")
+	//	public ModelAndView showBook(@PathVariable("bookId") final int bookId) {
+	//		ModelAndView mav = new ModelAndView("books/bookDetails");
+	//		mav.addObject(this.bookService.findBookById(bookId));
+	//		return mav;
+	//	}
 
 }

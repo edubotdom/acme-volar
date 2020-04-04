@@ -10,23 +10,31 @@
 
 	<jsp:attribute name="customScript">
         <script>
-        							function submitFunction(){
-										var quantity =$("#quantity")[0].value;
-										var price = ${flight.price}
+									function submitFunction() {
+										var quantity = $("#quantity")[0].value;
+										var price = $
+										{
+											flight.price
+										}
 										var totalPrice = quantity * price;
-										var submit = confirm("The price would be "+totalPrice+". Confirm?");
-										if(submit == true){
+										var submit = confirm("The price would be " + totalPrice + ". Confirm?");
+										if (submit == true) {
 											$("#submit").submit();
 										}
-									}; 
+									};
 								</script>
         
     </jsp:attribute>
 
 	<jsp:body>
-    <h2>
-        Book this flight!
-    </h2>
+	<c:choose>
+    <c:when test="${book['new']}">
+		<h2>
+			Book this flight!
+		</h2>
+	</c:when>
+    </c:choose>
+    
     
     <table class="table table-striped">
 
@@ -114,7 +122,7 @@
     <form:form modelAttribute="book" class="form-horizontal" id="add-book-form">
         <div class="form-group has-feedback">
         <sec:authorize access="hasAuthority('client')">
-            <petclinic:inputField label="Quantity" name="quantity"/>
+            <petclinic:inputField label="Quantity" name="quantity" />
         </sec:authorize>
             <input type="hidden" name="price" value="0">
 <!--           <input type="hidden" name="bookStatusType" value="${book.bookStatusType}">

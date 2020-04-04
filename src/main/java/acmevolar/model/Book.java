@@ -44,7 +44,7 @@ public class Book extends BaseEntity {
 
 	@Column(name = "price")
 	@Min(value = 0)
-	@NotNull
+	//@NotNull
 	private Double			price;
 
 	//@Past

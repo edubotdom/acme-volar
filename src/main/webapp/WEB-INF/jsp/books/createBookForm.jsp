@@ -33,6 +33,11 @@
 			Book this flight!
 		</h2>
 	</c:when>
+	<c:otherwise>
+	<h2>
+			Book details
+	</h2>
+	</c:otherwise>
     </c:choose>
     
     

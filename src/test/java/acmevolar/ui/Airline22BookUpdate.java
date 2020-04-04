@@ -47,7 +47,7 @@ public class Airline22BookUpdate {
     driver.findElement(By.linkText("MY BOOKS")).click();
     assertEquals("Books", driver.findElement(By.xpath("//h2")).getText());
     driver.findElement(By.linkText("Edit Book")).click();
-    assertEquals("Book this flight!", driver.findElement(By.xpath("//h2")).getText());
+    assertEquals("Book details", driver.findElement(By.xpath("//h2")).getText());
     new Select(driver.findElement(By.id("bookStatusType"))).selectByVisibleText("cancelled");
     driver.findElement(By.xpath("//option[@value='cancelled']")).click();
     driver.findElement(By.id("submit")).click();

@@ -10,23 +10,36 @@
 
 	<jsp:attribute name="customScript">
         <script>
-        							function submitFunction(){
-										var quantity =$("#quantity")[0].value;
-										var price = ${flight.price}
+									function submitFunction() {
+										var quantity = $("#quantity")[0].value;
+										var price = $
+										{
+											flight.price
+										}
 										var totalPrice = quantity * price;
-										var submit = confirm("The price would be "+totalPrice+". Confirm?");
-										if(submit == true){
+										var submit = confirm("The price would be " + totalPrice + ". Confirm?");
+										if (submit == true) {
 											$("#submit").submit();
 										}
-									}; 
+									};
 								</script>
         
     </jsp:attribute>
 
 	<jsp:body>
-    <h2>
-        Book this flight!
-    </h2>
+	<c:choose>
+    <c:when test="${book['new']}">
+		<h2>
+			Book this flight!
+		</h2>
+	</c:when>
+	<c:otherwise>
+	<h2>
+			Book details
+	</h2>
+	</c:otherwise>
+    </c:choose>
+    
     
     <table class="table table-striped">
 
@@ -113,9 +126,11 @@
     
     <form:form modelAttribute="book" class="form-horizontal" id="add-book-form">
         <div class="form-group has-feedback">
-        <sec:authorize access="hasAuthority('client')">
-            <petclinic:inputField label="Quantity" name="quantity"/>
-        </sec:authorize>
+        <c:choose>
+        <c:when test="${book['new']}">
+            <petclinic:inputField label="Quantity" name="quantity" />
+        </c:when>
+        </c:choose>
             <input type="hidden" name="price" value="0">
 <!--           <input type="hidden" name="bookStatusType" value="${book.bookStatusType}">
             <input type="hidden" name="client" value="${book.client.id}">
@@ -123,14 +138,15 @@
             <input type="hidden" name="moment" value="${book.moment}">
               
         </div>
-        
-        <sec:authorize access="hasAuthority('airline')">
+        <c:choose>
+        <c:when test="${!book['new']}">
        		<div class="control-group">
        			<input type="hidden" name="quantity" value="${book.quantity}">
        			Quantity: <c:out value="${book.quantity}" />
             	<petclinic:selectField label="Type" name="bookStatusType" size="2" names="${bookStatusTypes}" />
 			</div>
-        </sec:authorize>
+        </c:when>
+        </c:choose>
         
         <div class="form-group">
             <div class="col-sm-offset-2 col-sm-10">

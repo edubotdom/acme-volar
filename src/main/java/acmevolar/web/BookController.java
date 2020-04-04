@@ -20,7 +20,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.servlet.ModelAndView;
 
 import acmevolar.model.Book;
 import acmevolar.model.BookStatusType;
@@ -49,16 +48,7 @@ public class BookController {
 	public String initCreationForm(@PathVariable("flightId") final int flightId, final Map<String, Object> model) {
 		Book book = new Book();
 		Flight flight = this.flightService.findFlightById(flightId);
-		/*
-		 * BookStatusType bookStatusType = this.bookService.findBookStatusTypeById(1);
-		 * book.setBookStatusType(bookStatusType);
-		 * LocalDate date = LocalDate.now();
-		 * book.setMoment(date);
-		 * String clientUsername = SecurityContextHolder.getContext().getAuthentication().getName();
-		 * Client client = this.bookService.findClientByUsername(clientUsername);
-		 * book.setClient(client);
-		 * book.setFlight(flight);
-		 */
+
 		LocalDate departDate = flight.getDepartDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
 		if (LocalDate.now().isAfter(departDate)) {
 			return "redirect:/books/client";
@@ -183,12 +173,12 @@ public class BookController {
 	}
 
 	//show Book
-	@PreAuthorize("hasAuthority('airline')")
-	@GetMapping("/books/{bookId}")
-	public ModelAndView showBook(@PathVariable("bookId") final int bookId) {
-		ModelAndView mav = new ModelAndView("books/bookDetails");
-		mav.addObject(this.bookService.findBookById(bookId));
-		return mav;
-	}
+	//	@PreAuthorize("hasAuthority('airline')")
+	//	@GetMapping("/books/{bookId}")
+	//	public ModelAndView showBook(@PathVariable("bookId") final int bookId) {
+	//		ModelAndView mav = new ModelAndView("books/bookDetails");
+	//		mav.addObject(this.bookService.findBookById(bookId));
+	//		return mav;
+	//	}
 
 }

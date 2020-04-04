@@ -378,7 +378,7 @@ public class BookControllerTests {
 	})
 	@Test
 	void testProcessUpdateFormSuccess() throws Exception {
-		this.mockMvc.perform(MockMvcRequestBuilders.post("/books/{bookId}/edit", BookControllerTests.TEST_BOOK_ID).with(SecurityMockMvcRequestPostProcessors.csrf()).param("bookStatusType", "cancelled"))
+		this.mockMvc.perform(MockMvcRequestBuilders.post("/books/{bookId}/edit", BookControllerTests.TEST_BOOK_ID).with(SecurityMockMvcRequestPostProcessors.csrf()).param("bookStatusType", "cancelled").param("quantity","2"))
 			.andExpect(MockMvcResultMatchers.view().name("redirect:/books/airline"));
 	}
 
@@ -390,7 +390,7 @@ public class BookControllerTests {
 		"approved", "cancelled"
 	})
 	void testProcessUpdateFormSuccess(String bookStatusType) throws Exception {
-		this.mockMvc.perform(MockMvcRequestBuilders.post("/books/{bookId}/edit", BookControllerTests.TEST_BOOK_ID).with(SecurityMockMvcRequestPostProcessors.csrf()).param("bookStatusType", bookStatusType))
+		this.mockMvc.perform(MockMvcRequestBuilders.post("/books/{bookId}/edit", BookControllerTests.TEST_BOOK_ID).with(SecurityMockMvcRequestPostProcessors.csrf()).param("bookStatusType", bookStatusType).param("quantity","2"))
 			.andExpect(MockMvcResultMatchers.view().name("redirect:/books/airline"));
 	}
 
@@ -399,7 +399,7 @@ public class BookControllerTests {
 	})
 	@Test
 	void testProcessUpdateFormHasErrors() throws Exception {
-		this.mockMvc.perform(MockMvcRequestBuilders.post("/books/{bookId}/edit", BookControllerTests.TEST_BOOK_ID).with(SecurityMockMvcRequestPostProcessors.csrf()).param("bookStatusType", "fallo"))
+		this.mockMvc.perform(MockMvcRequestBuilders.post("/books/{bookId}/edit", BookControllerTests.TEST_BOOK_ID).with(SecurityMockMvcRequestPostProcessors.csrf()).param("bookStatusType", "fallo").param("quantity","2"))
 			.andExpect(MockMvcResultMatchers.model().attributeHasErrors("book")).andExpect(MockMvcResultMatchers.view().name("books/createBookForm"));
 	}
 
@@ -411,7 +411,7 @@ public class BookControllerTests {
 		"offered", "''",
 	})
 	void testProcessUpdateFormHasErrors(String bookStatusType) throws Exception {
-		this.mockMvc.perform(MockMvcRequestBuilders.post("/books/{bookId}/edit", BookControllerTests.TEST_BOOK_ID).with(SecurityMockMvcRequestPostProcessors.csrf()).param("bookStatusType", bookStatusType))
+		this.mockMvc.perform(MockMvcRequestBuilders.post("/books/{bookId}/edit", BookControllerTests.TEST_BOOK_ID).with(SecurityMockMvcRequestPostProcessors.csrf()).param("bookStatusType", bookStatusType).param("quantity","2"))
 			.andExpect(MockMvcResultMatchers.model().attributeHasErrors("book")).andExpect(MockMvcResultMatchers.view().name("books/createBookForm"));
 	}
 

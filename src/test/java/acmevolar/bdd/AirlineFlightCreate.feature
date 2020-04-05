@@ -4,8 +4,8 @@ Feature: Trabajador registra un vuelo
 
   Scenario: Creación de vuelo (Positivo)
     Given estoy iniciado sesión como "airline1"
-    When creo un vuelo con referencia "R-TEST" con número de asientos "100"
-    Then soy redirigido a la vista de detalles del vuelo "R-TEST" y tiene número de asientos "100"
+    When creo un vuelo con referencia "R-TEST" con número de asientos "20"
+    Then soy redirigido a la vista de detalles del vuelo "R-TEST" y tiene número de asientos "20"
 
   Scenario: Creación de vuelo (Negativo)
     Given estoy iniciado sesión como "airline1"

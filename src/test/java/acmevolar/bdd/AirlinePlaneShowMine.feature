@@ -8,5 +8,5 @@ Feature: Trabajador consulta aviones
 
   Scenario: Consulta de avión (Negativo)
     Given estoy iniciado sesión como "airline1"
-    When accedo a la vista un avión ajeno con id "9"
+    When accedo a la vista un avión ajeno con id "90"
     Then se me redirige a la vista de excepción

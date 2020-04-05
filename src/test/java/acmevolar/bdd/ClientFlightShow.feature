@@ -9,4 +9,4 @@ Feature: Cliente consulta vuelo disponible
   Scenario: Consulta de vuelo (Negativo)
     Given estoy iniciado sesión como "client1"
     When accedo a la vista un vuelo pasado con id "12"
-    Then se me redirige a la vista de excepción
+    Then soy redirigido al listado de vuelos

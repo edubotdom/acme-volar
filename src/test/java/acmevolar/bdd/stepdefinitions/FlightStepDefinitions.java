@@ -29,7 +29,8 @@ public class FlightStepDefinitions extends AbstractStep {
 
 	@When("soy redirigido a la vista del vuelo con referencia {string}")
 	public void comprobarVistaVuelo(String reference) {
-		assertEquals("Flight Information", getDriver().findElement(By.xpath("//th")).getText());
+		assertEquals("Flight Information", getDriver().findElement(By.xpath("//h2")).getText());
+		assertEquals("Reference", getDriver().findElement(By.xpath("//tr[1]/th")).getText());
 		assertEquals(reference, getDriver().findElement(By.linkText(reference)).getText());
 	}
 
@@ -87,7 +88,12 @@ public class FlightStepDefinitions extends AbstractStep {
 
 	@Then("soy redirigido a la vista de creación del vuelo con errores {string}")
 	public void redirigidoAVistaCreacionAvion(String errores) throws Exception {
-		assertEquals(errores, getDriver().findElement(By.xpath("//form[@id='add-plane-form']/div[1]/div[2]/div/span[2]")).getText());
+		assertEquals(errores, getDriver().findElement(By.xpath("//form[@id='add-flight-form']/div[1]/div[2]/div/span[2]")).getText());
 		stopDriver();
+	}
+	
+	@Then("soy redirigido al listado de vuelos")
+	public void redireccionAlListadoVuelos() {
+		assertEquals("Flights", getDriver().findElement(By.xpath("/html/body/div/div/h2")).getText());
 	}
 }

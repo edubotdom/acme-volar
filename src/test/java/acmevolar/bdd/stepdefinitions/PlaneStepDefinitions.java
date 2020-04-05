@@ -1,7 +1,7 @@
 
 package acmevolar.bdd.stepdefinitions;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -21,10 +21,10 @@ public class PlaneStepDefinitions extends AbstractStep {
 
 	@When("creo un avion con referencia {string} con número de asientos {string} y {string} kilómetros")
 	public void creoAvion(String reference, String asientos, String kilometros) throws Exception {
-		creAvion(reference, asientos, kilometros, port, getDriver());
+		creaAvion(reference, asientos, kilometros, port, getDriver());
 	}
 
-	private static void creAvion(String reference, String asientos, String kilometros, int port, WebDriver driver) {
+	private static void creaAvion(String reference, String asientos, String kilometros, int port, WebDriver driver) {
 		driver.get("http://localhost:" + port + "/");
 		driver.findElement(By.xpath("//div[@id='main-navbar']/ul/li[6]/a/span[2]")).click();
 		driver.findElement(By.xpath("//button[@type='submit']")).click();
@@ -93,7 +93,7 @@ public class PlaneStepDefinitions extends AbstractStep {
 		driver.findElement(By.id("lastMaintenance")).sendKeys(fechaMantenimiento);
 		driver.findElement(By.xpath("//button[@type='submit']")).click();
 	}
-	
+
 	@Then("soy redirigido a la vista del avion con referencia {string}, donde la fecha de mantenimiento es {string}")
 	public void redirigidoAVistaVueloActualizado(String reference, String fechaMantenimiento) throws Exception {
 		assertEquals("Reference", getDriver().findElement(By.xpath("//th")).getText());
@@ -102,11 +102,30 @@ public class PlaneStepDefinitions extends AbstractStep {
 		//assertEquals(fechaMantenimiento, getDriver().findElement(By.xpath("//tr[8]/td")).getText());
 		stopDriver();
 	}
-	
+
 	@Then("soy redirigido a la vista de actualizar avión con errores {string}")
 	public void redirigidoAVistaActualizacionAvion(String errores) throws Exception {
 		assertEquals(errores, getDriver().findElement(By.xpath("//form[@id='add-plane-form']/div[1]/div[8]/div/span[2]")).getText());
 		stopDriver();
+	}
+
+	@When("selecciono un avión con referencia {string}")
+	public void accederAVistaAvion(String reference) {
+		getDriver().findElement(By.linkText("MY PLANES")).click();
+		getDriver().findElement(By.linkText(reference)).click();
+	}
+
+	@Then("soy redirigido a la vista del avión con referencia {string}")
+	public void consultaAvionByReference(String reference) {
+		assertEquals("Reference", getDriver().findElement(By.xpath("//tr[1]/th")).getText());
+		assertEquals(reference.toUpperCase(), getDriver().findElement(By.xpath("//tr[1]/td/b")).getText());
+	
+		stopDriver();
+	}
+
+	@When("accedo a la vista un avión ajeno con id {string}")
+	public void consultaAvionById(String id) throws Exception {
+		getDriver().get("http://localhost:" + port + "/planes/" + id);
 	}
 
 }

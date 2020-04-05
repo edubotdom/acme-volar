@@ -17,10 +17,18 @@ import lombok.extern.java.Log;
 
 @Log
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class LoginStepDefinitions extends AbstractStep {
+public class LoginAndExceptionStepDefinitions extends AbstractStep {
 
 	@LocalServerPort
 	private int port;
+	
+	@Then("se me redirige a la vista de excepción")
+	public void redirigidoAExcepción() throws Exception {		
+
+		assertEquals("Something happened...", getDriver().findElement(By.xpath("//h2")).getText());
+		
+		stopDriver();
+	}
 	
 	@Given("I am not logged in the system")
 	public void IamNotLogged() throws Exception{		

@@ -8,6 +8,6 @@ Feature: Eliminar aeropuertos
     
    Scenario: Eliminar pista como airline (Negativo)
     Given estoy iniciado sesión como "airline1"
-    When elimino una pista con referencia "A-01" del aeropuerto con nombre "Sevilla Airport"
+    When elimino una pista con vuelos asociados con referencia "A-01" del aeropuerto con nombre "Sevilla Airport"
     Then se me redirige a la vista de excepción
 

@@ -32,6 +32,20 @@ public class RunwayStepDefinitions extends AbstractStep {
 		getDriver().findElement(By.xpath("(//a[contains(text(),'Delete')])[2]")).click();
 	}
 	
+	@When("elimino una pista con vuelos asociados con referencia {string} del aeropuerto con nombre {string}")
+	public void accederAVistaRunwaysByAirportName2(String reference, String airportName) {
+		getDriver().findElement(By.linkText("AIRPORTS")).click();
+		getDriver().findElement(By.linkText(airportName)).click();
+		getDriver().findElement(By.xpath("//div/div/button[3]")).click();//List Runways
+		
+		assertEquals("Delete", getDriver().findElement(By.xpath("//table[@id='runwayTable']/thead/tr/th[4]")).getText());
+		assertEquals(reference, getDriver().findElement(By.xpath("//table[@id='runwayTable']/tbody/tr[1]/td[1]")).getText());
+		assertEquals("take_off", getDriver().findElement(By.xpath("//table[@id='runwayTable']/tbody/tr[1]/td[2]")).getText());
+		assertEquals("Delete", getDriver().findElement(By.xpath("(//a[contains(text(),'Delete')])[1]")).getText());
+		
+		getDriver().findElement(By.xpath("(//a[contains(text(),'Delete')])[1]")).click();
+	}
+	
 	
 	@Then("no se encuentra en la vista del listado de pistas la referencia {string}")
 	public void noEncontrarRunwayByReference(String reference) {

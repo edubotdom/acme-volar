@@ -108,11 +108,17 @@ public class BookController {
 	//UPDATE
 	@PreAuthorize("hasAuthority('airline')")
 	@GetMapping(value = "/books/{bookId}/edit")
-	public String initUpdateForm(@PathVariable("bookId") final int bookId, final ModelMap model) {
+	public String initUpdateForm(@PathVariable("bookId") final int bookId, final ModelMap model) throws Exception {
 		Book book = this.bookService.findBookById(bookId);
 
 		List<BookStatusType> bookStatusTypes = this.bookService.findBookStatusTypes();
 
+		String username = SecurityContextHolder.getContext().getAuthentication().getName();
+		Collection<Flight> flights = this.flightService.findAirlineFlight(username);
+		if(!flights.contains(book.getFlight())) {
+			throw new Exception("No está autorizado para modificar un vuelo que no es suyo.");
+		}
+		
 		LocalDate departDate = book.getFlight().getDepartDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
 		if (LocalDate.now().isAfter(departDate)) {
 			return "redirect:/books/airline";
@@ -126,8 +132,8 @@ public class BookController {
 
 	@PreAuthorize("hasAuthority('airline')")
 	@PostMapping(value = "/books/{bookId}/edit")
-	public String processUpdateForm(@Valid final Book book, final BindingResult result, @PathVariable("bookId") final int bookId, final ModelMap model) {
-
+	public String processUpdateForm(@Valid final Book book, final BindingResult result, @PathVariable("bookId") final int bookId, final ModelMap model) throws Exception {
+		
 		if (result.hasErrors()) {
 
 			List<BookStatusType> bookStatusTypes = this.bookService.findBookStatusTypes();

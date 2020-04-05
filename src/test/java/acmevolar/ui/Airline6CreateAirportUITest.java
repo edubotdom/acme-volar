@@ -1,18 +1,20 @@
 package acmevolar.ui;
 
-import java.util.regex.Pattern;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
+
 import java.util.concurrent.TimeUnit;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-
-import static org.junit.Assert.*;
-import static org.hamcrest.CoreMatchers.*;
-import org.openqa.selenium.*;
+import org.openqa.selenium.Alert;
+import org.openqa.selenium.By;
+import org.openqa.selenium.NoAlertPresentException;
+import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
-import org.openqa.selenium.support.ui.Select;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -75,7 +77,7 @@ public class Airline6CreateAirportUITest {
     driver.findElement(By.id("city")).clear();
     driver.findElement(By.id("city")).sendKeys("London");
     driver.findElement(By.xpath("//button[@type='submit']")).click();
-    assertEquals("Airport Information", driver.findElement(By.xpath("//h2")).getText());
+    assertEquals("Airport Information", driver.findElement(By.xpath("//h2[1]")).getText());//	/html[1]/body[1]/div[1]/div[1]/h2[1]
     assertEquals("Name", driver.findElement(By.xpath("//th")).getText());
     assertEquals("Max Number Of Planes", driver.findElement(By.xpath("//tr[2]/th")).getText());
     assertEquals("Max Number Of Clients", driver.findElement(By.xpath("//tr[3]/th")).getText());

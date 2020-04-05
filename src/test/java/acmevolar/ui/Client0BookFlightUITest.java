@@ -1,17 +1,21 @@
 package acmevolar.ui;
 
-import java.util.regex.Pattern;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
+
+import java.time.LocalDate;
 import java.util.concurrent.TimeUnit;
-import static org.junit.Assert.*;
-import static org.hamcrest.CoreMatchers.*;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.openqa.selenium.*;
+import org.openqa.selenium.Alert;
+import org.openqa.selenium.By;
+import org.openqa.selenium.NoAlertPresentException;
+import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
-import org.openqa.selenium.support.ui.Select;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -59,7 +63,7 @@ public class Client0BookFlightUITest {
     assertEquals("Flight", driver.findElement(By.xpath("//table[@id='booksTable']/thead/tr/th[5]")).getText());
     assertEquals("1", driver.findElement(By.xpath("//table[@id='booksTable']/tbody/tr[2]/td")).getText());
     assertEquals("150.0", driver.findElement(By.xpath("//table[@id='booksTable']/tbody/tr[2]/td[2]")).getText());
-    assertEquals("2020-04-02", driver.findElement(By.xpath("//table[@id='booksTable']/tbody/tr[2]/td[3]")).getText());
+    assertEquals(LocalDate.now().toString(), driver.findElement(By.xpath("//table[@id='booksTable']/tbody/tr[2]/td[3]")).getText());
     assertEquals("approved", driver.findElement(By.xpath("//table[@id='booksTable']/tbody/tr[2]/td[4]")).getText());
     assertEquals("R-01", driver.findElement(By.xpath("(//a[contains(text(),'R-01')])[2]")).getText());
   }

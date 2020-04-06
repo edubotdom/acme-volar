@@ -46,7 +46,11 @@ public class PlaneStepDefinitions extends AbstractStep {
 		driver.findElement(By.id("maxDistance")).sendKeys("98765");
 		driver.findElement(By.id("lastMaintenance")).clear();
 		driver.findElement(By.id("lastMaintenance")).sendKeys("2020-03-30");
-		driver.findElement(By.xpath("//button[@type='submit']")).click();
+		//driver.findElement(By.xpath("//button[@type='submit']")).click();
+		driver.findElement(By.xpath("//div[@class='form-group has-feedback']")).click();
+		driver.findElement(By.xpath("//form[@id='add-plane-form']/div[2]")).click();
+	    //driver.findElement(By.xpath("//button[@type='submit']")).click();
+		driver.findElement(By.xpath("//button[@class='btn btn-default']")).click();
 	}
 
 	@Then("soy redirigido a la vista de detalles del vuelo {string} y tiene número de asientos {string} y {string} kilómetros")
@@ -91,7 +95,9 @@ public class PlaneStepDefinitions extends AbstractStep {
 		driver.findElement(By.id("lastMaintenance")).click();
 		driver.findElement(By.id("lastMaintenance")).clear();
 		driver.findElement(By.id("lastMaintenance")).sendKeys(fechaMantenimiento);
-		driver.findElement(By.xpath("//button[@type='submit']")).click();
+		//driver.findElement(By.xpath("//button[@type='submit']")).click();
+		driver.findElement(By.xpath("//form[@id='add-plane-form']/div[2]")).click();
+	    driver.findElement(By.xpath("//button[@type='submit']")).click();
 	}
 
 	@Then("soy redirigido a la vista del avion con referencia {string}, donde la fecha de mantenimiento es {string}")

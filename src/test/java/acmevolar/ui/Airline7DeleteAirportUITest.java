@@ -82,7 +82,9 @@ public class Airline7DeleteAirportUITest {
     assertEquals("Airport Information", driver.findElement(By.xpath("//h2")).getText());
     assertEquals("Weather in London", driver.findElement(By.xpath("//h2[2]")).getText());
     driver.findElement(By.xpath("//body/div/div")).click();
-    driver.findElement(By.xpath("//button[@onclick=\"window.location.href='/airports/11/delete'\"]")).click();
+    driver.findElement(By.xpath("//body/div/div/button[2]")).click();
+    ///html/body/div/div/button[2]
+    ////button[@onclick=\"window.location.href='/airports/11/delete'\"]
     assertEquals("Airports", driver.findElement(By.xpath("//h2")).getText());
   }
 

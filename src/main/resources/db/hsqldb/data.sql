@@ -221,5 +221,9 @@ INSERT INTO flights(id, reference, seats, price, flight_status_id, plane_id, pub
 INSERT INTO flights(id, reference, seats, price, flight_status_id, plane_id, published, departes_id, lands_id, airline_id, land_date, depart_date) 
 	VALUES (11, 'R-11', 256, 354.5, 2, 2, TRUE, 51, 14, 1,'2025-06-07 16:30','2025-06-07 15:05');
 	
+INSERT INTO flights(id, reference, seats, price, flight_status_id, plane_id, published, departes_id, lands_id, airline_id, land_date, depart_date) 
+	VALUES (12, 'R-00', 256, 354.5, 2, 1, TRUE, 51, 14, 1,'1999-06-08 16:30','1999-06-07 15:05');
+	
 	
 INSERT INTO books(id, quantity, price, moment, book_status_type_id, client_id, flight_id) VALUES (1, 2, 300.0, '2020-05-05', 1, 1, 1);
+INSERT INTO books(id, quantity, price, moment, book_status_type_id, client_id, flight_id) VALUES (2, 5, 500.0, '2020-06-05', 1, 2, 2);

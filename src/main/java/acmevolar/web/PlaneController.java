@@ -22,7 +22,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import acmevolar.model.Airline;
+import acmevolar.model.Flight;
 import acmevolar.model.Plane;
+import acmevolar.service.AirlineService;
 import acmevolar.service.FlightService;
 import acmevolar.service.PlaneService;
 
@@ -122,9 +124,15 @@ public class PlaneController {
 	
 	@PreAuthorize("hasAuthority('airline')")
 	@GetMapping(value = "/planes/{planeId}/edit")
-	public String initUpdateForm(@PathVariable("planeId") final int planeId, final ModelMap model) {
+	public String initUpdateForm(@PathVariable("planeId") final int planeId, final ModelMap model) throws Exception {
 		Plane plane = this.planeService.findPlaneById(planeId);
 
+		String username = SecurityContextHolder.getContext().getAuthentication().getName();
+		Collection<Plane> planes = this.flightService.findPlanesbyAirline(username);
+		if(!planes.contains(plane)) {
+			throw new Exception("No está autorizado para modificar un vuelo que no es suyo.");
+		}
+		
 		model.put("plane", plane);
 
 		return PlaneController.VIEWS_PLANES_CREATE_OR_UPDATE_FORM;
@@ -132,9 +140,15 @@ public class PlaneController {
 
 	@PreAuthorize("hasAuthority('airline')")
 	@PostMapping(value = "/planes/{planeId}/edit")
-	public String processUpdateForm(@Valid final Plane plane, final BindingResult result, @PathVariable("planeId") final int planeId, final ModelMap model) {
+	public String processUpdateForm(@Valid final Plane plane, final BindingResult result, @PathVariable("planeId") final int planeId, final ModelMap model) throws Exception {
+		
+		Plane unmodifiedPlane = this.planeService.findPlaneById(planeId);
+		
 		if (result.hasErrors()) {
 			model.put("plane", plane);
+			return PlaneController.VIEWS_PLANES_CREATE_OR_UPDATE_FORM;
+		} if((!unmodifiedPlane.getReference().equalsIgnoreCase(plane.getReference()))&&planeService.findPlaneByReference(plane.getReference())!=null) {
+			result.rejectValue("reference", "duplicate", "This reference number already exists");
 			return PlaneController.VIEWS_PLANES_CREATE_OR_UPDATE_FORM;
 		} else {
 			Plane planeToUpdate = this.planeService.findPlaneById(planeId);

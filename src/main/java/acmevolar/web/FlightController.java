@@ -16,8 +16,10 @@
 
 package acmevolar.web;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -183,6 +185,15 @@ public class FlightController {
 		Flight flight = this.flightService.findFlightById(flightId);
 		String username = SecurityContextHolder.getContext().getAuthentication().getName();
 		Airline airline = this.flightService.findAirlineByUsername(username);
+
+		if (flight.getDepartDate().before(Date.from(Instant.now()))) {
+			ModelAndView mav2 = new ModelAndView("flights/flightList");
+			Collection<Flight> flights = new ArrayList<Flight>();
+			flights.addAll(this.flightService.findPublishedFutureFlight());
+			mav2.addObject("flights", flights);
+
+			return mav2;
+		}
 
 		if (airline == null && flight.getPublished()) {
 			ModelAndView mav = new ModelAndView("flights/flightDetails");

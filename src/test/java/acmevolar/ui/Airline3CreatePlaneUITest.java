@@ -1,17 +1,20 @@
 package acmevolar.ui;
 
-import java.util.regex.Pattern;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
+
 import java.util.concurrent.TimeUnit;
+
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-
-import static org.junit.Assert.*;
-import static org.hamcrest.CoreMatchers.*;
-import org.openqa.selenium.*;
+import org.openqa.selenium.Alert;
+import org.openqa.selenium.By;
+import org.openqa.selenium.NoAlertPresentException;
+import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
-import org.openqa.selenium.support.ui.Select;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -48,7 +51,7 @@ public class Airline3CreatePlaneUITest {
 	    driver.findElement(By.xpath("//div[@id='main-navbar']/ul[2]/li/a/strong")).click();
     driver.get("http://localhost:"+port+"/");
     driver.findElement(By.xpath("//div[@id='main-navbar']/ul/li[6]/a/span[2]")).click();
-    driver.findElement(By.xpath("//button[@type='submit']")).click();
+    driver.findElement(By.xpath("//button[@class='btn btn-default']")).click();
     assertEquals("Register a Plane!", driver.findElement(By.xpath("//h2")).getText());
     driver.findElement(By.id("reference")).click();
     driver.findElement(By.id("reference")).clear();
@@ -67,7 +70,10 @@ public class Airline3CreatePlaneUITest {
     driver.findElement(By.id("maxDistance")).sendKeys("98765");
     driver.findElement(By.id("lastMaintenance")).clear();
     driver.findElement(By.id("lastMaintenance")).sendKeys("2020-03-30");
-    driver.findElement(By.xpath("//button[@type='submit']")).click();
+    //driver.findElement(By.xpath("//form[@id='add-plane-form']/div[2]")).click();
+    driver.findElement(By.xpath("//body/div")).click();
+    driver.findElement(By.xpath("//form[@id='add-plane-form']/div[2]")).click();
+    driver.findElement(By.xpath("//button[@class='btn btn-default']")).click();
     assertEquals("Plane Information", driver.findElement(By.xpath("//h2")).getText());
     assertEquals("Reference", driver.findElement(By.xpath("//th")).getText());
     assertEquals("Max of Seats", driver.findElement(By.xpath("//tr[2]/th")).getText());

@@ -1,18 +1,20 @@
 package acmevolar.ui;
 
-import java.util.regex.Pattern;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
+
 import java.util.concurrent.TimeUnit;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-
-import static org.junit.Assert.*;
-import static org.hamcrest.CoreMatchers.*;
-import org.openqa.selenium.*;
+import org.openqa.selenium.Alert;
+import org.openqa.selenium.By;
+import org.openqa.selenium.NoAlertPresentException;
+import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
-import org.openqa.selenium.support.ui.Select;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -101,7 +103,7 @@ public class Airline1PlaneValidationUITest {
     driver.findElement(By.id("reference")).click();
     driver.findElement(By.id("reference")).clear();
     driver.findElement(By.id("reference")).sendKeys("");
-    driver.findElement(By.xpath("//button[@type='submit']")).click();
+    driver.findElement(By.xpath("//button[@class='btn btn-default']")).click();
     driver.findElement(By.id("reference")).click();
     assertEquals("You must fill reference", driver.findElement(By.xpath("//form[@id='add-plane-form']/div/div/div/span[2]")).getText());
     assertEquals("You must fill max seats", driver.findElement(By.xpath("//form[@id='add-plane-form']/div/div[2]/div/span[2]")).getText());
@@ -124,7 +126,7 @@ public class Airline1PlaneValidationUITest {
     driver.findElement(By.id("model")).click();
     driver.findElement(By.id("model")).clear();
     driver.findElement(By.id("model")).sendKeys("GFD");
-    driver.findElement(By.xpath("//button[@type='submit']")).click();
+    driver.findElement(By.xpath("//button[@class='btn btn-default']")).click();
     assertEquals("You must introduce a positive number.", driver.findElement(By.xpath("//form[@id='add-plane-form']/div/div[2]/div/span[2]")).getText());
     assertEquals("You must introduce a positive number.", driver.findElement(By.xpath("//form[@id='add-plane-form']/div/div[6]/div/span[2]")).getText());
     assertEquals("You must introduce a positive number.", driver.findElement(By.xpath("//form[@id='add-plane-form']/div/div[7]/div/span[2]")).getText());
@@ -141,6 +143,8 @@ public class Airline1PlaneValidationUITest {
     driver.findElement(By.id("lastMaintenance")).click();
     driver.findElement(By.id("lastMaintenance")).clear();
     driver.findElement(By.id("lastMaintenance")).sendKeys("2020-03-30");
+    //driver.findElement(By.xpath("//button[@class='btn btn-default']")).click();
+    driver.findElement(By.xpath("//form[@id='add-plane-form']/div[2]")).click();
     driver.findElement(By.xpath("//button[@type='submit']")).click();
     assertEquals("Plane Information", driver.findElement(By.xpath("//h2")).getText());
     assertEquals("REF", driver.findElement(By.xpath("//b")).getText());

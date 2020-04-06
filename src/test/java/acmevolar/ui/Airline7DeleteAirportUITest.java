@@ -1,17 +1,20 @@
 package acmevolar.ui;
 
-import java.util.regex.Pattern;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
+
 import java.util.concurrent.TimeUnit;
+
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-
-import static org.junit.Assert.*;
-import static org.hamcrest.CoreMatchers.*;
-import org.openqa.selenium.*;
+import org.openqa.selenium.Alert;
+import org.openqa.selenium.By;
+import org.openqa.selenium.NoAlertPresentException;
+import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
-import org.openqa.selenium.support.ui.Select;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -49,7 +52,7 @@ public class Airline7DeleteAirportUITest {
 	    driver.get("http://localhost:"+port+"/");
 	    driver.findElement(By.xpath("//img")).click();
 	    driver.findElement(By.linkText("AIRPORTS")).click();
-	    driver.findElement(By.xpath("//button[@onclick=\"window.location.href='/airports/new'\"]")).click();
+	    driver.findElement(By.xpath("//button[@class='btn btn-default']")).click();
 	    assertEquals("Airport", driver.findElement(By.xpath("//h2")).getText());
 	    assertEquals("Name", driver.findElement(By.xpath("//form[@id='add-airport-form']/div/div/label")).getText());
 	    assertEquals("Max Number Of Planes", driver.findElement(By.xpath("//form[@id='add-airport-form']/div/div[2]/label")).getText());
@@ -74,7 +77,7 @@ public class Airline7DeleteAirportUITest {
 	    driver.findElement(By.id("code")).sendKeys("APT");
 	    driver.findElement(By.id("city")).clear();
 	    driver.findElement(By.id("city")).sendKeys("London");
-	    driver.findElement(By.xpath("//button[@type='submit']")).click();
+	    driver.findElement(By.xpath("//button[@class='btn btn-default']")).click();
 	   //ELIMINACION
     driver.get("http://localhost:"+port+"/");
     driver.findElement(By.linkText("AIRPORTS")).click();

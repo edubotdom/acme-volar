@@ -51,7 +51,7 @@ public class Airline6CreateAirportUITest {
     driver.get("http://localhost:"+port+"/");
     driver.findElement(By.xpath("//img")).click();
     driver.findElement(By.linkText("AIRPORTS")).click();
-    driver.findElement(By.xpath("//button[@onclick=\"window.location.href='/airports/new'\"]")).click();
+    driver.findElement(By.xpath("//button[@class='btn btn-default']")).click();
     assertEquals("Airport", driver.findElement(By.xpath("//h2")).getText());
     assertEquals("Name", driver.findElement(By.xpath("//form[@id='add-airport-form']/div/div/label")).getText());
     assertEquals("Max Number Of Planes", driver.findElement(By.xpath("//form[@id='add-airport-form']/div/div[2]/label")).getText());
@@ -76,7 +76,7 @@ public class Airline6CreateAirportUITest {
     driver.findElement(By.id("code")).sendKeys("APT");
     driver.findElement(By.id("city")).clear();
     driver.findElement(By.id("city")).sendKeys("London");
-    driver.findElement(By.xpath("//button[@type='submit']")).click();
+    driver.findElement(By.xpath("//button[@class='btn btn-default']")).click();
     assertEquals("Airport Information", driver.findElement(By.xpath("//h2[1]")).getText());//	/html[1]/body[1]/div[1]/div[1]/h2[1]
     assertEquals("Name", driver.findElement(By.xpath("//th")).getText());
     assertEquals("Max Number Of Planes", driver.findElement(By.xpath("//tr[2]/th")).getText());

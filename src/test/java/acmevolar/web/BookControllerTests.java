@@ -236,6 +236,10 @@ public class BookControllerTests {
 		flight2.setReference("F-02");
 		flight2.setSeats(10);
 
+		List<Flight> flights = new ArrayList<>();
+		flights.add(flight1);
+		flights.add(flight2);
+		
 		BDDMockito.given(this.flightService.findFlightById(1)).willReturn(flight1);
 
 		BDDMockito.given(this.flightService.findFlightById(2)).willReturn(flight2);
@@ -296,6 +300,8 @@ public class BookControllerTests {
 		BDDMockito.given(this.bookService.findClientBook("client1")).willReturn(books);
 		BDDMockito.given(this.bookService.findAirlineBook("client1")).willReturn(books);
 		BDDMockito.given(this.bookService.findClientByUsername("client1")).willReturn(client);
+		
+		BDDMockito.given(this.flightService.findAirlineFlight("airline1")).willReturn(flights);
 
 	}
 

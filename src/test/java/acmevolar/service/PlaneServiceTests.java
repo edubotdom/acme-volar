@@ -299,7 +299,7 @@ class PlaneServiceTests {
 	}
 	
 	@Test
-	void shouldgetAllPlanesFromAirline() {
+	void shouldGetAllPlanesFromAirline() {
 		Airline a1 = planeService.findAirlineByUsername("airline1");
 		Collection<Plane> planes = this.planeService.getAllPlanesFromAirline(a1);
 

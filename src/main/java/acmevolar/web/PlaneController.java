@@ -22,20 +22,18 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import acmevolar.model.Airline;
-import acmevolar.model.Flight;
 import acmevolar.model.Plane;
-import acmevolar.service.AirlineService;
 import acmevolar.service.FlightService;
 import acmevolar.service.PlaneService;
 
 @Controller
 public class PlaneController {
 
+	private final PlaneService	planeService;
+	private final FlightService	flightService;
 
-	private final PlaneService planeService;
-	private final FlightService flightService;
-	
-	private static final String VIEWS_PLANES_CREATE_OR_UPDATE_FORM = "planes/createPlaneForm";
+	private static final String	VIEWS_PLANES_CREATE_OR_UPDATE_FORM	= "planes/createPlaneForm";
+
 
 	@Autowired
 	public PlaneController(final PlaneService planeService, final FlightService flightService) {
@@ -62,7 +60,7 @@ public class PlaneController {
 
 		// now, we substract the planes created by the same airline
 		Collection<Plane> planes = this.planeService.getAllPlanesFromAirline(username);
-    
+
 		model.put("planes", planes);
 		return "planes/planesList";
 	}
@@ -75,7 +73,7 @@ public class PlaneController {
 	}
 
 	@InitBinder("airline")
-	public void initAirlineBinder(WebDataBinder dataBinder) {
+	public void initAirlineBinder(final WebDataBinder dataBinder) {
 		dataBinder.setDisallowedFields("id");
 	}
 
@@ -83,7 +81,7 @@ public class PlaneController {
 	@GetMapping(value = "/planes/new")
 	public String initCreationForm(final Map<String, Object> model) {
 		Plane plane = new Plane();
-		
+
 		String username = SecurityContextHolder.getContext().getAuthentication().getName();
 		Airline airline = this.flightService.findAirlineByUsername(username);
 		plane.setAirline(airline);
@@ -101,12 +99,12 @@ public class PlaneController {
 		if (result.hasErrors()) {
 			return PlaneController.VIEWS_PLANES_CREATE_OR_UPDATE_FORM;
 		} else {
-			
-			if(planeService.findPlaneByReference(plane.getReference())!=null) {
-				result.rejectValue("reference", "RepeatedReference", "You must introduce a reference that was not introduced in other plane.");	
+
+			if (this.planeService.findPlaneByReference(plane.getReference()) != null) {
+				result.rejectValue("reference", "RepeatedReference", "You must introduce a reference that was not introduced in other plane.");
 				return PlaneController.VIEWS_PLANES_CREATE_OR_UPDATE_FORM;
 			}
-			
+
 			String username = SecurityContextHolder.getContext().getAuthentication().getName();
 
 			Airline airline = this.flightService.findAirlineByUsername(username);
@@ -121,7 +119,7 @@ public class PlaneController {
 			return "redirect:/planes/" + plane.getId();
 		}
 	}
-	
+
 	@PreAuthorize("hasAuthority('airline')")
 	@GetMapping(value = "/planes/{planeId}/edit")
 	public String initUpdateForm(@PathVariable("planeId") final int planeId, final ModelMap model) throws Exception {
@@ -129,10 +127,10 @@ public class PlaneController {
 
 		String username = SecurityContextHolder.getContext().getAuthentication().getName();
 		Collection<Plane> planes = this.flightService.findPlanesbyAirline(username);
-		if(!planes.contains(plane)) {
+		if (!planes.contains(plane)) {
 			throw new Exception("No está autorizado para modificar un vuelo que no es suyo.");
 		}
-		
+
 		model.put("plane", plane);
 
 		return PlaneController.VIEWS_PLANES_CREATE_OR_UPDATE_FORM;
@@ -141,32 +139,33 @@ public class PlaneController {
 	@PreAuthorize("hasAuthority('airline')")
 	@PostMapping(value = "/planes/{planeId}/edit")
 	public String processUpdateForm(@Valid final Plane plane, final BindingResult result, @PathVariable("planeId") final int planeId, final ModelMap model) throws Exception {
-		
+
 		Plane unmodifiedPlane = this.planeService.findPlaneById(planeId);
-		
+
 		if (result.hasErrors()) {
 			model.put("plane", plane);
 			return PlaneController.VIEWS_PLANES_CREATE_OR_UPDATE_FORM;
-		} if((!unmodifiedPlane.getReference().equalsIgnoreCase(plane.getReference()))&&planeService.findPlaneByReference(plane.getReference())!=null) {
+		}
+		if (!unmodifiedPlane.getReference().equalsIgnoreCase(plane.getReference()) && this.planeService.findPlaneByReference(plane.getReference()) != null) {
 			result.rejectValue("reference", "duplicate", "This reference number already exists");
 			return PlaneController.VIEWS_PLANES_CREATE_OR_UPDATE_FORM;
 		} else {
 			Plane planeToUpdate = this.planeService.findPlaneById(planeId);
-			BeanUtils.copyProperties(planeToUpdate, plane, "reference", "maxSeats", "description",
-					"manufacter", "model", "numberOfKm", "maxDistance", "lastMaintenance");
+			BeanUtils.copyProperties(planeToUpdate, plane, "reference", "maxSeats", "description", "manufacter", "model", "numberOfKm", "maxDistance", "lastMaintenance");
 
 			try {
-				this.planeService.savePlane(plane);;
+				this.planeService.savePlane(plane);
+				;
 			} catch (DataAccessException e) {
 				e.printStackTrace();
 			}
-			
+
 			return "redirect:/planes/{planeId}";// + plane.getId();
 		}
 	}
-	
+
 	@InitBinder("plane")
-	public void initFlightBinder(WebDataBinder dataBinder) {
+	public void initFlightBinder(final WebDataBinder dataBinder) {
 		dataBinder.setValidator(new PlaneValidator());
 	}
 

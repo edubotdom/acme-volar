@@ -39,7 +39,7 @@ public class AirportControllerTestsE2E {
 	@WithMockUser(username="airline1",authorities= {"airline"})
 	@Test
 	void testShowAirport() throws Exception {
-		this.mockMvc.perform(get("/airports/{airportId}", AirportControllerTestsE2E.TEST_AIRPORT_ID))
+		this.mockMvc.perform(get("/airports/{airportId}", 4))
 		.andExpect(status().isOk()).andExpect(model().attributeExists("airport")).andExpect(view().name("airports/airportDetails"));
 	}
 

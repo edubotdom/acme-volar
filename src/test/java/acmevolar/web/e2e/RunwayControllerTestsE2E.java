@@ -126,7 +126,7 @@ class RunwayControllerTestsE2E {
 	})
 	@Test
 	void testDeleteSuccess() throws Exception {
-		this.mockMvc.perform(MockMvcRequestBuilders.get("/airports/{airportId}/runways/{runwayId}/delete", RunwayControllerTestsE2E.TEST_AIRPORT_ID1, RunwayControllerTestsE2E.TEST_RUNWAY_ID1)).andExpect(MockMvcResultMatchers.status().is2xxSuccessful());
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/airports/{airportId}/runways/{runwayId}/delete", 10, 50)).andExpect(MockMvcResultMatchers.status().is2xxSuccessful());
 	}
 
 	@WithMockUser(value = "airline1", authorities = {
@@ -134,7 +134,7 @@ class RunwayControllerTestsE2E {
 	})
 	@Test
 	void testDeleteHasErrors() throws Exception {
-		this.mockMvc.perform(MockMvcRequestBuilders.get("/airports/{airportId}/runways/{runwayId}/delete", RunwayControllerTestsE2E.TEST_AIRPORT_ID1, 2)).andExpect(MockMvcResultMatchers.view().name("exception"));
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/airports/{airportId}/runways/{runwayId}/delete", 10, 51)).andExpect(MockMvcResultMatchers.view().name("exception"));
 	}
 
 	@Test

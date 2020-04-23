@@ -267,7 +267,7 @@ public class FlightControllerTestsE2E {
 	@Test
 	void testInitCreationFormAnonymous() throws Exception {
 		this.mockMvc.perform(MockMvcRequestBuilders.get("/flights/new"))
-		.andExpect(MockMvcResultMatchers.status().is4xxClientError());
+		.andExpect(MockMvcResultMatchers.view().name("exception"));
 	}
 
 	@WithMockUser(value = "anonymous")
@@ -285,7 +285,7 @@ public class FlightControllerTestsE2E {
 			.param("lands", "A-02, airport: Adolfo Suárez Madrid-Barajas Airport, city: Madrid")
 			.param("landDate", "2021-03-27")
 			.param("departDate", "2021-03-27"))
-			.andExpect(MockMvcResultMatchers.status().is4xxClientError());
+			.andExpect(MockMvcResultMatchers.view().name("exception"));
 	}
 
 //	@WithMockUser(value = "anonymous")

@@ -37,29 +37,34 @@ public class BookControllerTestsE2E {
 		this.mockMvc.perform(MockMvcRequestBuilders.get("/books/client")).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.model().attributeExists("books")).andExpect(MockMvcResultMatchers.view().name("books/bookList"));
 	}
 
-	@WithMockUser(value = "client1", authorities = {
-		"client"
-	})
-	@Test
-	void testAirlineBookList() throws Exception {
-		this.mockMvc.perform(MockMvcRequestBuilders.get("/books/airline")).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.model().attributeExists("books")).andExpect(MockMvcResultMatchers.view().name("books/bookList"));
-	}
-
 	@WithMockUser(value = "airline1", authorities = {
 		"airline"
 	})
+	@Test
+	void testAirlineBookList() throws Exception {
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/books/airline"))
+		.andExpect(MockMvcResultMatchers.status().isOk())
+		.andExpect(MockMvcResultMatchers.view().name("books/bookList"));
+	}
+
+	@WithMockUser(value = "client1", authorities = {
+			"client"
+		})
 	@Test
 	void testInitCreationForm() throws Exception {
 		this.mockMvc.perform(MockMvcRequestBuilders.get("/books/{flightId}/new", TEST_FLIGHT_ID)).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.view().name("books/createBookForm"));
 	}
 
-	@WithMockUser(value = "airline1", authorities = {
-		"airline"
+	@WithMockUser(value = "client1", authorities = {
+		"client"
 	})
 	@Test
 	void testProcessCreationFormSuccess() throws Exception {
 
-		this.mockMvc.perform(MockMvcRequestBuilders.post("/books/{flightId}/new", TEST_FLIGHT_ID).with(SecurityMockMvcRequestPostProcessors.csrf()).param("quantity", "10")).andExpect(MockMvcResultMatchers.status().is3xxRedirection());
+		this.mockMvc.perform(MockMvcRequestBuilders.post("/books/{flightId}/new", TEST_FLIGHT_ID).with(SecurityMockMvcRequestPostProcessors.csrf())
+				.param("quantity", "10"))
+				
+				.andExpect(MockMvcResultMatchers.status().is3xxRedirection());
 	}
 
 	@WithMockUser(value = "client1", authorities = {
@@ -146,7 +151,7 @@ public class BookControllerTestsE2E {
 	}
 
 	//////////////////////////////////////////////////////////////////////////////////////////////
-
+	@WithMockUser(value = "anonymous")
 	@Test
 	void testClientBookListAnonymous() throws Exception {
 		this.mockMvc.perform(MockMvcRequestBuilders.get("/books/client")).andExpect(MockMvcResultMatchers.status().is4xxClientError());

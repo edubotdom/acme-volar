@@ -321,16 +321,16 @@ public class BookControllerTests {
 		this.mockMvc.perform(MockMvcRequestBuilders.get("/books/airline")).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.model().attributeExists("books")).andExpect(MockMvcResultMatchers.view().name("books/bookList"));
 	}
 
-	@WithMockUser(value = "airline1", authorities = {
-		"airline"
-	})
+	@WithMockUser(value = "client1", authorities = {
+			"client"
+		})
 	@Test
 	void testInitCreationForm() throws Exception {
 		this.mockMvc.perform(MockMvcRequestBuilders.get("/books/{flightId}/new", TEST_FLIGHT_ID)).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.view().name("books/createBookForm"));
 	}
 
-	@WithMockUser(value = "airline1", authorities = {
-		"airline"
+	@WithMockUser(value = "client1", authorities = {
+		"client"
 	})
 	@Test
 	void testProcessCreationFormSuccess() throws Exception {

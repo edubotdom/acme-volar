@@ -38,7 +38,7 @@ public class AirportControllerTestsE2E {
 
 	@WithMockUser(username="airline1",authorities= {"airline"})
 	@Test
-	void testShowPlane() throws Exception {
+	void testShowAirport() throws Exception {
 		this.mockMvc.perform(get("/airports/{airportId}", AirportControllerTestsE2E.TEST_AIRPORT_ID))
 		.andExpect(status().isOk()).andExpect(model().attributeExists("airport")).andExpect(view().name("airports/airportDetails"));
 	}
@@ -55,9 +55,9 @@ public class AirportControllerTestsE2E {
 	void testProcessCreationFormSuccess() throws Exception {
 		this.mockMvc.perform(post("/airports/new").with(csrf())
 
-				.param("name", "Sevilla Airport").param("maxNumberOfPlanes", "50")
+				.param("name", "Sevilla Airport 2").param("maxNumberOfPlanes", "50")
 				.param("maxNumberOfClients", "600").param("latitude", "37.4180000").param("longitude", "-5.8931100")
-				.param("code", "SVQ").param("city", "Sevilla")).andExpect(status().is3xxRedirection());;
+				.param("code", "SVS").param("city", "Sevilla")).andExpect(status().is3xxRedirection());;
 	}
 	
 	@WithMockUser(username="airline1",authorities= {"airline"})
@@ -138,10 +138,10 @@ public class AirportControllerTestsE2E {
 	@WithMockUser(username="airline1",authorities= {"airline"})
 	@ParameterizedTest 
 	@CsvSource({
-	    "Madrid Airport, 35, 500, 55.55, 49.112, MAC, Madrid",
-	    "Tongoliki Airport, 25, 350, 72.10, 87.123, ATC, Togoliki Menor",
-	    "Chicago Airport, 40, 650, 82.92, -73.9012, CKP, Chicago",
-	    "Arellano Airport, 1, 1, -1.1111111, 1.1111111, EGD, La casa de Dani",
+	    "Madrid Airport 2, 35, 500, 55.55, 49.112, MAA, Madrid",
+	    "Tongoliki Airport 2, 25, 350, 72.10, 87.123, ATX, Togoliki Menor",
+	    "Chicago Airport 2, 40, 650, 82.92, -73.9012, CKL, Chicago",
+	    "Arellano Airport 2, 1, 1, -1.1111111, 1.1111111, EAZ, La casa de Dani",
 	}) 
 	void testProcessUpdateFormSuccess(String name, String maxNumberOfPlanes, String maxNumberOfClients, String latitude, 
 			String longitude, String code, String city) throws Exception {    

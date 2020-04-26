@@ -138,7 +138,7 @@ public class PlaneServiceMockedTests {
 	}
 	
 	@Test
-	public void createPlaneTest() {
+	public void shouldInsertPlaneIntoDatabaseAndGenerateId() {
 		planeService.savePlane(plane);
 		Mockito.verify(planeRepository, Mockito.times(1)).save(plane);
 	}
@@ -147,12 +147,6 @@ public class PlaneServiceMockedTests {
 	public void shouldfindPlaneById() {
 		Plane expected = planeService.findPlaneById(TEST_PLANE_ID);
 		assertThat(expected).isEqualTo(plane);
-	}
-	
-	@Test
-	public void shouldInsertPlaneIntoDatabaseAndGenerateId() {
-		planeService.savePlane(plane);
-		Mockito.verify(planeRepository, Mockito.times(1)).save(plane);
 	}
 	
 	@Test
@@ -181,26 +175,6 @@ public class PlaneServiceMockedTests {
 	@Test
 	void shouldGetAllPlanesFromAirlineId() {
 		Mockito.when(planeService.getAllPlanesFromAirline(airline.getUser().getUsername()).size()).thenReturn(2);
-	}
-	
-	void shouldFindPlaneInformationById() {
-		
-	}
-	
-	void shouldFindPlaneInformation() {
-		
-	}
-	
-	void shouldFindPlaneInformationByFlight() {
-		
-	}
-	
-	void shouldNotFindPlaneInformation() {
-		
-	}
-	
-	void shouldNotFindPlaneInformationByFlight() {
-		
 	}
 	
 }

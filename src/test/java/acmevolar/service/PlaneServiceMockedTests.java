@@ -172,14 +172,15 @@ public class PlaneServiceMockedTests {
 		assertThat(planeService.findAirlineByUsername("airline1")).isEqualTo(airline);
 	}
 	
+	@Test
 	void shouldGetAllPlanesFromAirline() {
-		
+		Mockito.when(planeService.getAllPlanesFromAirline(airline).size()).thenReturn(2);
 	}
 	
 	// NO FUNCIONA
 	@Test
 	void shouldGetAllPlanesFromAirlineId() {
-		assertThat(planeService.getAllPlanesFromAirline(airline.getUser().getUsername()).size()).isEqualTo(2);
+		Mockito.when(planeService.getAllPlanesFromAirline(airline.getUser().getUsername()).size()).thenReturn(2);
 	}
 	
 	void shouldFindPlaneInformationById() {

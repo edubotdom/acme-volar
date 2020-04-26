@@ -178,36 +178,7 @@ class PlaneServiceTests {
 			planeService.savePlane(plane);
 		});
 	}
-	
-/*	@Test
-	@Transactional
-	@ParameterizedTest 
-	@CsvSource({
-	    "reference1, 200, description1, manufacturer1, model1, 100, -500",
-	    "reference2, 300, description2, manufacturer2, model2, -200, 600",
-	    "reference4, -500, description4, manufacturer4, model4, -400, -800"
-	}) 
-	public void shouldNotInsertPlanes(String reference, Integer maxSeats, String description, String manufacturer, String model, Double numberOfKm, Double maxDistance) {
 
-		Airline a1 = this.airlineService.findAirlineById(1);
-		Flight f1 = this.flightService.findFlightById(1);
-		
-		Plane plane = new Plane();
-		plane.setAirline(a1);
-		plane.setReference(reference);
-		plane.setMaxSeats(maxSeats);
-		plane.setDescription(description);
-		plane.setManufacter(manufacturer);
-		plane.setNumberOfKm(numberOfKm.doubleValue());
-		plane.setMaxDistance(maxDistance.doubleValue());
-		plane.setLastMaintenance(Date.from(Instant.now().minusSeconds(90000)));
-		
-		Assertions.assertThrows(ConstraintViolationException.class, () ->{
-			f1.setPlane(plane);
-			planeService.savePlane(plane);
-		});
-	}
-*/	
 	@Test
 	@Transactional
 	public void shouldDeletePlaneById() {

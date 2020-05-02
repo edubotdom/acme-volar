@@ -1,7 +1,7 @@
+
 package acmevolar.service;
 
 import  static org.assertj.core.api.Assertions.assertThat;
-
 import java.time.LocalDate;
 import java.util.HashSet;
 
@@ -13,11 +13,11 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
-
 import acmevolar.model.Airline;
 import acmevolar.model.User;
 import acmevolar.repository.AirlineRepository;
 import acmevolar.repository.UserRepository;
+
 
 @ExtendWith(MockitoExtension.class)
 public class AirlineServiceMockedTests {
@@ -74,9 +74,11 @@ public class AirlineServiceMockedTests {
 		
 	}
 	
-	// NO FUNCIONAsddsds
+	// NO FUNCIONA
 	@Test
 	public void shouldInsertAirlineIntoDatabase() {
+		
+		
 		airlineService.saveAirline(airline);
 		Mockito.verify(airlineRepository,Mockito.times(1)).save(airline);
 	}
@@ -103,3 +105,4 @@ public class AirlineServiceMockedTests {
 	}
 	
 }
+

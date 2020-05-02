@@ -77,6 +77,7 @@ class AirlineServiceTests {
 		assertThat(airlines).asList();
 	}
 
+	@Test
 	public void shouldFindAirlineById() {
 		Airline airline = this.airlineService.findAirlineById(1);
 
@@ -89,6 +90,7 @@ class AirlineServiceTests {
 		assertThat(airline.getReference().equals("SEA-001"));
 	}
 
+	@Test
 	public void shouldNotFindAirlineById() {
 		Airline airline = this.airlineService.findAirlineById(200);
 

@@ -32,14 +32,14 @@ import acmevolar.repository.RunwayRepository;
 @Service
 public class RunwayService {
 
-	private RunwayRepository runwayRepository;
-	private AirportRepository airportRepository;
+	private RunwayRepository	runwayRepository;
+	private AirportRepository	airportRepository;
 
 
 	@Autowired
 	public RunwayService(final RunwayRepository runwayRepository, final AirportRepository airportRepository) {
 		this.runwayRepository = runwayRepository;
-		this.airportRepository=airportRepository;
+		this.airportRepository = airportRepository;
 	}
 
 	@Transactional(readOnly = true)

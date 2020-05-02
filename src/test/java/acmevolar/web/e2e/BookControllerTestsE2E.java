@@ -10,25 +10,27 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 @ExtendWith(SpringExtension.class)
-@SpringBootTest(
-  webEnvironment=SpringBootTest.WebEnvironment.MOCK)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
 @AutoConfigureMockMvc
+@TestPropertySource(locations = "classpath:application-mysql.properties")
+
 public class BookControllerTestsE2E {
 
-	private static final int	TEST_FLIGHT_ID			= 1;
+	private static final int	TEST_FLIGHT_ID	= 1;
 
-	private static final int	TEST_BOOK_ID			= 1;
+	private static final int	TEST_BOOK_ID	= 1;
 
 	@Autowired
 	private MockMvc				mockMvc;
 
-	
+
 	@WithMockUser(value = "client1", authorities = {
 		"client"
 	})
@@ -42,17 +44,15 @@ public class BookControllerTestsE2E {
 	})
 	@Test
 	void testAirlineBookList() throws Exception {
-		this.mockMvc.perform(MockMvcRequestBuilders.get("/books/airline"))
-		.andExpect(MockMvcResultMatchers.status().isOk())
-		.andExpect(MockMvcResultMatchers.view().name("books/bookList"));
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/books/airline")).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.view().name("books/bookList"));
 	}
 
 	@WithMockUser(value = "client1", authorities = {
-			"client"
-		})
+		"client"
+	})
 	@Test
 	void testInitCreationForm() throws Exception {
-		this.mockMvc.perform(MockMvcRequestBuilders.get("/books/{flightId}/new", TEST_FLIGHT_ID)).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.view().name("books/createBookForm"));
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/books/{flightId}/new", BookControllerTestsE2E.TEST_FLIGHT_ID)).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.view().name("books/createBookForm"));
 	}
 
 	@WithMockUser(value = "client1", authorities = {
@@ -61,10 +61,9 @@ public class BookControllerTestsE2E {
 	@Test
 	void testProcessCreationFormSuccess() throws Exception {
 
-		this.mockMvc.perform(MockMvcRequestBuilders.post("/books/{flightId}/new", TEST_FLIGHT_ID).with(SecurityMockMvcRequestPostProcessors.csrf())
-				.param("quantity", "10"))
-				
-				.andExpect(MockMvcResultMatchers.status().is3xxRedirection());
+		this.mockMvc.perform(MockMvcRequestBuilders.post("/books/{flightId}/new", BookControllerTestsE2E.TEST_FLIGHT_ID).with(SecurityMockMvcRequestPostProcessors.csrf()).param("quantity", "10"))
+
+			.andExpect(MockMvcResultMatchers.status().is3xxRedirection());
 	}
 
 	@WithMockUser(value = "client1", authorities = {
@@ -75,7 +74,8 @@ public class BookControllerTestsE2E {
 		"10", "1", "2", "5",
 	})
 	void testProcessCreationFormSuccess(final String quantity) throws Exception {
-		this.mockMvc.perform(MockMvcRequestBuilders.post("/books/{flightId}/new", TEST_FLIGHT_ID).with(SecurityMockMvcRequestPostProcessors.csrf()).param("quantity", quantity)).andExpect(MockMvcResultMatchers.status().is3xxRedirection());
+		this.mockMvc.perform(MockMvcRequestBuilders.post("/books/{flightId}/new", BookControllerTestsE2E.TEST_FLIGHT_ID).with(SecurityMockMvcRequestPostProcessors.csrf()).param("quantity", quantity))
+			.andExpect(MockMvcResultMatchers.status().is3xxRedirection());
 	}
 
 	@WithMockUser(value = "client1", authorities = {
@@ -83,8 +83,8 @@ public class BookControllerTestsE2E {
 	})
 	@Test
 	void testProcessCreationFormHasErrors() throws Exception {
-		this.mockMvc.perform(MockMvcRequestBuilders.post("/books/{flightId}/new", TEST_FLIGHT_ID).with(SecurityMockMvcRequestPostProcessors.csrf()).param("quantity", "0")).andExpect(MockMvcResultMatchers.model().attributeHasErrors("book"))
-			.andExpect(MockMvcResultMatchers.view().name("books/createBookForm"));
+		this.mockMvc.perform(MockMvcRequestBuilders.post("/books/{flightId}/new", BookControllerTestsE2E.TEST_FLIGHT_ID).with(SecurityMockMvcRequestPostProcessors.csrf()).param("quantity", "0"))
+			.andExpect(MockMvcResultMatchers.model().attributeHasErrors("book")).andExpect(MockMvcResultMatchers.view().name("books/createBookForm"));
 	}
 
 	@WithMockUser(value = "client1", authorities = {
@@ -95,8 +95,8 @@ public class BookControllerTestsE2E {
 		"-10", "0",
 	})
 	void testProcessCreationFormHasErrors(final String quantity) throws Exception {
-		this.mockMvc.perform(MockMvcRequestBuilders.post("/books/{flightId}/new", TEST_FLIGHT_ID).with(SecurityMockMvcRequestPostProcessors.csrf()).param("quantity", quantity)).andExpect(MockMvcResultMatchers.model().attributeHasErrors("book"))
-			.andExpect(MockMvcResultMatchers.view().name("books/createBookForm"));
+		this.mockMvc.perform(MockMvcRequestBuilders.post("/books/{flightId}/new", BookControllerTestsE2E.TEST_FLIGHT_ID).with(SecurityMockMvcRequestPostProcessors.csrf()).param("quantity", quantity))
+			.andExpect(MockMvcResultMatchers.model().attributeHasErrors("book")).andExpect(MockMvcResultMatchers.view().name("books/createBookForm"));
 	}
 
 	@WithMockUser(value = "airline1", authorities = {
@@ -113,7 +113,7 @@ public class BookControllerTestsE2E {
 	})
 	@Test
 	void testProcessUpdateFormSuccess() throws Exception {
-		this.mockMvc.perform(MockMvcRequestBuilders.post("/books/{bookId}/edit", BookControllerTestsE2E.TEST_BOOK_ID).with(SecurityMockMvcRequestPostProcessors.csrf()).param("bookStatusType", "cancelled").param("quantity","2"))
+		this.mockMvc.perform(MockMvcRequestBuilders.post("/books/{bookId}/edit", BookControllerTestsE2E.TEST_BOOK_ID).with(SecurityMockMvcRequestPostProcessors.csrf()).param("bookStatusType", "cancelled").param("quantity", "2"))
 			.andExpect(MockMvcResultMatchers.view().name("redirect:/books/airline"));
 	}
 
@@ -124,8 +124,8 @@ public class BookControllerTestsE2E {
 	@CsvSource({
 		"approved", "cancelled"
 	})
-	void testProcessUpdateFormSuccess(String bookStatusType) throws Exception {
-		this.mockMvc.perform(MockMvcRequestBuilders.post("/books/{bookId}/edit", BookControllerTestsE2E.TEST_BOOK_ID).with(SecurityMockMvcRequestPostProcessors.csrf()).param("bookStatusType", bookStatusType).param("quantity","2"))
+	void testProcessUpdateFormSuccess(final String bookStatusType) throws Exception {
+		this.mockMvc.perform(MockMvcRequestBuilders.post("/books/{bookId}/edit", BookControllerTestsE2E.TEST_BOOK_ID).with(SecurityMockMvcRequestPostProcessors.csrf()).param("bookStatusType", bookStatusType).param("quantity", "2"))
 			.andExpect(MockMvcResultMatchers.view().name("redirect:/books/airline"));
 	}
 
@@ -134,7 +134,7 @@ public class BookControllerTestsE2E {
 	})
 	@Test
 	void testProcessUpdateFormHasErrors() throws Exception {
-		this.mockMvc.perform(MockMvcRequestBuilders.post("/books/{bookId}/edit", BookControllerTestsE2E.TEST_BOOK_ID).with(SecurityMockMvcRequestPostProcessors.csrf()).param("bookStatusType", "fallo").param("quantity","2"))
+		this.mockMvc.perform(MockMvcRequestBuilders.post("/books/{bookId}/edit", BookControllerTestsE2E.TEST_BOOK_ID).with(SecurityMockMvcRequestPostProcessors.csrf()).param("bookStatusType", "fallo").param("quantity", "2"))
 			.andExpect(MockMvcResultMatchers.model().attributeHasErrors("book")).andExpect(MockMvcResultMatchers.view().name("books/createBookForm"));
 	}
 
@@ -145,8 +145,8 @@ public class BookControllerTestsE2E {
 	@CsvSource({
 		"offered", "test_status",
 	})
-	void testProcessUpdateFormHasErrors(String bookStatusType) throws Exception {
-		this.mockMvc.perform(MockMvcRequestBuilders.post("/books/{bookId}/edit", BookControllerTestsE2E.TEST_BOOK_ID).with(SecurityMockMvcRequestPostProcessors.csrf()).param("bookStatusType", bookStatusType).param("quantity","2"))
+	void testProcessUpdateFormHasErrors(final String bookStatusType) throws Exception {
+		this.mockMvc.perform(MockMvcRequestBuilders.post("/books/{bookId}/edit", BookControllerTestsE2E.TEST_BOOK_ID).with(SecurityMockMvcRequestPostProcessors.csrf()).param("bookStatusType", bookStatusType).param("quantity", "2"))
 			.andExpect(MockMvcResultMatchers.model().attributeHasErrors("book")).andExpect(MockMvcResultMatchers.view().name("books/createBookForm"));
 	}
 

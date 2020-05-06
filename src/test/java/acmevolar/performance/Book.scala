@@ -131,17 +131,38 @@ class Book extends Simulation {
 		.pause(14)
 	}
 
-	val scnBookClient = scenario("Book clients").exec(Home.home,LoginForm.loginForm,LoggedClient.loggedClient,BookListClient.bookListClient, FlightList.flightList, FlightShow.flightShow, CreateBook.createBook,BookCreated.bookCreated)
+	//val scnBookClient = scenario("Book clients").exec(Home.home,LoginForm.loginForm,LoggedClient.loggedClient,BookListClient.bookListClient, FlightList.flightList, FlightShow.flightShow, CreateBook.createBook,BookCreated.bookCreated)
 
-	val scnBookAirline = scenario("Book airlines").exec(Home.home,LoginForm.loginForm,LoggedAirline.loggedAirline,BookListAirline.bookListAirline, EditBook.editBook, EditedBook.editedBook)
+	//val scnBookAirline = scenario("Book airlines").exec(Home.home,LoginForm.loginForm,LoggedAirline.loggedAirline,BookListAirline.bookListAirline, EditBook.editBook, EditedBook.editedBook)
 
-	//setUp(scnClient.inject(atOnceUsers(1))).protocols(httpProtocol)
+
+
+	val scnBookClientShow = scenario("Clients show books").exec(Home.home,LoginForm.loginForm,LoggedClient.loggedClient,BookListClient.bookListClient)
+	val scnBookClientList = scenario("Clients list books").exec(Home.home,LoginForm.loginForm,LoggedClient.loggedClient,BookListClient.bookListClient)
+	val scnBookClientCreate = scenario("Clients create books").exec(Home.home,LoginForm.loginForm,LoggedClient.loggedClient,FlightList.flightList, FlightShow.flightShow, CreateBook.createBook,BookCreated.bookCreated)
+
+
+	val scnBookAirlineList = scenario("Airline list books").exec(Home.home,LoginForm.loginForm,LoggedAirline.loggedAirline,BookListAirline.bookListAirline)
+	val scnBookAirlineShow = scenario("Airline show books").exec(Home.home,LoginForm.loginForm,LoggedAirline.loggedAirline,BookListAirline.bookListAirline)
+	val scnBookAirlineUpdate = scenario("Airline update books").exec(Home.home,LoginForm.loginForm,LoggedAirline.loggedAirline,BookListAirline.bookListAirline, EditBook.editBook, EditedBook.editedBook)
+
+	
+	
+	
+	
+	setUp(
+		nothingFor(5 seconds),
+		scnBookClientShow.inject(rampUsers(7000) during (100 seconds)),
+		scnBookClientList.inject(rampUsers(7000) during (100 seconds)),
+		scnBookClientCreate.inject(rampUsers(5000) during (100 seconds))).protocols(httpProtocol)
+	.assertions(global.responseTime.max.lt(5000),forAll.failedRequests.percent.lte(5),global.successfulRequests.percent.gt(90)).maxDuration(10 minutes)
 
 	setUp(
-		scnBookClient.inject(rampUsers(5000) during (100 seconds)),
-		scnBookAirline.inject(rampUsers(5000) during (100 seconds))
-	).protocols(httpProtocol)
-     .assertions(
-        global.responseTime.max.lt(5000)
-     )
+		nothingFor(5 seconds),
+		scnBookAirlineList.inject(rampUsers(7000) during (100 seconds)),
+		scnBookAirlineShow.inject(rampUsers(7000) during (100 seconds)),
+		scnBookAirlineUpdate.inject(rampUsers(5000) during (100 seconds))).protocols(httpProtocol)
+	.assertions(global.responseTime.max.lt(5000),forAll.failedRequests.percent.lte(5),global.successfulRequests.percent.gt(90)).maxDuration(10 minutes)
+
+
 }

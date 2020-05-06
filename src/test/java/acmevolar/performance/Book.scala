@@ -151,18 +151,14 @@ class Book extends Simulation {
 	
 	
 	setUp(
-		nothingFor(5 seconds),
-		scnBookClientShow.inject(rampUsers(7000) during (100 seconds)),
-		scnBookClientList.inject(rampUsers(7000) during (100 seconds)),
-		scnBookClientCreate.inject(rampUsers(5000) during (100 seconds))).protocols(httpProtocol)
+		//nothingFor(5 seconds),
+		scnBookClientShow.inject(rampUsers(3000) during (100 seconds)),
+		scnBookClientList.inject(rampUsers(3000) during (100 seconds)),
+		scnBookClientCreate.inject(rampUsers(3000) during (100 seconds)),
+		scnBookAirlineList.inject(rampUsers(3000) during (100 seconds)),
+		scnBookAirlineShow.inject(rampUsers(3000) during (100 seconds)),
+		scnBookAirlineUpdate.inject(rampUsers(3000) during (100 seconds))
+		).protocols(httpProtocol)
 	.assertions(global.responseTime.max.lt(5000),forAll.failedRequests.percent.lte(5),global.successfulRequests.percent.gt(90)).maxDuration(10 minutes)
-
-	setUp(
-		nothingFor(5 seconds),
-		scnBookAirlineList.inject(rampUsers(7000) during (100 seconds)),
-		scnBookAirlineShow.inject(rampUsers(7000) during (100 seconds)),
-		scnBookAirlineUpdate.inject(rampUsers(5000) during (100 seconds))).protocols(httpProtocol)
-	.assertions(global.responseTime.max.lt(5000),forAll.failedRequests.percent.lte(5),global.successfulRequests.percent.gt(90)).maxDuration(10 minutes)
-
 
 }

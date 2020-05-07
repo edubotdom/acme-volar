@@ -1,0 +1,71 @@
+<testsuite name="acmevolar.model.Book" tests="23" errors="0" failures="13" time="0">
+<testcase name="Global: max of response time is less than 5000.0" status="false" time="0">
+  <failure type="Global">Actual value: 7750.0</failure>
+</testcase>
+<testcase name="Home: percentage of failed events is less than or equal to 5.0" status="false" time="0">
+  <failure type="Home">Actual value: 37.28333333333333</failure>
+</testcase>
+<testcase name="LoginForm: percentage of failed events is less than or equal to 5.0" status="false" time="0">
+  <failure type="LoginForm">Actual value: 21.922222222222224</failure>
+</testcase>
+<testcase name="request_2: percentage of failed events is less than or equal to 5.0" status="true" time="0">
+  <system-out>request_2: percentage of failed events is less than or equal to 5.0</system-out>
+</testcase>
+<testcase name="LoggedClient: percentage of failed events is less than or equal to 5.0" status="false" time="0">
+  <failure type="LoggedClient">Actual value: 13.722222222222221</failure>
+</testcase>
+<testcase name="LoggedAirline: percentage of failed events is less than or equal to 5.0" status="false" time="0">
+  <failure type="LoggedAirline">Actual value: 13.71111111111111</failure>
+</testcase>
+<testcase name="LoggedAirline Redirect 1: percentage of failed events is less than or equal to 5.0" status="true" time="0">
+  <system-out>LoggedAirline Redirect 1: percentage of failed events is less than or equal to 5.0</system-out>
+</testcase>
+<testcase name="LoggedClient Redirect 1: percentage of failed events is less than or equal to 5.0" status="true" time="0">
+  <system-out>LoggedClient Redirect 1: percentage of failed events is less than or equal to 5.0</system-out>
+</testcase>
+<testcase name="BookListAirline: percentage of failed events is less than or equal to 5.0" status="false" time="0">
+  <failure type="BookListAirline">Actual value: 9.844444444444445</failure>
+</testcase>
+<testcase name="BookListAirline Redirect 1: percentage of failed events is less than or equal to 5.0" status="true" time="0">
+  <system-out>BookListAirline Redirect 1: percentage of failed events is less than or equal to 5.0</system-out>
+</testcase>
+<testcase name="BookListClient: percentage of failed events is less than or equal to 5.0" status="false" time="0">
+  <failure type="BookListClient">Actual value: 10.299999999999999</failure>
+</testcase>
+<testcase name="FlightList: percentage of failed events is less than or equal to 5.0" status="false" time="0">
+  <failure type="FlightList">Actual value: 9.966666666666667</failure>
+</testcase>
+<testcase name="BookListClient Redirect 1: percentage of failed events is less than or equal to 5.0" status="true" time="0">
+  <system-out>BookListClient Redirect 1: percentage of failed events is less than or equal to 5.0</system-out>
+</testcase>
+<testcase name="FlightShow: percentage of failed events is less than or equal to 5.0" status="false" time="0">
+  <failure type="FlightShow">Actual value: 8.1</failure>
+</testcase>
+<testcase name="EditBook: percentage of failed events is less than or equal to 5.0" status="false" time="0">
+  <failure type="EditBook">Actual value: 8.5</failure>
+</testcase>
+<testcase name="EditBook Redirect 1: percentage of failed events is less than or equal to 5.0" status="true" time="0">
+  <system-out>EditBook Redirect 1: percentage of failed events is less than or equal to 5.0</system-out>
+</testcase>
+<testcase name="request_6: percentage of failed events is less than or equal to 5.0" status="false" time="0">
+  <failure type="request_6">Actual value: 7.3999999999999995</failure>
+</testcase>
+<testcase name="request_6 Redirect 1: percentage of failed events is less than or equal to 5.0" status="true" time="0">
+  <system-out>request_6 Redirect 1: percentage of failed events is less than or equal to 5.0</system-out>
+</testcase>
+<testcase name="CreateBook: percentage of failed events is less than or equal to 5.0" status="false" time="0">
+  <failure type="CreateBook">Actual value: 5.333333333333334</failure>
+</testcase>
+<testcase name="CreateBook Redirect 1: percentage of failed events is less than or equal to 5.0" status="true" time="0">
+  <system-out>CreateBook Redirect 1: percentage of failed events is less than or equal to 5.0</system-out>
+</testcase>
+<testcase name="BookCreated: percentage of failed events is less than or equal to 5.0" status="true" time="0">
+  <system-out>BookCreated: percentage of failed events is less than or equal to 5.0</system-out>
+</testcase>
+<testcase name="BookCreated Redirect 1: percentage of failed events is less than or equal to 5.0" status="true" time="0">
+  <system-out>BookCreated Redirect 1: percentage of failed events is less than or equal to 5.0</system-out>
+</testcase>
+<testcase name="Global: percentage of successful events is greater than 90.0" status="false" time="0">
+  <failure type="Global">Actual value: 88.78303734979808</failure>
+</testcase>
+</testsuite>

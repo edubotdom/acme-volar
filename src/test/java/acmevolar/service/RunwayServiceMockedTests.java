@@ -129,13 +129,13 @@ public class RunwayServiceMockedTests {
 		flights.add(flight1);
 
 	}
-
+/*
 	@Test
 	public void shouldInsertRunwayIntoDatabaseAndGenerateId() {
 		this.runwayService.saveRunway(this.runway);
 		Mockito.verify(this.runwayRepository, Mockito.times(1)).save(this.runway);
 	}
-
+*/
 	@Test
 	public void shouldInsertRunwayWithFlights() {
 

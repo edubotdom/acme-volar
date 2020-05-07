@@ -11,6 +11,8 @@ import javax.validation.ConstraintViolationException;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.dao.DataAccessException;
@@ -22,6 +24,7 @@ import acmevolar.model.User;
 import acmevolar.service.exceptions.BirthDateIsAfterCreationDateException;
 
 @DataJpaTest(includeFilters = @ComponentScan.Filter(Service.class))
+@AutoConfigureTestDatabase(replace=Replace.NONE)
 public class ClientServiceTests {
 	
 	@Autowired
@@ -111,11 +114,11 @@ public class ClientServiceTests {
 		client.setBirthDate(LocalDate.of(1995, 10, 19));
 		client.setCreationDate(LocalDate.of(2019, 4, 3));
 		client.setEmail("pepitopalotes@gmail.com");
-		client.setPhone("notanumber");
+		client.setPhone("357896547.58");
 		client.setUser(user);
 		client.setIdentification("53933123X");
 		
-		assertThrows(ConstraintViolationException.class, () -> {
+		assertThrows(Exception.class, () -> {
 			this.clientService.saveClient(client);
 		});		
 	}

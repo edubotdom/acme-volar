@@ -61,7 +61,7 @@ public class AirportServiceTests {
 		airport.setMaxNumberOfClients(25000);
 		airport.setLatitude(40.642098);
 		airport.setLongitude(-73.789288);
-		airport.setCode("JFK");
+		airport.setCode("WTF");
 		airport.setCity("New York");
 
 		try {
@@ -205,7 +205,7 @@ public class AirportServiceTests {
 		airport.setMaxNumberOfClients(0);
 		airport.setLatitude(17.5);
 		airport.setLongitude(-73.789288);
-		airport.setCode("JFK");
+		airport.setCode("ASB");
 		airport.setCity("New York");
 
 		try {

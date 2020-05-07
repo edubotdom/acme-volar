@@ -45,7 +45,7 @@ public class FlightServiceTests {
 
 	@Autowired
 	protected AirlineService	airlineService;
-/*
+
 
 	@Test
 	@Transactional
@@ -662,5 +662,5 @@ public class FlightServiceTests {
 			this.flightService.saveFlight(flight);
 		});
 	}
-*/
+
 }

@@ -114,7 +114,7 @@ public class ClientServiceTests {
 		client.setBirthDate(LocalDate.of(1995, 10, 19));
 		client.setCreationDate(LocalDate.of(2019, 4, 3));
 		client.setEmail("pepitopalotes@gmail.com");
-		client.setPhone("notanumber");
+		client.setPhone("357896547.58");
 		client.setUser(user);
 		client.setIdentification("53933123X");
 		

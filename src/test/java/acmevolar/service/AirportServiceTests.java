@@ -75,7 +75,7 @@ public class AirportServiceTests {
 		Collection<Airport> airports = this.airportService.findAirportsByName("JFK Airport");
 		int found = airports.size();
 
-		assertThat(found).isEqualTo(1);
+		assertThat(found).isGreaterThan(0);
 	}
 
 	@Test
@@ -219,7 +219,7 @@ public class AirportServiceTests {
 		Collection<Airport> airports = this.airportService.findAirportsByName("JFK Airport");
 		int found = airports.size();
 
-		assertThat(found).isEqualTo(1);
+		assertThat(found).isGreaterThan(0);
 
 	}
 

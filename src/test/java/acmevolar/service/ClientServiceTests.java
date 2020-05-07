@@ -118,7 +118,7 @@ public class ClientServiceTests {
 		client.setUser(user);
 		client.setIdentification("53933123X");
 		
-		assertThrows(ConstraintViolationException.class, () -> {
+		assertThrows(Exception.class, () -> {
 			this.clientService.saveClient(client);
 		});		
 	}

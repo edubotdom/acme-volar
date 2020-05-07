@@ -201,7 +201,7 @@ class PlaneServiceTests {
 		plane.setMaxSeats(300);
 		plane.setModel("Renton 737");
 		plane.setNumberOfKm(34200.);
-		plane.setReference("REF1");
+		plane.setReference("REF_shouldDeletePlaneById");
 		
 		
         this.planeService.savePlane(plane);
@@ -233,7 +233,7 @@ class PlaneServiceTests {
 		plane.setMaxSeats(300);
 		plane.setModel("Renton 737");
 		plane.setNumberOfKm(34200.);
-		plane.setReference("REF1");
+		plane.setReference("REF_shouldDeletePlane");
 		
 		
         this.planeService.savePlane(plane);

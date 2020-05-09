@@ -25,25 +25,21 @@ class RegistrationAndLoginAirline extends Simulation {
 		"Proxy-Connection" -> "keep-alive",
 		"Upgrade-Insecure-Requests" -> "1")
 
-	val headers_4 = Map(
-		"Accept" -> "image/webp,image/apng,image/*,*/*;q=0.8",
-		"Proxy-Connection" -> "keep-alive")
-
-	Object Home {
+	object Home {
 		val home = exec(http("Home")
 			.get("/")
 			.headers(headers_0))
 		.pause(7)
 	}
 
-	Object RegistrationForm {
+	object RegistrationForm {
 		val registrationForm = exec(http("RegistrationForm")
 			.get("/airlines/new")
 			.headers(headers_0))
 		.pause(59)
 	}
 
-	Object Registered {
+	object Registered {
 		val registered = exec(http("Registered")
 			.post("/airlines/new")
 			.headers(headers_2)
@@ -59,14 +55,14 @@ class RegistrationAndLoginAirline extends Simulation {
 		.pause(27)
 	}
 
-	Object LoginForm {
+	object LoginForm {
 		val loginForm = exec(http("LoginForm")
 			.get("/login")
-			.headers(headers_0)
+			.headers(headers_0))
 		.pause(24)
 	}
 
-	Object Logged {
+	object Logged {
 		val logged = exec(http("Logged")
 			.post("/login")
 			.headers(headers_2)
@@ -76,14 +72,14 @@ class RegistrationAndLoginAirline extends Simulation {
 		.pause(19)
 	}
 
-	Object LogOut {
+	object LogOut {
 		val logOut = exec(http("LogOut")
 			.get("/logout")
-			.headers(headers_0)
+			.headers(headers_0))
 		.pause(9)
 	}
 
-	Object LoggedOut {
+	object LoggedOut {
 		val loggedOut = exec(http("LoggedOut")
 			.post("/logout")
 			.headers(headers_2)

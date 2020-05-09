@@ -20,30 +20,26 @@ class ClienteConsultaAvion extends Simulation {
 		"Proxy-Connection" -> "keep-alive",
 		"Upgrade-Insecure-Requests" -> "1")
 
-	val headers_2 = Map(
-		"Accept" -> "image/webp,image/apng,image/*,*/*;q=0.8",
-		"Proxy-Connection" -> "keep-alive")
-
 	val headers_3 = Map(
 		"Origin" -> "http://www.dp2.com",
 		"Proxy-Connection" -> "keep-alive",
 		"Upgrade-Insecure-Requests" -> "1")
 
-	Object Home {
+	object Home{
 		val home = exec(http("Home")
 			.get("/")
 			.headers(headers_0))
 		.pause(6)
 	}
 
-	Object LoginForm {
+	object LoginForm{
 		val loginForm = exec(http("LoginForm")
 			.get("/login")
-			.headers(headers_0)
+			.headers(headers_0))
 		.pause(16)
 	}
 
-	Object Logged {
+	object Logged{
 		val logged = exec(http("Logged")
 			.post("/login")
 			.headers(headers_3)
@@ -53,7 +49,7 @@ class ClienteConsultaAvion extends Simulation {
 		.pause(14)
 	}
 
-	Object ShowPlane {
+	object ShowPlane{
 		val showPlane = exec(http("Logged")
 			.post("/login")
 			.headers(headers_3)
@@ -67,8 +63,7 @@ class ClienteConsultaAvion extends Simulation {
 	val airlineScn = scenario("ClienteConsultaAvion").exec(Home.home,
 	LoginForm.loginForm,
 	Logged.logged,
-	ShowPlane.showPlane
-	)
+	ShowPlane.showPlane)
 
 
 	setUp(airlineScn.inject(atOnceUsers(1))).protocols(httpProtocol)

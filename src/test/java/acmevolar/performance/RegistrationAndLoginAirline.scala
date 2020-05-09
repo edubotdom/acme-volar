@@ -25,82 +25,57 @@ class RegistrationAndLoginAirline extends Simulation {
 		"Proxy-Connection" -> "keep-alive",
 		"Upgrade-Insecure-Requests" -> "1")
 
-	object Home {
-		val home = exec(http("Home")
+
+
+	val scn = scenario("AirlineRegistrationAndLogin")
+		.exec(http("request_0")
 			.get("/")
 			.headers(headers_0))
-		.pause(7)
-	}
-
-	object RegistrationForm {
-		val registrationForm = exec(http("RegistrationForm")
+		.pause(17)
+		// Home
+		.exec(http("request_1")
 			.get("/airlines/new")
 			.headers(headers_0))
-		.pause(59)
-	}
-
-	object Registered {
-		val registered = exec(http("Registered")
+		.pause(40)
+		// RegistrationForm
+		.exec(http("request_2")
 			.post("/airlines/new")
 			.headers(headers_2)
 			.formParam("name", "Airlinetest")
 			.formParam("identification", "53934261-P")
-			.formParam("reference", "MA-001")
+			.formParam("reference", "KA-001")
 			.formParam("email", "airlinetest@gmail.com")
 			.formParam("country", "Spain")
-			.formParam("phone", "618293456")
+			.formParam("phone", "678901234")
 			.formParam("user.username", "airlinetest")
 			.formParam("user.password", "1nv1tad0")
-			.formParam("_csrf", "5d105c1b-1e28-4f06-903b-1753389ba83c"))
+			.formParam("_csrf", "aba7adf4-8edd-4dec-a033-856035fd2bc2"))
 		.pause(27)
-	}
-
-	object LoginForm {
-		val loginForm = exec(http("LoginForm")
+		// RegisteredRedirection
+		.exec(http("request_3")
 			.get("/login")
 			.headers(headers_0))
-		.pause(24)
-	}
-
-	object Logged {
-		val logged = exec(http("Logged")
+		.pause(13)
+		// LoginForm
+		.exec(http("request_5")
 			.post("/login")
 			.headers(headers_2)
 			.formParam("username", "airlinetest")
 			.formParam("password", "1nv1tad0")
-			.formParam("_csrf", "5d105c1b-1e28-4f06-903b-1753389ba83c"))
-		.pause(19)
-	}
-
-	object LogOut {
-		val logOut = exec(http("LogOut")
+			.formParam("_csrf", "aba7adf4-8edd-4dec-a033-856035fd2bc2"))
+		.pause(12)
+		// Logged
+		.exec(http("request_6")
 			.get("/logout")
 			.headers(headers_0))
-		.pause(9)
-	}
-
-	object LoggedOut {
-		val loggedOut = exec(http("LoggedOut")
+		.pause(8)
+		// LogOut
+		.exec(http("request_7")
 			.post("/logout")
 			.headers(headers_2)
-			.formParam("_csrf", "e6adf1b5-cc67-4574-90f3-0148c257b1b6"))
-		.pause(10)
-	}
+			.formParam("_csrf", "5b3778e3-d182-4d89-b9ad-f29c6418c833"))
+		.pause(6)
+		// LoggedOut
 
-	val airlineScn = scenario("RegistrationAndLoginAirline").exec(Home.home,
-	RegistrationForm.registrationForm,
-	Registered.registered,
-	LoginForm.loginForm,
-	Logged.logged,
-	LogOut.logOut,
-	LoggedOut.loggedOut
-	)
-		
-			//.resources(http("request_4")
-			//.get("/login")
-			//.headers(headers_4)))
-		
-		// LoginFormx2
-
-	setUp(airlineScn.inject(atOnceUsers(1))).protocols(httpProtocol)
+	setUp(scn.inject(atOnceUsers(1))).protocols(httpProtocol)
 }

@@ -20,51 +20,41 @@ class ClienteConsultaAvion extends Simulation {
 		"Proxy-Connection" -> "keep-alive",
 		"Upgrade-Insecure-Requests" -> "1")
 
+	val headers_2 = Map(
+		"Accept" -> "image/webp,image/apng,image/*,*/*;q=0.8",
+		"Proxy-Connection" -> "keep-alive")
+
 	val headers_3 = Map(
 		"Origin" -> "http://www.dp2.com",
 		"Proxy-Connection" -> "keep-alive",
 		"Upgrade-Insecure-Requests" -> "1")
 
-	object Home{
-		val home = exec(http("Home")
+
+
+	val scn = scenario("ClienteConsultaAvion")
+		.exec(http("request_0")
 			.get("/")
 			.headers(headers_0))
-		.pause(6)
-	}
-
-	object LoginForm{
-		val loginForm = exec(http("LoginForm")
+		.pause(7)
+		// Home
+		.exec(http("request_1")
 			.get("/login")
 			.headers(headers_0))
-		.pause(16)
-	}
-
-	object Logged{
-		val logged = exec(http("Logged")
+		.pause(17)
+		// LoginForm
+		.exec(http("request_3")
 			.post("/login")
 			.headers(headers_3)
 			.formParam("username", "client1")
 			.formParam("password", "client1")
-			.formParam("_csrf", "1237c2f9-c167-4817-813a-bb0d00e8a153"))
-		.pause(14)
-	}
+			.formParam("_csrf", "9ecbb5c9-444d-4bc4-9d68-1c4ba9daa4fb"))
+		.pause(9)
+		// Logged
+		.exec(http("request_4")
+			.get("/planes/1")
+			.headers(headers_0))
+		.pause(7)
+		// ShowPlane
 
-	object ShowPlane{
-		val showPlane = exec(http("Logged")
-			.post("/login")
-			.headers(headers_3)
-			.formParam("username", "client1")
-			.formParam("password", "client1")
-			.formParam("_csrf", "1237c2f9-c167-4817-813a-bb0d00e8a153"))
-		.pause(14)
-	}
-
-
-	val airlineScn = scenario("ClienteConsultaAvion").exec(Home.home,
-	LoginForm.loginForm,
-	Logged.logged,
-	ShowPlane.showPlane)
-
-
-	setUp(airlineScn.inject(atOnceUsers(1))).protocols(httpProtocol)
+	setUp(scn.inject(atOnceUsers(1))).protocols(httpProtocol)
 }

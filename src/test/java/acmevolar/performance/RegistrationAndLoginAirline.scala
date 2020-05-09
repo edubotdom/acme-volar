@@ -76,11 +76,28 @@ class RegistrationAndLoginAirline extends Simulation {
 		.pause(19)
 	}
 
+	Object LogOut {
+		val logOut = exec(http("LogOut")
+			.get("/logout")
+			.headers(headers_0)
+		.pause(9)
+	}
+
+	Object LoggedOut {
+		val loggedOut = exec(http("LoggedOut")
+			.post("/logout")
+			.headers(headers_2)
+			.formParam("_csrf", "e6adf1b5-cc67-4574-90f3-0148c257b1b6"))
+		.pause(10)
+	}
+
 	val airlineScn = scenario("RegistrationAndLoginAirline").exec(Home.home,
 	RegistrationForm.registrationForm,
 	Registered.registered,
 	LoginForm.loginForm,
-	Logged.logged
+	Logged.logged,
+	LogOut.logOut,
+	LoggedOut.loggedOut
 	)
 		
 			//.resources(http("request_4")

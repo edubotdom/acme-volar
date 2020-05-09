@@ -29,20 +29,22 @@ class ClientSimulation extends Simulation {
 		"Accept" -> "image/webp,image/apng,image/*,*/*;q=0.8",
 		"Proxy-Connection" -> "keep-alive")
 
-
-
-	val scn = scenario("ClientSimulation")
-		.exec(http("Home")
+	Object Home {
+		val home = exec(http("Home")
 			.get("/")
 			.headers(headers_0))
 		.pause(10)
-		// Home
-		.exec(http("Register")
+	}
+
+	Object Register {
+		val register = exec(http("Register")
 			.get("/clients/new")
 			.headers(headers_0))
 		.pause(92)
-		// Register
-		.exec(http("Registered")
+	}
+
+	Object Registered {
+		val registered = exec(http("Registered")
 			.post("/clients/new")
 			.headers(headers_2)
 			.formParam("name", "Pepito Camotes Areto")
@@ -54,33 +56,63 @@ class ClientSimulation extends Simulation {
 			.formParam("user.password", "client4")
 			.formParam("_csrf", "d4ef9648-17d9-4000-a280-e519c5703792"))
 		.pause(14)
-		// Registered
-		.exec(http("Login")
+	}
+
+	Object Login {
+		val login = exec(http("Login")
 			.get("/login")
 			.headers(headers_0)
 			.resources(http("request_4")
 			.get("/login")
 			.headers(headers_4)))
 		.pause(19)
-		// Login
-		.exec(http("Logged")
+	}
+
+	Object Logged {
+		var logged = exec(http("Logged")
 			.post("/login")
 			.headers(headers_2)
 			.formParam("username", "client4")
 			.formParam("password", "client4")
 			.formParam("_csrf", "d4ef9648-17d9-4000-a280-e519c5703792"))
 		.pause(16)
-		// Logged
-		.exec(http("Logout")
+	}
+
+	Object Loggout{
+		var loggout = exec(http("Logout")
 			.get("/logout")
 			.headers(headers_0))
 		.pause(14)
-		// Logout
-		.exec(http("Loggedout")
+	}
+
+	Object LoggedOut {
+		var loggedout = exec(http("Loggedout")
 			.post("/logout")
 			.headers(headers_2)
 			.formParam("_csrf", "8ce153dd-a621-496c-b404-4d539197b644"))
 		.pause(12)
+	}
+
+	val scn = scenario("RegistrationAndLoginClient").exec(Home.home,
+		Register.register,
+		Registered.registered,
+		Login.login,
+		Logged.logged,
+		Logout.loggout,
+		LoggedOut.loggedout)
+		
+		// Home
+		
+		// Register
+		
+		// Registered
+		
+		// Login
+		
+		// Logged
+		
+		// Logout
+		
 		// Loggedout
 
 	setUp(scn.inject(atOnceUsers(1))).protocols(httpProtocol)

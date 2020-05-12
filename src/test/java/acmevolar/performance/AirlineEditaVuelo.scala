@@ -28,18 +28,16 @@ class AirlineEditaVuelo extends Simulation {
 
 	object Login{
 		val login = exec(http("Login")
-			.get("/login"))
-		.pause(10)
-	}
-
-	object AirlineLogged{
-		val airlineLogged = exec(http("AirlineLogged")
-			.post("/login")
-			.headers(headers_2)
-			.formParam("username", "airline1")
-			.formParam("password", "airline1")
-			.formParam("_csrf", "a09e4a00-876e-41ef-8ee7-544bd35bcfd8"))
-		.pause(19)
+			.get("/login")
+			.check(css("input[name=_csrf]", "value").saveAs("stoken"))			
+		).pause(10)
+			.exec(http("AirlineLogged")
+				.post("/login")
+				.headers(headers_2)
+				.formParam("username", "airline1")
+				.formParam("password", "airline1")
+				.formParam("_csrf", "${stoken}"))
+			.pause(19)
 	}
 
 	object ListMyFlights{
@@ -55,13 +53,13 @@ class AirlineEditaVuelo extends Simulation {
 	}
 
 	object EditFormFlight{
-		val editFormFlight = exec(http("EditFormFlight")
-			.get("/flights/4/edit"))
-		.pause(21)
-	}
-
-	object ShowEditedFlight{
-		val showEditedFlight = exec(http("ShowEditedFlight")
+		val editFormFlight = exec(
+			http("EditFormFlight")
+			.get("/flights/4/edit")
+			.check(css("input[name=_csrf]", "value").saveAs("stoken"))
+		).pause(21)
+			.exec(
+			http("ShowEditedFlight")
 			.post("/flights/4/edit")
 			.headers(headers_2)
 			.formParam("reference", "R-04")
@@ -75,17 +73,15 @@ class AirlineEditaVuelo extends Simulation {
 			.formParam("landDate", "2021-06-07")
 			.formParam("departes", "A-23, airport: Aeropuerto Federico Garc�a Lorca Granada-Ja�n, city: Granada")
 			.formParam("departDate", "2021-06-07")
-			.formParam("_csrf", "d0812734-3b80-41d6-a1e2-612abd6804c2"))
+			.formParam("_csrf", "${stoken}"))
 		.pause(13)
 	}
 
 	val scn = scenario("AirlineEditaVuelo").exec(Home.home, 
-			Login.login, 
-			AirlineLogged.airlineLogged, 
+			Login.login,  
 			ListMyFlights.listMyFlights, 
 			ShowFlight.showFlight, 
-			EditFormFlight.editFormFlight,
-			ShowEditedFlight.showEditedFlight)
+			EditFormFlight.editFormFlight)
 
 	setUp(
 		scn.inject(rampUsers(5000) during (100 seconds))

@@ -37,18 +37,16 @@ class AirlineRegistraVuelo extends Simulation {
 	object Login{
 		val login = exec(http("Login")
 			.get("/login")
-			.headers(headers_0))
-		.pause(19)
-	}
-
-	object AirlineLogged{
-		val airlineLogged = exec(http("AirlineLogged")
-			.post("/login")
-			.headers(headers_2)
-			.formParam("username", "airline1")
-			.formParam("password", "airline1")
-			.formParam("_csrf", "737bc308-1068-48de-9613-4b504f84211d"))
-		.pause(12)
+			.headers(headers_0)
+			.check(css("input[name=_csrf]", "value").saveAs("stoken"))			
+		).pause(19)
+			.exec(http("AirlineLogged")
+				.post("/login")
+				.headers(headers_2)
+				.formParam("username", "airline1")
+				.formParam("password", "airline1")
+				.formParam("_csrf", "${stoken}"))
+			.pause(12)
 	}
 
 	object FlightList{
@@ -59,14 +57,13 @@ class AirlineRegistraVuelo extends Simulation {
 	}
 
 	object FlightCreationForm{
-		val flightCreationForm = exec(http("FlightCreationForm")
+		val flightCreationForm = exec(
+			http("FlightCreationForm")
 			.get("/flights/new")
-			.headers(headers_0))
-		.pause(44)
-	}
-
-	object FlightShow{
-		val flightShow = exec(http("FlightShow")
+			.headers(headers_0)
+			.check(css("input[name=_csrf]", "value").saveAs("stoken"))
+		).pause(44)
+			.exec(http("FlightShow")
 			.post("/flights/new")
 			.headers(headers_2)
 			.formParam("reference", "REF-023")
@@ -79,16 +76,14 @@ class AirlineRegistraVuelo extends Simulation {
 			.formParam("landDate", "2020-08-02")
 			.formParam("departes", "A-01, airport: Sevilla Airport, city: Sevilla")
 			.formParam("departDate", "2020-08-01")
-			.formParam("_csrf", "56fcf47a-16d2-4e1a-b2dd-1040bc1c9ad7"))
+			.formParam("_csrf", "${stoken}"))
 		.pause(10)
 	}
 
 	val scn = scenario("AirlineRegistraVuelo").exec(Home.home, 
 		Login.login, 
-		AirlineLogged.airlineLogged, 
 		FlightList.flightList, 
-		FlightCreationForm.flightCreationForm, 
-		FlightShow.flightShow)
+		FlightCreationForm.flightCreationForm)
 
 
 	setUp(

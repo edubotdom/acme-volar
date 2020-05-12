@@ -28,18 +28,15 @@ class ClienteListaVuelosDisponibles extends Simulation {
 
 	object Login{
 	val login = exec(http("Login")
-			.get("/login"))
-		.pause(10)
-	}
-
-	object ClientLogged{
-
-	val clientlogged = exec(http("ClientLogged")
+			.get("/login")
+			.check(css("input[name=_csrf]", "value").saveAs("stoken"))
+		).pause(10)
+			.exec(http("ClientLogged")
 			.post("/login")
 			.headers(headers_2)
 			.formParam("username", "client1")
 			.formParam("password", "client1")
-			.formParam("_csrf", "724637ee-3097-4bfa-ae6c-92cd81e5575c"))
+			.formParam("_csrf", "${stoken}"))
 		.pause(12)
 	}
 
@@ -53,7 +50,6 @@ class ClienteListaVuelosDisponibles extends Simulation {
 
 	val clientsScn = scenario("ClienteListaVuelosDisponibles").exec(Home.home,
 		Login.login,
-		ClientLogged.clientlogged,
 		ListFlights.listflights)
 
 

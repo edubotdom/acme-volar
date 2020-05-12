@@ -28,18 +28,16 @@ class AirlineConsultaVuelo extends Simulation {
 
 	object Login{
 		val login = exec(http("Login")
-			.get("/login"))
-		.pause(14)
-	}
-
-	object AirlineLogged{
-		val airlineLogged = exec(http("AirlineLogged")
-			.post("/login")
-			.headers(headers_2)
-			.formParam("username", "airline1")
-			.formParam("password", "airline1")
-			.formParam("_csrf", "d24572f1-b7a3-4adf-be00-fbca77cf9a6d"))
-		.pause(29)
+			.get("/login")
+			.check(css("input[name=_csrf]", "value").saveAs("stoken"))			
+		).pause(22)
+			.exec(http("AirlineLogged")
+				.post("/login")
+				.headers(headers_2)
+				.formParam("username", "airline1")
+				.formParam("password", "airline1")
+				.formParam("_csrf", "${stoken}"))
+			.pause(11)
 	}
 
 	object ListMyFlights{
@@ -56,7 +54,6 @@ class AirlineConsultaVuelo extends Simulation {
 
 	val scn = scenario("AirlineConsultaVuelo").exec(Home.home, 
 		Login.login,
-		AirlineLogged.airlineLogged,
 		ListMyFlights.listMyFlights,
 		ShowFlight.showFlight)
 

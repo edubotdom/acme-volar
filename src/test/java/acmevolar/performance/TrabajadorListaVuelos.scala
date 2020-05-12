@@ -27,18 +27,17 @@ class TrabajadorListaVuelos extends Simulation {
 	}
 
 	object Login{
-		val login = exec(http("Login")
-			.get("/login"))
-			.pause(15)
-	}
-
-	object AirlineLogged{
-		val airlinelogged = exec(http("AirlineLogged")
+		val login = exec(
+			http("Login")
+			.get("/login")
+			.check(css("input[name=_csrf]", "value").saveAs("stoken"))
+		).pause(15)
+			.exec(http("AirlineLogged")
 				.post("/login")
 				.headers(headers_2)
 				.formParam("username", "airline1")
 				.formParam("password", "airline1")
-				.formParam("_csrf", "398e8ee6-e5a1-433a-b424-4a17b0522450"))
+				.formParam("_csrf", "${stoken}"))
 			.pause(10)
 	}
 
@@ -50,7 +49,6 @@ object ListMyFlights{
 
 	val airlineScn = scenario("TrabajadorListaVuelos").exec(Home.home,
 		Login.login,
-		AirlineLogged.airlinelogged,
 		ListMyFlights.listMyflights)
 
 

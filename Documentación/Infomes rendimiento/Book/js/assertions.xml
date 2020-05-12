@@ -1,0 +1,56 @@
+<testsuite name="acmevolar.model.Book" tests="18" errors="0" failures="0" time="0">
+<testcase name="Global: max of response time is less than 5000.0" status="true" time="0">
+  <system-out>Global: max of response time is less than 5000.0</system-out>
+</testcase>
+<testcase name="Home: percentage of failed events is less than or equal to 5.0" status="true" time="0">
+  <system-out>Home: percentage of failed events is less than or equal to 5.0</system-out>
+</testcase>
+<testcase name="LoginFormAirline: percentage of failed events is less than or equal to 5.0" status="true" time="0">
+  <system-out>LoginFormAirline: percentage of failed events is less than or equal to 5.0</system-out>
+</testcase>
+<testcase name="LoginFormClient: percentage of failed events is less than or equal to 5.0" status="true" time="0">
+  <system-out>LoginFormClient: percentage of failed events is less than or equal to 5.0</system-out>
+</testcase>
+<testcase name="LoggedClient: percentage of failed events is less than or equal to 5.0" status="true" time="0">
+  <system-out>LoggedClient: percentage of failed events is less than or equal to 5.0</system-out>
+</testcase>
+<testcase name="LoggedAirline: percentage of failed events is less than or equal to 5.0" status="true" time="0">
+  <system-out>LoggedAirline: percentage of failed events is less than or equal to 5.0</system-out>
+</testcase>
+<testcase name="LoggedAirline Redirect 1: percentage of failed events is less than or equal to 5.0" status="true" time="0">
+  <system-out>LoggedAirline Redirect 1: percentage of failed events is less than or equal to 5.0</system-out>
+</testcase>
+<testcase name="LoggedClient Redirect 1: percentage of failed events is less than or equal to 5.0" status="true" time="0">
+  <system-out>LoggedClient Redirect 1: percentage of failed events is less than or equal to 5.0</system-out>
+</testcase>
+<testcase name="BookListClient: percentage of failed events is less than or equal to 5.0" status="true" time="0">
+  <system-out>BookListClient: percentage of failed events is less than or equal to 5.0</system-out>
+</testcase>
+<testcase name="BookListAirline: percentage of failed events is less than or equal to 5.0" status="true" time="0">
+  <system-out>BookListAirline: percentage of failed events is less than or equal to 5.0</system-out>
+</testcase>
+<testcase name="FlightList: percentage of failed events is less than or equal to 5.0" status="true" time="0">
+  <system-out>FlightList: percentage of failed events is less than or equal to 5.0</system-out>
+</testcase>
+<testcase name="FlightShow: percentage of failed events is less than or equal to 5.0" status="true" time="0">
+  <system-out>FlightShow: percentage of failed events is less than or equal to 5.0</system-out>
+</testcase>
+<testcase name="EditBook: percentage of failed events is less than or equal to 5.0" status="true" time="0">
+  <system-out>EditBook: percentage of failed events is less than or equal to 5.0</system-out>
+</testcase>
+<testcase name="EditedBook: percentage of failed events is less than or equal to 5.0" status="true" time="0">
+  <system-out>EditedBook: percentage of failed events is less than or equal to 5.0</system-out>
+</testcase>
+<testcase name="EditedBook Redirect 1: percentage of failed events is less than or equal to 5.0" status="true" time="0">
+  <system-out>EditedBook Redirect 1: percentage of failed events is less than or equal to 5.0</system-out>
+</testcase>
+<testcase name="CreateBook: percentage of failed events is less than or equal to 5.0" status="true" time="0">
+  <system-out>CreateBook: percentage of failed events is less than or equal to 5.0</system-out>
+</testcase>
+<testcase name="BookCreated: percentage of failed events is less than or equal to 5.0" status="true" time="0">
+  <system-out>BookCreated: percentage of failed events is less than or equal to 5.0</system-out>
+</testcase>
+<testcase name="Global: percentage of successful events is greater than 90.0" status="true" time="0">
+  <system-out>Global: percentage of successful events is greater than 90.0</system-out>
+</testcase>
+</testsuite>

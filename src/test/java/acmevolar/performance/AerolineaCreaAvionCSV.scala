@@ -6,7 +6,7 @@ import io.gatling.core.Predef._
 import io.gatling.http.Predef._
 import io.gatling.jdbc.Predef._
 
-class AerolineaListaAvion extends Simulation {
+class AerolineaCreaAvionCSV extends Simulation {
 
 	val httpProtocol = http
 		.baseUrl("http://www.dp2.com")
@@ -20,60 +20,75 @@ class AerolineaListaAvion extends Simulation {
 		"Proxy-Connection" -> "keep-alive",
 		"Upgrade-Insecure-Requests" -> "1")
 
-	val headers_1 = Map(
+	val headers_2 = Map(
 		"Accept" -> "image/webp,image/apng,image/*,*/*;q=0.8",
 		"Accept-Encoding" -> "gzip, deflate",
 		"Accept-Language" -> "es,en-US;q=0.9,en;q=0.8",
 		"Proxy-Connection" -> "keep-alive")
 
-	val headers_2 = Map(
+	val headers_3 = Map(
 		"Accept-Encoding" -> "gzip, deflate",
 		"Accept-Language" -> "es,en-US;q=0.9,en;q=0.8",
 		"Origin" -> "http://www.dp2.com",
 		"Proxy-Connection" -> "keep-alive",
 		"Upgrade-Insecure-Requests" -> "1")
 
-	val headers_4 = Map(
+	val headers_6 = Map(
 		"Accept" -> "*/*",
 		"Proxy-Connection" -> "Keep-Alive",
 		"User-Agent" -> "Microsoft-CryptoAPI/10.0")
 
-	Object Login {
-		var login = exec(http("Login")
+	val csvFeeder = csv("aeroplanes.csv").random
+
+	val scn = scenario("AerolineaCreaAvionCSV")
+		.exec(http("Home")
+			.get("/")
+			.headers(headers_0))
+		.pause(7)
+		// Home
+		.exec(http("Login")
 			.get("/login")
 			.headers(headers_0)
-			.resources(http("request_1")
+			.resources(http("request_2")
 			.get("/login")
-			.headers(headers_1)))
-		.pause(17)
-	}
-
-	Obejct Logged {
-		var logged = exec(http("Logged")
+			.headers(headers_2))
+			.check(css("input[name=_csrf]", "value").saveAs("stoken")))
+		.pause(25)
+		// Login
+		.exec(http("Logged")
 			.post("/login")
-			.headers(headers_2)
+			.headers(headers_3)
 			.formParam("username", "airline1")
 			.formParam("password", "airline1")
-			.formParam("_csrf", "4f7a88b4-7290-4a53-bc6e-958de9ea5619"))
-		.pause(22) 
-	}
+			.formParam("_csrf", "${stoken}"))
+		.pause(43)
 
-	Object ListPlanes {
-		var listPlanes = exec(http("ListPlanes")
-			.get("/my_planes")
-			.headers(headers_0))
-		.pause(25)
-	}
 
-	val scn = scenario("AerolineaListaAvion").exec(Login.login,
-		Logged.logged,
-		ListPlanes.listPlanes)
-		
-		// Login
-		
-		// Logged
-		
-		// ListPlanes
+		//CSV
+		.exec(repeat(1) {
+
+			exec(http("CreatePlane")
+				.get("/planes/new")
+				.headers(headers_0)
+				.check(css("input[name=_csrf]", "value").saveAs("stoken")))
+			.pause(59)
+
+			.feed(csvFeeder)
+				.exec(http("CreatedPlane")
+					.post("/planes/new")
+					.headers(headers_3)
+						.formParam("id", "$id")
+						.formParam("reference", "${reference}")
+						.formParam("maxSeats", "${maxSeats}")
+						.formParam("description", "${description}")
+						.formParam("manufacter", "${manufacter}")
+						.formParam("model", "${model}")
+						.formParam("numberOfKm", "${numberOfKm}")
+						.formParam("maxDistance", "${maxDistance}")
+						.formParam("lastMaintenance", "${lastMaintenance}")
+					.formParam("_csrf", "${stoken}"))			
+		})
+		// CreatedPlane
 
 	setUp(scn.inject(atOnceUsers(1))).protocols(httpProtocol)
 }

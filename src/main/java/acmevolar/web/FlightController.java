@@ -45,6 +45,7 @@ import acmevolar.model.Flight;
 import acmevolar.model.FlightStatusType;
 import acmevolar.model.Plane;
 import acmevolar.model.Runway;
+import acmevolar.projections.FlightListAttributes;
 import acmevolar.service.FlightService;
 import acmevolar.service.PlaneService;
 
@@ -67,8 +68,7 @@ public class FlightController {
 	})
 	public String showFlightList(final Map<String, Object> model) {
 
-		Collection<Flight> flights = new ArrayList<Flight>();
-		flights.addAll(this.flightService.findPublishedFutureFlight());
+		Collection<FlightListAttributes> flights = this.flightService.findAllClientFlightListAttributesPublishedFuture();
 		model.put("flights", flights);
 		return "flights/flightList";
 	}
@@ -175,7 +175,7 @@ public class FlightController {
 	public String showAirlineFlightList(final Map<String, Object> model) {
 
 		String username = SecurityContextHolder.getContext().getAuthentication().getName();
-		Collection<Flight> flights = this.flightService.findAirlineFlight(username);
+		Collection<FlightListAttributes> flights = this.flightService.findAllAirlineFlightListAttributes(username);
 		model.put("flights", flights);
 		return "flights/flightList";
 	}

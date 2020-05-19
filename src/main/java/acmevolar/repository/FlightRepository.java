@@ -23,6 +23,7 @@ import org.springframework.dao.DataAccessException;
 
 import acmevolar.model.Flight;
 import acmevolar.model.FlightStatusType;
+import acmevolar.projections.FlightListAttributes;
 
 public interface FlightRepository {
 
@@ -68,5 +69,9 @@ public interface FlightRepository {
 	List<Flight> findPublishedFutureFlight() throws DataAccessException;
 
 	Flight findFlightByReference(String reference) throws DataAccessException;
+
+	List<FlightListAttributes> findAllAirlineFlightListAttributes(String username) throws DataAccessException;
+
+	List<FlightListAttributes> findAllClientFlightListAttributesPublishedFuture() throws DataAccessException;
 
 }

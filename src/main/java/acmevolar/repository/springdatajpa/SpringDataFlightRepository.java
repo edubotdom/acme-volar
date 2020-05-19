@@ -25,6 +25,7 @@ import org.springframework.data.repository.query.Param;
 
 import acmevolar.model.Flight;
 import acmevolar.model.FlightStatusType;
+import acmevolar.projections.FlightListAttributes;
 import acmevolar.repository.FlightRepository;
 
 /**
@@ -54,4 +55,21 @@ public interface SpringDataFlightRepository extends FlightRepository, Repository
 	@Override
 	@Query("SELECT flight FROM Flight flight WHERE flight.reference = :reference")
 	Flight findFlightByReference(@Param("reference") String reference) throws DataAccessException;
+
+	@Override
+	@Query("SELECT f.id AS id, f.reference AS reference, f.price AS price, "
+			+ "f.landDate AS landDate, f.departDate AS departDate, f.airline.name AS airlineName, f.airline.id AS airlineId, "
+			+ "f.plane.id AS planeId, f.plane.model AS planeModel, f.departes.airport.id AS departAirportId, "
+			+ "f.departes.airport.city AS departAirportCity, f.lands.airport.id AS landAirportId, f.lands.airport.city AS landAirportCity"
+			+ " FROM Flight f WHERE f.airline.user.username =:username AND f.departDate >= current_date()")
+	List<FlightListAttributes> findAllAirlineFlightListAttributes(@Param("username") String username) throws DataAccessException;
+
+	@Override
+	@Query("SELECT f.id AS id, f.reference AS reference, f.price AS price, "
+			+ "f.landDate AS landDate, f.departDate AS departDate, f.airline.name AS airlineName, f.airline.id AS airlineId, "
+			+ "f.plane.id AS planeId, f.plane.model AS planeModel, f.departes.airport.id AS departAirportId, "
+			+ "f.departes.airport.city AS departAirportCity, f.lands.airport.id AS landAirportId, f.lands.airport.city AS landAirportCity"
+			+ " FROM Flight f WHERE f.published = '1' AND f.departDate >= current_date()")
+	List<FlightListAttributes> findAllClientFlightListAttributesPublishedFuture() throws DataAccessException;
+
 }

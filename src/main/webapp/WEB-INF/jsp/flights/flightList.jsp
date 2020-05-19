@@ -32,27 +32,27 @@
 						</spring:url> <a href="${fn:escapeXml(flightUrl)}"><c:out value="${flight.reference}" /></a></td>
 						
 					<td><spring:url value="/airlines/{airlineId}" var="airlineUrl">
-							<spring:param name="airlineId" value="${flight.airline.id}" />
-						</spring:url> <a href="${fn:escapeXml(airlineUrl)}"><c:out value="${flight.airline.name}" /></a></td>
+							<spring:param name="airlineId" value="${flight.airlineId}" />
+						</spring:url> <a href="${fn:escapeXml(airlineUrl)}"><c:out value="${flight.airlineName}" /></a></td>
 
 					<td><c:out value="${flight.departDate}" /></td>
 							
 					<td><c:out value="${flight.landDate}" /></td>
 					
 					<td><spring:url value="/planes/{planeId}" var="planeUrl">
-							<spring:param name="planeId" value="${flight.plane.id}" />
-						</spring:url> <a href="${fn:escapeXml(planeUrl)}"><c:out value="${flight.plane.model}" /></a></td>
+							<spring:param name="planeId" value="${flight.planeId}" />
+						</spring:url> <a href="${fn:escapeXml(planeUrl)}"><c:out value="${flight.planeModel}" /></a></td>
 					
 					<td><c:out value="${flight.price}" /></td>
 
 					<sec:authorize access="hasAuthority('airline')||hasAuthority('client')">					
 					<td><spring:url value="/airports/{airportId}" var="departesUrl">
-							<spring:param name="airportId" value="${flight.departes.airport.id}" />
-					</spring:url> <a href="${fn:escapeXml(departesUrl)}"><c:out value="${flight.departes.airport.city}" /></a></td>
+							<spring:param name="airportId" value="${flight.departAirportId}" />
+					</spring:url> <a href="${fn:escapeXml(departesUrl)}"><c:out value="${flight.departAirportCity}" /></a></td>
 						
 					<td><spring:url value="/airports/{airportId}" var="landsUrl">
-							<spring:param name="airportId" value="${flight.lands.airport.id}" />
-					</spring:url> <a href="${fn:escapeXml(landsUrl)}"><c:out value="${flight.lands.airport.city}" /></a></td>
+							<spring:param name="airportId" value="${flight.landAirportId}" />
+					</spring:url> <a href="${fn:escapeXml(landsUrl)}"><c:out value="${flight.landAirportCity}" /></a></td>
 					</sec:authorize>
 					
 				</tr>

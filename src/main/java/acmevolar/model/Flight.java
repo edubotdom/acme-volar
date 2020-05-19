@@ -26,6 +26,7 @@ import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Index;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
@@ -39,7 +40,7 @@ import org.springframework.beans.support.PropertyComparator;
 import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
-@Table(name = "flights"/* , uniqueConstraints = @UniqueConstraint(columnNames = { "reference" }) */)
+@Table(name = "flights", indexes = { @Index(columnList = "depart_date"), @Index(columnList="reference") })/* , uniqueConstraints = @UniqueConstraint(columnNames = { "reference" })/* , uniqueConstraints = @UniqueConstraint(columnNames = { "reference" }) */
 
 public class Flight extends BaseEntity {
 

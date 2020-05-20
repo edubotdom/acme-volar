@@ -6,7 +6,7 @@ import io.gatling.core.Predef._
 import io.gatling.http.Predef._
 import io.gatling.jdbc.Predef._
 
-class ClientSimulation extends Simulation {
+class RegistrationClientAndAirline extends Simulation {
 
 	val httpProtocol = http
 		.baseUrl("http://www.dp2.com")
@@ -25,26 +25,20 @@ class ClientSimulation extends Simulation {
 		"Proxy-Connection" -> "keep-alive",
 		"Upgrade-Insecure-Requests" -> "1")
 
-	val headers_4 = Map(
-		"Accept" -> "image/webp,image/apng,image/*,*/*;q=0.8",
-		"Proxy-Connection" -> "keep-alive")
-
-	Object Home {
+	object Home {
 		val home = exec(http("Home")
 			.get("/")
 			.headers(headers_0))
 		.pause(10)
 	}
 
-	Object Register {
-		val register = exec(http("Register")
+	object RegistrationAndRegisteredClient {
+		val regist = exec(http("Registration")
 			.get("/clients/new")
-			.headers(headers_0))
+			.headers(headers_0)
+			.check(css("input[name=_csrf]", "value").saveAs("stoken")))
 		.pause(92)
-	}
-
-	Object Registered {
-		val registered = exec(http("Registered")
+		.exec(http("Registered")
 			.post("/clients/new")
 			.headers(headers_2)
 			.formParam("name", "Pepito Camotes Areto")
@@ -54,66 +48,41 @@ class ClientSimulation extends Simulation {
 			.formParam("phone", "987654321")
 			.formParam("user.username", "client4")
 			.formParam("user.password", "client4")
-			.formParam("_csrf", "d4ef9648-17d9-4000-a280-e519c5703792"))
+			.formParam("_csrf", "${stoken}"))
 		.pause(14)
+		
 	}
 
-	Object Login {
-		val login = exec(http("Login")
-			.get("/login")
+	object RegistrationAndRegisteredAirline {
+		var regist = exec(http("request_1")
+			.get("/airlines/new")
 			.headers(headers_0)
-			.resources(http("request_4")
-			.get("/login")
-			.headers(headers_4)))
-		.pause(19)
-	}
-
-	Object Logged {
-		var logged = exec(http("Logged")
-			.post("/login")
+			.check(css("input[name=_csrf]", "value").saveAs("stoken")))
+		.pause(40)
+		// RegistrationForm
+		.exec(http("request_2")
+			.post("/airlines/new")
 			.headers(headers_2)
-			.formParam("username", "client4")
-			.formParam("password", "client4")
-			.formParam("_csrf", "d4ef9648-17d9-4000-a280-e519c5703792"))
-		.pause(16)
+			.formParam("name", "Airlinetest")
+			.formParam("identification", "53934261-P")
+			.formParam("reference", "KA-001")
+			.formParam("email", "airlinetest@gmail.com")
+			.formParam("country", "Spain")
+			.formParam("phone", "678901234")
+			.formParam("user.username", "airlinetest")
+			.formParam("user.password", "1nv1tad0")
+			.formParam("_csrf", "${stoken}"))
+		.pause(27)
+		// RegisteredRedirection
 	}
 
-	Object Loggout{
-		var loggout = exec(http("Logout")
-			.get("/logout")
-			.headers(headers_0))
-		.pause(14)
-	}
+	val airlineScn = scenario("RegistrationAirline").exec(Home.home,
+		RegistrationAndRegisteredAirline.regist)
+		
 
-	Object LoggedOut {
-		var loggedout = exec(http("Loggedout")
-			.post("/logout")
-			.headers(headers_2)
-			.formParam("_csrf", "8ce153dd-a621-496c-b404-4d539197b644"))
-		.pause(12)
-	}
+	val clientScn = scenario("RegistrationClient").exec(Home.home,
+		RegistrationAndRegisteredClient.regist)
+		
 
-	val scn = scenario("RegistrationAndLoginClient").exec(Home.home,
-		Register.register,
-		Registered.registered,
-		Login.login,
-		Logged.logged,
-		Logout.loggout,
-		LoggedOut.loggedout)
-		
-		// Home
-		
-		// Register
-		
-		// Registered
-		
-		// Login
-		
-		// Logged
-		
-		// Logout
-		
-		// Loggedout
-
-	setUp(scn.inject(atOnceUsers(1))).protocols(httpProtocol)
+	setUp(airlineScn.inject(atOnceUsers(1)), clientScn.inject(atOnceUsers(1))).protocols(httpProtocol)
 }

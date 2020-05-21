@@ -23,6 +23,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import acmevolar.model.Airline;
 import acmevolar.model.Plane;
+import acmevolar.projections.PlaneListAttributes;
 import acmevolar.service.FlightService;
 import acmevolar.service.PlaneService;
 
@@ -59,7 +60,7 @@ public class PlaneController {
 		String username = SecurityContextHolder.getContext().getAuthentication().getName();
 
 		// now, we substract the planes created by the same airline
-		Collection<Plane> planes = this.planeService.getAllPlanesFromAirline(username);
+		Collection<PlaneListAttributes> planes = this.planeService.findPlaneListAttributes(username);
 
 		model.put("planes", planes);
 		return "planes/planesList";

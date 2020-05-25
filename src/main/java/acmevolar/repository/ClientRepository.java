@@ -16,12 +16,13 @@
 package acmevolar.repository;
 
 import java.util.Collection;
-
+import java.util.List;
 
 import org.springframework.dao.DataAccessException;
 
 import acmevolar.model.BaseEntity;
 import acmevolar.model.Client;
+import acmevolar.projections.ClientListAttributes;
 
 /**
  * Repository class for <code>Owner</code> domain objects All method names are compliant
@@ -52,5 +53,7 @@ public interface ClientRepository {
 	 * @see BaseEntity#isNew
 	 */
 	void save(Client client) throws DataAccessException;
+
+	List<ClientListAttributes> findAllClientsAttributes()  throws DataAccessException;
 
 }

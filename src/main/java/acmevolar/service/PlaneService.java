@@ -50,10 +50,12 @@ public class PlaneService {
 		this.planeRepository.save(plane);
 	}
 
+	@CacheEvict(cacheNames = "planesByAirline", allEntries = true)
 	public void deleteById(final int id) throws DataAccessException {
 		this.planeRepository.deleteById(id);
 	}
 
+	@CacheEvict(cacheNames = "planesByAirline", allEntries = true)
 	public void deletePlane(final Plane plane) throws DataAccessException {
 		this.planeRepository.deleteById(plane.getId());
 	}

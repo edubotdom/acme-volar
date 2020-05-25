@@ -111,23 +111,23 @@ INSERT INTO aeroplanes(id, reference, max_seats, description, manufacter, model,
 INSERT INTO aeroplanes(id, reference, max_seats, description, manufacter, model, number_of_km, max_distance, last_maintenance,airline_id) 
 	VALUES (3, 'RB9', 100, 'This is a description', 'Antónov', 'An-124', 500000.23, 2000000.0, '2020-02-17',1);
 INSERT INTO aeroplanes(id, reference, max_seats, description, manufacter, model, number_of_km, max_distance, last_maintenance,airline_id) 
-	VALUES (4, 'W05', 40, 'This is a description', 'Mercedes', 'W05 Hybrid', 50000.23, 6000.0, '2014-01-17',1);
+	VALUES (4, 'W05', 40, 'This is a description', 'Mercedes', 'W05 Hybrid', 50000.23, 600000.0, '2014-01-17',1);
 INSERT INTO aeroplanes(id, reference, max_seats, description, manufacter, model, number_of_km, max_distance, last_maintenance,airline_id) 
-	VALUES (5, 'FW18', 40, 'This is a description', 'Williams', 'Frank Williams 18', 50000.23, 6000.0, '1996-01-17',1);
+	VALUES (5, 'FW18', 40, 'This is a description', 'Williams', 'Frank Williams 18', 50000.23, 600000.0, '1996-01-17',1);
 INSERT INTO aeroplanes(id, reference, max_seats, description, manufacter, model, number_of_km, max_distance, last_maintenance,airline_id) 
-	VALUES (6, 'MP4-4', 60, 'This is a description', 'McLaren', 'McLaren-Honda MP4-4', 50000.23, 6000.0, '1986-01-17',1);
+	VALUES (6, 'MP4-4', 60, 'This is a description', 'McLaren', 'McLaren-Honda MP4-4', 50000.23, 600000.0, '1986-01-17',1);
 INSERT INTO aeroplanes(id, reference, max_seats, description, manufacter, model, number_of_km, max_distance, last_maintenance,airline_id) 
-	VALUES (7, 'F2004', 60, 'This is a description', 'Ferrari', 'Ferrari F2004', 50000.23, 6000.0, '2004-01-17',1);
+	VALUES (7, 'F2004', 60, 'This is a description', 'Ferrari', 'Ferrari F2004', 50000.23, 600000.0, '2004-01-17',1);
 INSERT INTO aeroplanes(id, reference, max_seats, description, manufacter, model, number_of_km, max_distance, last_maintenance,airline_id) 
-	VALUES (8, 'W07', 60, 'This is a description', 'Mercedes', 'Mercedes W07', 50000.23, 6000.0, '2016-01-17',1);
+	VALUES (8, 'W07', 60, 'This is a description', 'Mercedes', 'Mercedes W07', 50000.23, 600000.0, '2016-01-17',1);
 INSERT INTO aeroplanes(id, reference, max_seats, description, manufacter, model, number_of_km, max_distance, last_maintenance,airline_id) 
-	VALUES (9, 'K4M', 8, 'This is a description', 'Renault', 'Laguna Grand Tour 2', 50000.23, 6000.0, '2002-01-17',2);
+	VALUES (9, 'K4M', 8, 'This is a description', 'Renault', 'Laguna Grand Tour 2', 50000.23, 600000.0, '2002-01-17',2);
 INSERT INTO aeroplanes(id, reference, max_seats, description, manufacter, model, number_of_km, max_distance, last_maintenance,airline_id) 
-	VALUES (10, 'FW14B', 60, 'This is a description', 'Williams', 'Williams FW14B', 50000.23, 6000.0, '1992-01-17',2);
+	VALUES (10, 'FW14B', 60, 'This is a description', 'Williams', 'Williams FW14B', 50000.23, 600000.0, '1992-01-17',2);
 INSERT INTO aeroplanes(id, reference, max_seats, description, manufacter, model, number_of_km, max_distance, last_maintenance,airline_id) 
-	VALUES (11, 'F2002', 60, 'This is a description', 'Ferrari', 'Ferrari F2002', 50000.23, 6000.0, '2002-01-17',2);
+	VALUES (11, 'F2002', 60, 'This is a description', 'Ferrari', 'Ferrari F2002', 50000.23, 600000.0, '2002-01-17',2);
 INSERT INTO aeroplanes(id, reference, max_seats, description, manufacter, model, number_of_km, max_distance, last_maintenance,airline_id) 
-	VALUES (12, 'RGS', 6, 'This is a description', 'Renault', 'Grand Scénic', 50000.23, 6000.0, '2016-01-17',2);
+	VALUES (12, 'RGS', 6, 'This is a description', 'Renault', 'Grand Scénic', 50000.23, 600000.0, '2016-01-17',2);
 
 	
 

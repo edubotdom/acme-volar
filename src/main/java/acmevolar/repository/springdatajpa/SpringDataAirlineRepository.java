@@ -16,11 +16,14 @@
 
 package acmevolar.repository.springdatajpa;
 
+import java.util.List;
+
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.Repository;
 import org.springframework.data.repository.query.Param;
 
 import acmevolar.model.Airline;
+import acmevolar.projections.AirlineListAttributes;
 import acmevolar.repository.AirlineRepository;
 import acmevolar.repository.OwnerRepository;
 
@@ -39,5 +42,9 @@ public interface SpringDataAirlineRepository extends AirlineRepository, Reposito
 	@Override
 	@Query("SELECT airline FROM Airline airline WHERE airline.user.username =:username")
 	Airline findByUsername(@Param("username") String username);
+	
+	@Override
+	@Query("SELECT a.id AS id, a.identification AS identification, a.name AS name FROM Airline a")
+	List<AirlineListAttributes> findAllAirlinesAttributes();
 
 }

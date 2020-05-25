@@ -27,7 +27,7 @@ public interface SpringDataPlaneRepository extends PlaneRepository, Repository<P
 	Plane findByReference(String reference);
 
 	@Override
-	@Query("SELECT p.id AS id, p.reference AS reference, " + "p.maxSeats AS maxSeats, p.description AS description, p.manufacter AS manufacter, " + "p.model AS model, p.numberOfKm AS numberOfKm, p.lastMaintenance AS lastMaintenance "
+	@Query("SELECT p.id AS id, p.reference AS reference, " + "p.maxSeats AS maxSeats, p.description AS description, p.manufacter AS manufacter, " + "p.model AS model, p.numberOfKm AS numberOfKm, p.maxDistance AS maxDistance, p.lastMaintenance AS lastMaintenance "
 		+ " FROM Plane p WHERE p.airline.user.username =:airline")
 	List<PlaneListAttributes> findAllAirlinePlaneListAttributes(@Param("airline") String airline) throws DataAccessException;
 }

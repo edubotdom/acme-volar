@@ -53,11 +53,11 @@ public class AirlineService {
 		this.airlineRepository = airlineRepository;
 	}
 
-//	@Transactional(readOnly = true)
-//	@Cacheable("airlines")
-//	public Collection<Airline> findAirlines() throws DataAccessException {
-//		return this.airlineRepository.findAll();
-//	}
+	@Transactional(readOnly = true)
+	@Cacheable("airlines")
+	public Collection<Airline> findAirlines() throws DataAccessException {
+		return this.airlineRepository.findAll();
+	}
 	
 	@Transactional(readOnly = true)
 	@Cacheable("listAirlines")

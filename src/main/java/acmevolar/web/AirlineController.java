@@ -51,15 +51,10 @@ public class AirlineController {
 	private static final String		VIEWS_AIRLINE_CREATE_FORM	= "airlines/createAirlineForm";
 
 	private final AirlineService	airlineService;
-	private final UserService	userService;
-/*	private final AuthoritiesService	authoritiesService;*/
-
-
+	
 	@Autowired
 	public AirlineController(final AirlineService airlineService, final UserService userService/*, final AuthoritiesService authoritiesService*/) {
 		this.airlineService = airlineService;
-		this.userService = userService;
-/*		this.authoritiesService = authoritiesService;*/
 	}
 
 	@InitBinder
@@ -105,7 +100,7 @@ public class AirlineController {
 		})
 		public String showAirlineList(final Map<String, Object> model) {
 
-			Collection<AirlineListAttributes> airlines = new ArrayList<AirlineListAttributes>();
+			Collection<AirlineListAttributes> airlines = new ArrayList<>();
 			airlines.addAll(this.airlineService.findAirlinesListAttributes());
 			model.put("airlines", airlines);
 			return "airlines/airlinesList";

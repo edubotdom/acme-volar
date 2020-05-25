@@ -156,12 +156,11 @@ public class PlaneController {
 
 			try {
 				this.planeService.savePlane(plane);
-				;
 			} catch (DataAccessException e) {
 				e.printStackTrace();
 			}
 
-			return "redirect:/planes/{planeId}";// + plane.getId();
+			return "redirect:/planes/{planeId}";
 		}
 	}
 

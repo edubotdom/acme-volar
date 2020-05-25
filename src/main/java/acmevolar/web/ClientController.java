@@ -36,6 +36,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import acmevolar.model.Client;
+import acmevolar.projections.ClientListAttributes;
 import acmevolar.service.AuthoritiesService;
 import acmevolar.service.ClientService;
 import acmevolar.service.UserService;
@@ -99,8 +100,8 @@ public class ClientController {
 	})
 	public String showClientList(final Map<String, Object> model) {
 
-		Collection<Client> clients = new ArrayList<Client>();
-		clients.addAll(this.clientService.findClients());
+		Collection<ClientListAttributes> clients = new ArrayList<ClientListAttributes>();
+		clients.addAll(this.clientService.findClientsListAttributes());
 		model.put("clients", clients);
 		return "clients/clientsList";
 	}

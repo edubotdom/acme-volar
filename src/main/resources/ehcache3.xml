@@ -43,4 +43,8 @@
 	<cache alias="listAirlines" uses-template="default">
 		<value-type>java.util.Collection</value-type>
 	</cache>
+	
+	<cache alias="listClients" uses-template="default">
+		<value-type>java.util.Collection</value-type>
+	</cache>
 </config>

@@ -15,11 +15,15 @@
  */
 package acmevolar.repository.springdatajpa;
 
+import java.util.List;
+
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.Repository;
 import org.springframework.data.repository.query.Param;
 
 import acmevolar.model.Client;
+import acmevolar.projections.AirlineListAttributes;
+import acmevolar.projections.ClientListAttributes;
 import acmevolar.repository.ClientRepository;
 import acmevolar.repository.OwnerRepository;
 
@@ -34,5 +38,9 @@ public interface SpringDataClientRepository extends ClientRepository, Repository
 	@Override
 	@Query("SELECT client FROM Client client WHERE client.id =:id")
 	public Client findById(@Param("id") int id);
+	
+	@Override
+	@Query("SELECT c.id AS id, c.identification AS identification, c.name AS name FROM Client c")
+	List<ClientListAttributes> findAllClientsAttributes();
 
 }

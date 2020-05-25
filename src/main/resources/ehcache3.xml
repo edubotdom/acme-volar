@@ -39,4 +39,8 @@
 		<key-type>java.lang.String</key-type>
 		<value-type>java.util.Collection</value-type>
 	</cache>
+	
+	<cache alias="listAirlines" uses-template="default">
+		<value-type>java.util.Collection</value-type>
+	</cache>
 </config>

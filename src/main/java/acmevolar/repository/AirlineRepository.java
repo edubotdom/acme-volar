@@ -17,11 +17,13 @@
 package acmevolar.repository;
 
 import java.util.Collection;
+import java.util.List;
 
 import org.springframework.dao.DataAccessException;
 
 import acmevolar.model.Airline;
 import acmevolar.model.BaseEntity;
+import acmevolar.projections.AirlineListAttributes;
 
 /**
  * Repository class for <code>Airline</code> domain objects All method names are compliant
@@ -59,5 +61,7 @@ public interface AirlineRepository {
 	void save(Airline airline) throws DataAccessException;
 
 	Airline findByUsername(String username) throws DataAccessException;
+
+	List<AirlineListAttributes> findAllAirlinesAttributes()  throws DataAccessException;
 
 }

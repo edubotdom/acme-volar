@@ -34,6 +34,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import acmevolar.model.Airline;
+import acmevolar.projections.AirlineListAttributes;
 import acmevolar.service.AirlineService;
 import acmevolar.service.AuthoritiesService;
 import acmevolar.service.UserService;
@@ -86,17 +87,29 @@ public class AirlineController {
 			return "redirect:/airlines/" + airline.getId();
 		}
 	}
+//	//@PreAuthorize("!hasAuthority('airline')")
+//	@GetMapping(value = {
+//		"/airlines"
+//	})
+//	public String showAirlineList(final Map<String, Object> model) {
+//
+//		Collection<Airline> airlines = new ArrayList<Airline>();
+//		airlines.addAll(this.airlineService.findAirlines());
+//		model.put("airlines", airlines);
+//		return "airlines/airlinesList";
+//	}
+	
 	//@PreAuthorize("!hasAuthority('airline')")
-	@GetMapping(value = {
-		"/airlines"
-	})
-	public String showAirlineList(final Map<String, Object> model) {
+		@GetMapping(value = {
+			"/airlines"
+		})
+		public String showAirlineList(final Map<String, Object> model) {
 
-		Collection<Airline> airlines = new ArrayList<Airline>();
-		airlines.addAll(this.airlineService.findAirlines());
-		model.put("airlines", airlines);
-		return "airlines/airlinesList";
-	}
+			Collection<AirlineListAttributes> airlines = new ArrayList<AirlineListAttributes>();
+			airlines.addAll(this.airlineService.findAirlinesListAttributes());
+			model.put("airlines", airlines);
+			return "airlines/airlinesList";
+		}
 
 	/**
 	 * Custom handler for displaying an owner.

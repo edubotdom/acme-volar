@@ -13,7 +13,7 @@
     <table class="table table-striped">
         <tr>
             <th>Reference</th>
-            <td><b><c:out value="${plane.reference}"/></b></td>
+            <td><strong><c:out value="${plane.reference}"/></strong></td>
         </tr>
         <tr>
             <th>Max of Seats</th>

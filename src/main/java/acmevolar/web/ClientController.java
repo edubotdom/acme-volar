@@ -100,7 +100,7 @@ public class ClientController {
 	})
 	public String showClientList(final Map<String, Object> model) {
 
-		Collection<ClientListAttributes> clients = new ArrayList<ClientListAttributes>();
+		Collection<ClientListAttributes> clients = new ArrayList<>();
 		clients.addAll(this.clientService.findClientsListAttributes());
 		model.put("clients", clients);
 		return "clients/clientsList";

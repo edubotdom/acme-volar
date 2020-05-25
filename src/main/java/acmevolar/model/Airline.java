@@ -85,7 +85,7 @@ public class Airline extends NamedEntity {
 
 	public Set<Plane> getPlanesInternal() {
 		if(this.planes==null) {
-			this.planes = new HashSet<Plane>();
+			this.planes = new HashSet<>();
 		}
 		return this.planes;
 	}

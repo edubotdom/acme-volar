@@ -12,7 +12,7 @@
     <table class="table table-striped">
         <tr>
             <th>Name</th>
-            <td><b><c:out value="${client.name}"/></b></td>
+            <td><strong><c:out value="${client.name}"/></strong></td>
         </tr>
         <tr>
             <th>Identification</th>

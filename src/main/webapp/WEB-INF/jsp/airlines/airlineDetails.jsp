@@ -12,7 +12,7 @@
 	<table class="table table-striped">
 		<tr>
 			<th>Name</th>
-			<td><b><c:out value="${airline.name}" /></b></td>
+			<td><strong><c:out value="${airline.name}" /></strong></td>
 		</tr>
 		<tr>
 			<th>Identification</th>

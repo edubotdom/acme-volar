@@ -54,11 +54,11 @@ public class ClientService {
 		this.clientRepository = clientRepository;
 	}	
 
-//	@Transactional(readOnly = true)	
-//	@Cacheable("listClients")
-//	public Collection<Client> findClients() throws DataAccessException {
-//		return clientRepository.findAll();
-//	}
+	@Transactional(readOnly = true)	
+	@Cacheable("listClients")
+	public Collection<Client> findClients() throws DataAccessException {
+		return clientRepository.findAll();
+	}
 	
 	@Transactional(readOnly = true)	
 	@Cacheable("listClients")

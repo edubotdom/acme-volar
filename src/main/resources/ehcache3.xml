@@ -47,4 +47,17 @@
 	<cache alias="listClients" uses-template="default">
 		<value-type>java.util.Collection</value-type>
 	</cache>
+	
+	<cache alias="airports" uses-template="default">
+		<value-type>java.util.Collection</value-type>
+	</cache>
+	
+	<cache alias="listRunwaysByAirpotId" uses-template="default">
+		<key-type>java.lang.Integer</key-type>
+		<value-type>java.util.List</value-type>
+	</cache>
+	
+	<cache alias="listAirports" uses-template="default">
+		<value-type>java.util.List</value-type>
+	</cache>
 </config>

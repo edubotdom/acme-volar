@@ -19,6 +19,8 @@ package acmevolar.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -58,6 +60,7 @@ public class RunwayService {
 	}
 
 	@Transactional(readOnly = true)
+	@Cacheable("listRunwaysByAirpotId")
 	public List<Runway> findRunwaysByAirportId(final Integer airportId) throws DataAccessException {
 		return this.runwayRepository.findRunwaysByAirportId(airportId);
 	}
@@ -69,6 +72,7 @@ public class RunwayService {
 	}
 
 	@Transactional
+	@CacheEvict(cacheNames = "listRunwaysByAirpotId", allEntries = true)
 	public void saveRunway(final Runway runway) throws DataAccessException {
 		runway.setName(runway.getName().replace(",", ""));
 		this.runwayRepository.save(runway);
@@ -80,6 +84,7 @@ public class RunwayService {
 		return airport;
 	}
 
+	@CacheEvict(cacheNames = "listRunwaysByAirpotId", allEntries = true)
 	public void deleteRunwayById(final Integer runwayId) throws DataAccessException {
 		this.runwayRepository.deleteById(runwayId);
 	}

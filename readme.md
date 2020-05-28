@@ -1,6 +1,6 @@
 # Spring PetClinic Sample Application 
 
-This is a fork of https://github.com/edubotdom/acme-volar to be used for the DP2 course. The main changes that have been performed were:
+This is a fork of https://github.com/gii-is-DP2/spring-petclinic to be used for the DP2 course. The main changes that have been performed were:
 - Trimming several parts of the application to keep the example low
 - Reorganize some parts of the code according to best practices introduced in the course
 

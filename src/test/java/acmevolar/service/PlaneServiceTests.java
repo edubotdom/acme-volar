@@ -40,9 +40,6 @@ class PlaneServiceTests {
 	@Autowired
 	protected AirlineService	airlineService;
 	
-//	@Autowired
-//	private MockMvc mockMvc;
-	
 	//Registrar un avión correctamente
 	@Test
 	@Transactional
@@ -121,7 +118,6 @@ class PlaneServiceTests {
 		plane.setNumberOfKm(34200.);
 		plane.setReference("REF1");
 		
-
 		Assertions.assertThrows(ConstraintViolationException.class, () ->{
 			f1.setPlane(plane);
 			planeService.savePlane(plane);
@@ -147,7 +143,6 @@ class PlaneServiceTests {
 		plane.setModel("Renton 737");
 		plane.setNumberOfKm(-34200.);
 		plane.setReference("REF1");
-		
 
 		Assertions.assertThrows(ConstraintViolationException.class, () ->{
 			f1.setPlane(plane);
@@ -211,7 +206,7 @@ class PlaneServiceTests {
 
 		//compruebo si se ha eliminado
 		Long nActualAviones = planeService.findPlanes().stream().count();
-		assertThat(nActualAviones.equals(nPrevioAviones));
+		assertThat(nActualAviones.equals(nPrevioAviones)).isTrue();
 	}
 	
 	@Test
@@ -243,7 +238,7 @@ class PlaneServiceTests {
 
 		//compruebo si se ha eliminado
 		Long nActualAviones = planeService.findPlanes().stream().count();
-		assertThat(nActualAviones.equals(nPrevioAviones));
+		assertThat(nActualAviones.equals(nPrevioAviones)).isTrue();
 	}
 	
 	@Test
@@ -251,7 +246,7 @@ class PlaneServiceTests {
 		Collection<Plane> planes = this.planeService.findPlanes();
 
 		//Plane plane1 = EntityUtils.getById(planes, Plane.class, 1);
-		assertThat(!planes.isEmpty());
+		assertThat(!planes.isEmpty()).isTrue();
 		assertThat(planes).asList();
 	}
 	
@@ -261,15 +256,15 @@ class PlaneServiceTests {
 		Airline a1 = planeService.findAirlineByUsername("airline1");
 		
 		assertThat(a1).isNotNull();
-		assertThat(a1.getCountry().equals("Spain"));
+		assertThat(a1.getCountry().equals("Spain")).isTrue();
 		assertThat(a1.getCreationDate()).isInstanceOf(LocalDate.class);
-		assertThat(a1.getEmail().equals("minardi@gmail.com"));
+		assertThat(a1.getEmail().equals("minardi@gmail.com")).isTrue();
 		assertThat(a1.getFlights()).asList();
-		assertThat(a1.getIdentification().equals("61333744-N"));
-		assertThat(a1.getName().equals("Sevilla Este Airways"));
-		assertThat(a1.getPhone().equals("644584458"));
+		assertThat(a1.getIdentification().equals("61333744-N")).isTrue();
+		assertThat(a1.getName().equals("Sevilla Este Airways")).isTrue();
+		assertThat(a1.getPhone().equals("644584458")).isTrue();
 		assertThat(a1.getPlanes()).asList();
-		assertThat(a1.getReference().equals("SEA-001"));
+		assertThat(a1.getReference().equals("SEA-001")).isTrue();
 	}
 	
 	@Test
@@ -278,7 +273,7 @@ class PlaneServiceTests {
 		Collection<Plane> planes = this.planeService.getAllPlanesFromAirline(a1);
 
 		//Plane plane1 = EntityUtils.getById(planes, Plane.class, 1);
-		assertThat(!planes.isEmpty());
+		assertThat(!planes.isEmpty()).isTrue();
 		assertThat(planes).asList();
 	}
 	
@@ -288,7 +283,7 @@ class PlaneServiceTests {
 		Collection<Plane> planes = this.planeService.getAllPlanesFromAirline(a1.getUser().getUsername());
 
 		//Plane plane1 = EntityUtils.getById(planes, Plane.class, 1);
-		assertThat(!planes.isEmpty());
+		assertThat(!planes.isEmpty()).isTrue();
 		assertThat(planes).asList();
 	}
 	

@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -33,16 +33,24 @@ import acmevolar.model.BaseEntity;
  */
 public abstract class EntityUtils {
 
+	private EntityUtils() {
+		super();
+	}
+
 	/**
 	 * Look up the entity of the given class with the given id in the given collection.
-	 * @param entities the collection to search
-	 * @param entityClass the entity class to look up
-	 * @param entityId the entity id to look up
+	 * 
+	 * @param entities
+	 *            the collection to search
+	 * @param entityClass
+	 *            the entity class to look up
+	 * @param entityId
+	 *            the entity id to look up
 	 * @return the found entity
-	 * @throws ObjectRetrievalFailureException if the entity was not found
+	 * @throws ObjectRetrievalFailureException
+	 *             if the entity was not found
 	 */
-	public static <T extends BaseEntity> T getById(Collection<T> entities, Class<T> entityClass, int entityId)
-			throws ObjectRetrievalFailureException {
+	public static <T extends BaseEntity> T getById(final Collection<T> entities, final Class<T> entityClass, final int entityId) throws ObjectRetrievalFailureException {
 		for (T entity : entities) {
 			if (entity.getId() == entityId && entityClass.isInstance(entity)) {
 				return entity;

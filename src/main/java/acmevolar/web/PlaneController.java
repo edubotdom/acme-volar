@@ -1,6 +1,7 @@
 
 package acmevolar.web;
 
+import java.nio.file.AccessDeniedException;
 import java.util.Collection;
 import java.util.Map;
 
@@ -32,6 +33,9 @@ public class PlaneController {
 
 	private final PlaneService	planeService;
 	private final FlightService	flightService;
+
+	private String				planeString							= "plane";
+	private String				referenceString						= "reference";
 
 	private static final String	VIEWS_PLANES_CREATE_OR_UPDATE_FORM	= "planes/createPlaneForm";
 
@@ -88,7 +92,7 @@ public class PlaneController {
 		plane.setAirline(airline);
 		airline.addPlane(plane);
 
-		model.put("plane", plane);
+		model.put(this.planeString, plane);
 
 		return PlaneController.VIEWS_PLANES_CREATE_OR_UPDATE_FORM;
 	}
@@ -102,7 +106,7 @@ public class PlaneController {
 		} else {
 
 			if (this.planeService.findPlaneByReference(plane.getReference()) != null) {
-				result.rejectValue("reference", "RepeatedReference", "You must introduce a reference that was not introduced in other plane.");
+				result.rejectValue(this.referenceString, "RepeatedReference", "You must introduce a reference that was not introduced in other plane.");
 				return PlaneController.VIEWS_PLANES_CREATE_OR_UPDATE_FORM;
 			}
 
@@ -123,36 +127,36 @@ public class PlaneController {
 
 	@PreAuthorize("hasAuthority('airline')")
 	@GetMapping(value = "/planes/{planeId}/edit")
-	public String initUpdateForm(@PathVariable("planeId") final int planeId, final ModelMap model) throws Exception {
+	public String initUpdateForm(@PathVariable("planeId") final int planeId, final ModelMap model) throws AccessDeniedException {
 		Plane plane = this.planeService.findPlaneById(planeId);
 
 		String username = SecurityContextHolder.getContext().getAuthentication().getName();
 		Collection<Plane> planes = this.flightService.findPlanesbyAirline(username);
 		if (!planes.contains(plane)) {
-			throw new Exception("No está autorizado para modificar un vuelo que no es suyo.");
+			throw new AccessDeniedException("No está autorizado para modificar un vuelo que no es suyo.");
 		}
 
-		model.put("plane", plane);
+		model.put(this.planeString, plane);
 
 		return PlaneController.VIEWS_PLANES_CREATE_OR_UPDATE_FORM;
 	}
 
 	@PreAuthorize("hasAuthority('airline')")
 	@PostMapping(value = "/planes/{planeId}/edit")
-	public String processUpdateForm(@Valid final Plane plane, final BindingResult result, @PathVariable("planeId") final int planeId, final ModelMap model) throws Exception {
+	public String processUpdateForm(@Valid final Plane plane, final BindingResult result, @PathVariable("planeId") final int planeId, final ModelMap model) throws AccessDeniedException {
 
 		Plane unmodifiedPlane = this.planeService.findPlaneById(planeId);
 
 		if (result.hasErrors()) {
-			model.put("plane", plane);
+			model.put(this.planeString, plane);
 			return PlaneController.VIEWS_PLANES_CREATE_OR_UPDATE_FORM;
 		}
 		if (!unmodifiedPlane.getReference().equalsIgnoreCase(plane.getReference()) && this.planeService.findPlaneByReference(plane.getReference()) != null) {
-			result.rejectValue("reference", "duplicate", "This reference number already exists");
+			result.rejectValue(this.referenceString, "duplicate", "This reference number already exists");
 			return PlaneController.VIEWS_PLANES_CREATE_OR_UPDATE_FORM;
 		} else {
 			Plane planeToUpdate = this.planeService.findPlaneById(planeId);
-			BeanUtils.copyProperties(planeToUpdate, plane, "reference", "maxSeats", "description", "manufacter", "model", "numberOfKm", "maxDistance", "lastMaintenance");
+			BeanUtils.copyProperties(planeToUpdate, plane, this.referenceString, "maxSeats", "description", "manufacter", "model", "numberOfKm", "maxDistance", "lastMaintenance");
 
 			try {
 				this.planeService.savePlane(plane);

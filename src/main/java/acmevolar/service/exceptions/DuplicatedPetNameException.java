@@ -3,12 +3,18 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+
 package acmevolar.service.exceptions;
 
 /**
  *
  * @author japarejo
  */
-public class DuplicatedPetNameException extends Exception{
-    
+public class DuplicatedPetNameException extends Exception {
+
+	/**
+	 *
+	 */
+	private static final long serialVersionUID = 1L;
+
 }

@@ -35,6 +35,7 @@ public class BookController {
 	private final FlightService	flightService;
 
 	private static final String	VIEWS_BOOKS_CREATE_OR_UPDATE_FORM	= "books/createBookForm";
+	private static final String	FLIGHT_ATTRIBUTTE					= "flight";
 
 
 	@Autowired
@@ -54,7 +55,7 @@ public class BookController {
 			return "redirect:/books/client";
 		}
 
-		model.put("flight", flight);
+		model.put(FLIGHT_ATTRIBUTTE, flight);
 		model.put("book", book);
 
 		return BookController.VIEWS_BOOKS_CREATE_OR_UPDATE_FORM;
@@ -86,14 +87,12 @@ public class BookController {
 
 		if (result.hasErrors()) {
 
-			//	Client client = SecurityContextHolder.getContext().getAuthentication().;
-
-			model.put("flight", flight);
+			model.put(FLIGHT_ATTRIBUTTE, flight);
 			return BookController.VIEWS_BOOKS_CREATE_OR_UPDATE_FORM;
 
 		} else if (flight.getSeats() - (book.getQuantity() + seatsBooked) < 0) {
 			result.rejectValue("quantity", "NotEnoughSeats", "There are only " + (flight.getSeats() - seatsBooked) + " seats in this flight!");
-			model.put("flight", flight);
+			model.put(FLIGHT_ATTRIBUTTE, flight);
 			return BookController.VIEWS_BOOKS_CREATE_OR_UPDATE_FORM;
 		} else if (book.getMoment().isAfter(departDate)) {
 			throw new Exception("You cannot create a book for a past flight");
@@ -105,7 +104,6 @@ public class BookController {
 		}
 	}
 
-	//UPDATE
 	@PreAuthorize("hasAuthority('airline')")
 	@GetMapping(value = "/books/{bookId}/edit")
 	public String initUpdateForm(@PathVariable("bookId") final int bookId, final ModelMap model) throws Exception {
@@ -115,10 +113,10 @@ public class BookController {
 
 		String username = SecurityContextHolder.getContext().getAuthentication().getName();
 		Collection<Flight> flights = this.flightService.findAirlineFlight(username);
-		if(!flights.contains(book.getFlight())) {
+		if (!flights.contains(book.getFlight())) {
 			throw new Exception("No está autorizado para modificar un vuelo que no es suyo.");
 		}
-		
+
 		LocalDate departDate = book.getFlight().getDepartDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
 		if (LocalDate.now().isAfter(departDate)) {
 			return "redirect:/books/airline";
@@ -126,19 +124,19 @@ public class BookController {
 
 		model.put("book", book);
 		model.put("bookStatusTypes", bookStatusTypes);
-		model.put("flight", book.getFlight());
+		model.put(FLIGHT_ATTRIBUTTE, book.getFlight());
 		return BookController.VIEWS_BOOKS_CREATE_OR_UPDATE_FORM;
 	}
 
 	@PreAuthorize("hasAuthority('airline')")
 	@PostMapping(value = "/books/{bookId}/edit")
 	public String processUpdateForm(@Valid final Book book, final BindingResult result, @PathVariable("bookId") final int bookId, final ModelMap model) throws Exception {
-		
+
 		if (result.hasErrors()) {
 
 			List<BookStatusType> bookStatusTypes = this.bookService.findBookStatusTypes();
 			model.put("bookStatusTypes", bookStatusTypes);
-			model.put("flight", book.getFlight());
+			model.put(FLIGHT_ATTRIBUTTE, book.getFlight());
 			return BookController.VIEWS_BOOKS_CREATE_OR_UPDATE_FORM;
 
 		} else {
@@ -153,10 +151,6 @@ public class BookController {
 			return "redirect:/books/airline";
 		}
 	}
-
-	//list mine client
-
-	//list mine airline
 
 	@PreAuthorize("hasAuthority('airline')")
 	@GetMapping("/books/airline")
@@ -177,14 +171,5 @@ public class BookController {
 		model.put("books", books);
 		return "books/bookList";
 	}
-
-	//show Book
-	//	@PreAuthorize("hasAuthority('airline')")
-	//	@GetMapping("/books/{bookId}")
-	//	public ModelAndView showBook(@PathVariable("bookId") final int bookId) {
-	//		ModelAndView mav = new ModelAndView("books/bookDetails");
-	//		mav.addObject(this.bookService.findBookById(bookId));
-	//		return mav;
-	//	}
 
 }

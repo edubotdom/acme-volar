@@ -35,13 +35,13 @@ import acmevolar.model.Flight;
  */
 public class FlightValidator implements Validator {
 
-	//private static final String REQUIRED = "required";
-	//private FlightService flightService;
+	private static final String SEATS = "seats";
 
 	@Override
 	public void validate(final Object obj, final Errors errors) {
 		Flight flight = (Flight) obj;
-		Boolean notNullorEmpty = (flight.getLands() == null || flight.getDepartes() == null || flight.getDepartDate() == null || flight.getLandDate() == null || flight.getSeats() == null || flight.getPrice() == null || flight.getReference().isEmpty()
+
+		boolean notNullorEmpty = (flight.getLands() == null || flight.getDepartes() == null || flight.getDepartDate() == null || flight.getLandDate() == null || flight.getSeats() == null || flight.getPrice() == null || flight.getReference().isEmpty()
 			|| flight.getPlane() == null || flight.getPublished() == null || flight.getFlightStatus() == null);
 
 		if (notNullorEmpty) {
@@ -49,7 +49,7 @@ public class FlightValidator implements Validator {
 				errors.rejectValue("reference", "NullReferenceValue", "You must fill reference information.");
 
 			} else if (flight.getSeats() == null) {
-				errors.rejectValue("seats", "NullSeatValue", "You must fill seat information.");
+				errors.rejectValue(SEATS, "NullSeatValue", "You must fill seat information.");
 
 			} else if (flight.getPrice() == null) {
 				errors.rejectValue("price", "NullPriceValue", "You must fill price information.");
@@ -78,11 +78,11 @@ public class FlightValidator implements Validator {
 			}
 		} else {
 			if (flight.getSeats() < 0) {
-				errors.rejectValue("seats", "Minus0Seats", "You must specificate a number equal or higher than 0.");
+				errors.rejectValue(SEATS, "Minus0Seats", "You must specificate a number equal or higher than 0.");
 
 			}
 			if (flight.getSeats() > flight.getPlane().getMaxSeats()) {
-				errors.rejectValue("seats", "TooManySeats", "The number of seats in the flight cannot by higher than the number of seats in its plane.");
+				errors.rejectValue(SEATS, "TooManySeats", "The number of seats in the flight cannot by higher than the number of seats in its plane.");
 
 			}
 			if (flight.getPrice() < 0) {

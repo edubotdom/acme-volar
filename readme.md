@@ -106,7 +106,7 @@ that could be used to implement the Pet Clinic then please join the community th
 
 # Contributing
 
-The [issue tracker](https://github.com/gii-is-DP2/spring-petclinic/issues) is the preferred channel for bug reports, features requests and submitting pull requests.
+The [issue tracker](https://github.com/edubotdom/acme-volar/issues) is the preferred channel for bug reports, features requests and submitting pull requests.
 
 For pull requests, editor preferences are available in the [editor config](.editorconfig) for easy use in common text editors. Read more and download plugins at <https://editorconfig.org>. If you have not previously done so, please fill out and submit the [Contributor License Agreement](https://cla.pivotal.io/sign/spring).
 

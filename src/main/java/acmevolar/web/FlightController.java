@@ -55,6 +55,14 @@ public class FlightController {
 	private final FlightService	flightService;
 	private final PlaneService	planeService;
 	private static final String	VIEWS_FLIGHT_CREATE_FORM	= "flights/createFlightForm";
+	private static final String	FLIGHTS_WORD				= "flights";
+	private static final String	FLIGHT_LIST_URI				= "flights/flightList";
+	private static final String	FLIGHT						= "flight";
+	private static final String	REFERENCE					= "reference";
+	private static final String	DEPARTES					= "departes";
+	private static final String	LANDS						= "lands";
+	private static final String	AIRPORTFULLOFPLANES			= "airportFullOfPlanes";
+	private static final String	AIRPORTFULLOFPLANES_MESSAGE	= "This airport is full of planes this day";
 
 
 	@Autowired
@@ -69,8 +77,8 @@ public class FlightController {
 	public String showFlightList(final Map<String, Object> model) {
 
 		Collection<FlightListAttributes> flights = this.flightService.findAllClientFlightListAttributesPublishedFuture();
-		model.put("flights", flights);
-		return "flights/flightList";
+		model.put(FLIGHTS_WORD, flights);
+		return FLIGHT_LIST_URI;
 	}
 
 	@InitBinder("plane")
@@ -89,11 +97,11 @@ public class FlightController {
 		List<Runway> departuresList = this.flightService.findDepartingRunways();
 		List<Runway> landsList = this.flightService.findLandingRunways();
 		List<FlightStatusType> estados = this.flightService.findFlightStatusTypes();
-		List<Boolean> opciones_publicao = new ArrayList<>();
-		opciones_publicao.add(true);
-		opciones_publicao.add(false);
+		List<Boolean> opcionesPublicao = new ArrayList<>();
+		opcionesPublicao.add(true);
+		opcionesPublicao.add(false);
 
-		model.put("opciones_publicao", opciones_publicao);
+		model.put("opciones_publicao", opcionesPublicao);
 		model.put("planes", planes);
 		model.put("departuresList", departuresList);
 		model.put("landsList", landsList);
@@ -106,7 +114,7 @@ public class FlightController {
 		Flight flight = new Flight();
 		flight.setPublished(false);
 		this.insertData(model, flight);
-		model.put("flight", flight);
+		model.put(FLIGHT, flight);
 
 		return FlightController.VIEWS_FLIGHT_CREATE_FORM;
 	}
@@ -115,7 +123,7 @@ public class FlightController {
 	public String processCreationForm(final Map<String, Object> model, @Valid final Flight flight, final BindingResult result) {
 
 		if (result.hasErrors()) {
-			model.put("flight", flight);
+			model.put(FLIGHT, flight);
 			this.insertData(model, flight);
 			return FlightController.VIEWS_FLIGHT_CREATE_FORM;
 
@@ -124,7 +132,6 @@ public class FlightController {
 			String username = SecurityContextHolder.getContext().getAuthentication().getName();
 			Airline airline = this.flightService.findAirlineByUsername(username);
 			flight.setAirline(airline);
-			// flight.getPlane().addFlight(flight);
 			airline.addFlight(flight);
 
 			Integer idPlane = flight.getPlane().getId();
@@ -142,7 +149,7 @@ public class FlightController {
 			if (numPlanesInDepartAirport + 1L >= flight.getDepartes().getAirport().getMaxNumberOfPlanes()) {
 				// this is caused becaused an airport only can deals with a limit of planes per
 				// day
-				result.rejectValue("departes", "AirportFullOfPlanes", "This airport is full of planes this day");
+				result.rejectValue(DEPARTES, AIRPORTFULLOFPLANES, AIRPORTFULLOFPLANES_MESSAGE);
 
 			}
 			if (this.flightService.findFlightByReference(flight.getReference()) != null) {
@@ -152,12 +159,12 @@ public class FlightController {
 			if (numPlanesInLandAirport + 1L >= flight.getLands().getAirport().getMaxNumberOfPlanes()) {
 				// this is caused becaused an airport only can deals with a limit of planes per
 				// day
-				result.rejectValue("lands", "AirportFullOfPlanes", "This airport is full of planes this day");
+				result.rejectValue(LANDS, AIRPORTFULLOFPLANES, AIRPORTFULLOFPLANES_MESSAGE);
 
 			}
 
 			if (result.hasErrors()) {
-				model.put("flight", flight);
+				model.put(FLIGHT, flight);
 				this.insertData(model, flight);
 				return FlightController.VIEWS_FLIGHT_CREATE_FORM;
 			} else {
@@ -176,8 +183,8 @@ public class FlightController {
 
 		String username = SecurityContextHolder.getContext().getAuthentication().getName();
 		Collection<FlightListAttributes> flights = this.flightService.findAllAirlineFlightListAttributes(username);
-		model.put("flights", flights);
-		return "flights/flightList";
+		model.put(FLIGHTS_WORD, flights);
+		return FLIGHT_LIST_URI;
 	}
 
 	@GetMapping("/flights/{flightId}")
@@ -187,10 +194,10 @@ public class FlightController {
 		Airline airline = this.flightService.findAirlineByUsername(username);
 
 		if (flight.getDepartDate().before(Date.from(Instant.now()))) {
-			ModelAndView mav2 = new ModelAndView("flights/flightList");
-			Collection<Flight> flights = new ArrayList<Flight>();
+			ModelAndView mav2 = new ModelAndView(FLIGHT_LIST_URI);
+			Collection<Flight> flights = new ArrayList<>();
 			flights.addAll(this.flightService.findPublishedFutureFlight());
-			mav2.addObject("flights", flights);
+			mav2.addObject(FLIGHTS_WORD, flights);
 
 			return mav2;
 		}
@@ -201,31 +208,30 @@ public class FlightController {
 			return mav;
 		} else if (airline == null && !flight.getPublished()) {
 
-			ModelAndView mav2 = new ModelAndView("flights/flightList");
-			Collection<Flight> flights = new ArrayList<Flight>();
+			ModelAndView mav2 = new ModelAndView(FLIGHT_LIST_URI);
+			Collection<Flight> flights = new ArrayList<>();
 			flights.addAll(this.flightService.findPublishedFutureFlight());
-			mav2.addObject("flights", flights);
+			mav2.addObject(FLIGHTS_WORD, flights);
 
 			return mav2;
 		}
 
-		if (flight.getPublished() || flight.getAirline().getName().equals(airline.getName())) {
+		if (flight.getPublished() || airline != null && flight.getAirline().getName().equals(airline.getName())) {
 
 			ModelAndView mav = new ModelAndView("flights/flightDetails");
 			mav.addObject(flight);
 			return mav;
 		} else {
-			ModelAndView mav2 = new ModelAndView("flights/flightList");
-			Collection<Flight> flights = new ArrayList<Flight>();
+			ModelAndView mav2 = new ModelAndView(FLIGHT_LIST_URI);
+			Collection<Flight> flights = new ArrayList<>();
 			flights.addAll(this.flightService.findPublishedFutureFlight());
-			mav2.addObject("flights", flights);
+			mav2.addObject(FLIGHTS_WORD, flights);
 
 			return mav2;
 		}
 
 	}
 
-	// @Secured("hasRole('airline')")
 	@PreAuthorize("hasAuthority('airline')")
 	@GetMapping(value = "/flights/{flightId}/edit")
 	public String initUpdateForm(@PathVariable("flightId") final int flightId, final ModelMap model) {
@@ -236,7 +242,7 @@ public class FlightController {
 			return "redirect:/flights/{flightId}";
 		} else {
 			this.insertData(model, flight);
-			model.put("flight", flight);
+			model.put(FLIGHT, flight);
 			return FlightController.VIEWS_FLIGHT_CREATE_FORM;
 		}
 	}
@@ -245,16 +251,16 @@ public class FlightController {
 	@PreAuthorize("hasAuthority('airline')")
 	public String processUpdateForm(@Valid final Flight flight, final BindingResult result, @PathVariable("flightId") final int flightId, final ModelMap model) {
 		if (result.hasErrors()) {
-			model.put("flight", flight);
+			model.put(FLIGHT, flight);
 			this.insertData(model, flight);
 			return FlightController.VIEWS_FLIGHT_CREATE_FORM;
 		} else {
 			Flight flightToUpdate = this.flightService.findFlightById(flightId);
 			if (this.flightService.findFlightByReference(flight.getReference()) != null && !flight.getReference().equalsIgnoreCase(flightToUpdate.getReference())) {
-				result.rejectValue("reference", "referenceTaken", "Flight reference already taken.");
+				result.rejectValue(REFERENCE, "referenceTaken", "Flight reference already taken.");
 			}
 
-			BeanUtils.copyProperties(flightToUpdate, flight, "reference", "seats", "price", "flightStatus", "published", "landDate", "departDate", "lands", "departes", "plane");
+			BeanUtils.copyProperties(flightToUpdate, flight, REFERENCE, "seats", "price", "flightStatus", "published", "landDate", "departDate", LANDS, DEPARTES, "plane");
 
 			// we get the flight (one per plane) in the same day that depart airport
 			Long numPlanesInDepartAirport = this.flightService.findFlights().stream().filter(x -> x.getDepartDate().equals(flight.getDepartDate())).count();
@@ -265,18 +271,18 @@ public class FlightController {
 			if (numPlanesInDepartAirport + 1L >= flight.getDepartes().getAirport().getMaxNumberOfPlanes()) {
 				// this is caused becaused an airport only can deals with a limit of planes per
 				// day
-				result.rejectValue("departes", "AirportFullOfPlanes", "This airport is full of planes this day");
+				result.rejectValue(DEPARTES, AIRPORTFULLOFPLANES, AIRPORTFULLOFPLANES_MESSAGE);
 
 			}
 			if (numPlanesInLandAirport + 1L >= flight.getLands().getAirport().getMaxNumberOfPlanes()) {
 				// this is caused becaused an airport only can deals with a limit of planes per
 				// day
-				result.rejectValue("lands", "AirportFullOfPlanes", "This airport is full of planes this day");
+				result.rejectValue(LANDS, AIRPORTFULLOFPLANES, AIRPORTFULLOFPLANES_MESSAGE);
 
 			}
 
 			if (result.hasErrors()) {
-				model.put("flight", flight);
+				model.put(FLIGHT, flight);
 				this.insertData(model, flight);
 				return FlightController.VIEWS_FLIGHT_CREATE_FORM;
 			} else {
@@ -286,7 +292,7 @@ public class FlightController {
 		}
 	}
 
-	@InitBinder("flight")
+	@InitBinder(FLIGHT)
 	public void initFlightBinder(final WebDataBinder dataBinder) {
 		dataBinder.setValidator(new FlightValidator());
 	}

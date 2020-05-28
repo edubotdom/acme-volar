@@ -19,16 +19,12 @@ import acmevolar.repository.springdatajpa.SpringDataPlaneRepository;
 @Service
 public class BookService {
 
-	private BookRepository				bookRepository;
-	private AirlineRepository			airlineRepository;
-	private SpringDataPlaneRepository	springPlaneRepository;
+	private BookRepository bookRepository;
 
 
 	@Autowired
 	public BookService(final BookRepository bookRepository, final SpringDataPlaneRepository springPlaneRepository, final AirlineRepository airlineRepository) {
 		this.bookRepository = bookRepository;
-		this.springPlaneRepository = springPlaneRepository;
-		this.airlineRepository = airlineRepository;
 	}
 
 	@Transactional(readOnly = true)
@@ -78,6 +74,5 @@ public class BookService {
 	public Collection<Book> findClientBookFuture(final String username) {
 		return this.bookRepository.findClientBookFuture(username);
 	}
-
 
 }

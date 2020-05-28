@@ -6,4 +6,12 @@ services:
 before_install:
   - chmod +x mvnw
   - mysql -e 'CREATE DATABASE acmevolardb;'
-script: mvn test -Dspring.profiles.active=mysql-travis
+addons:
+  sonarcloud:
+    organization: "acme-volar"
+    token:
+      secure: "9f1da7595e8b671b6684b297c580a9b4626c8dd2" # encrypted value of your token
+script:
+  - mvn test -Dspring.profiles.active=mysql-travis
+  # the following command line builds the project, runs the tests with coverage and then execute the SonarCloud analysis
+  - mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent install sonar:sonar -Dsonar.projectKey=edubotdom_acme-volar

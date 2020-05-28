@@ -23,7 +23,7 @@ public class BookService {
 
 
 	@Autowired
-	public BookService(final BookRepository bookRepository, final SpringDataPlaneRepository springPlaneRepository, final AirlineRepository airlineRepository) {
+	public BookService(final BookRepository bookRepository) {
 		this.bookRepository = bookRepository;
 	}
 

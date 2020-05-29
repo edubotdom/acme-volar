@@ -1,0 +1,32 @@
+<testsuite name="dp2.AerolineaCreaAeropuertoCSV" tests="10" errors="0" failures="0" time="0">
+<testcase name="Global: max of response time is less than 5000.0" status="true" time="0">
+  <system-out>Global: max of response time is less than 5000.0</system-out>
+</testcase>
+<testcase name="Home: percentage of failed events is less than or equal to 5.0" status="true" time="0">
+  <system-out>Home: percentage of failed events is less than or equal to 5.0</system-out>
+</testcase>
+<testcase name="LoginAirline: percentage of failed events is less than or equal to 5.0" status="true" time="0">
+  <system-out>LoginAirline: percentage of failed events is less than or equal to 5.0</system-out>
+</testcase>
+<testcase name="request_9: percentage of failed events is less than or equal to 5.0" status="true" time="0">
+  <system-out>request_9: percentage of failed events is less than or equal to 5.0</system-out>
+</testcase>
+<testcase name="request_10: percentage of failed events is less than or equal to 5.0" status="true" time="0">
+  <system-out>request_10: percentage of failed events is less than or equal to 5.0</system-out>
+</testcase>
+<testcase name="request_10 Redirect 1: percentage of failed events is less than or equal to 5.0" status="true" time="0">
+  <system-out>request_10 Redirect 1: percentage of failed events is less than or equal to 5.0</system-out>
+</testcase>
+<testcase name="CreateAirport: percentage of failed events is less than or equal to 5.0" status="true" time="0">
+  <system-out>CreateAirport: percentage of failed events is less than or equal to 5.0</system-out>
+</testcase>
+<testcase name="request_17: percentage of failed events is less than or equal to 5.0" status="true" time="0">
+  <system-out>request_17: percentage of failed events is less than or equal to 5.0</system-out>
+</testcase>
+<testcase name="request_17 Redirect 1: percentage of failed events is less than or equal to 5.0" status="true" time="0">
+  <system-out>request_17 Redirect 1: percentage of failed events is less than or equal to 5.0</system-out>
+</testcase>
+<testcase name="Global: percentage of successful events is greater than 90.0" status="true" time="0">
+  <system-out>Global: percentage of successful events is greater than 90.0</system-out>
+</testcase>
+</testsuite>

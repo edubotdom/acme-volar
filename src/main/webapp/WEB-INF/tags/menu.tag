@@ -42,35 +42,35 @@
 				
 
 <%--				<sec:authorize access="!hasAuthority('airline')"> --%>
-					<petclinic:menuItem active="${name eq 'flights'}" url="/flights" title="List flights">
+					<petclinic:menuItem active="${name eq 'flights'}" url="/flights" title="Flights">
 						<span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
 						<span>Flights</span>
 					</petclinic:menuItem>
 <%--				</sec:authorize> --%>
 				
 				<sec:authorize access="hasAuthority('airline')">
-					<petclinic:menuItem active="${name eq 'clients'}" url="/my_flights" title="List clients">
+					<petclinic:menuItem active="${name eq 'clients'}" url="/my_flights" title="My Flights">
 						<span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
 						<span>My Flights</span>
 					</petclinic:menuItem>
 				</sec:authorize>
 				
 				<sec:authorize access="hasAuthority('airline')">
-					<petclinic:menuItem active="${name eq 'clients'}" url="/my_planes" title="List clients">
+					<petclinic:menuItem active="${name eq 'clients'}" url="/my_planes" title="My Planes">
 						<span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
 						<span>My Planes</span>
 					</petclinic:menuItem>
 				</sec:authorize>
 				
 				<sec:authorize access="hasAuthority('airline')">
-					<petclinic:menuItem active="${name eq 'airline'}" url="/books/airline" title="List books">
+					<petclinic:menuItem active="${name eq 'airline'}" url="/books/airline" title="My books">
 						<span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
 						<span>My Books</span>
 					</petclinic:menuItem>
 				</sec:authorize>
 				
 				<sec:authorize access="hasAuthority('client')">
-					<petclinic:menuItem active="${name eq 'client'}" url="/books/client" title="List books">
+					<petclinic:menuItem active="${name eq 'client'}" url="/books/client" title="My books">
 						<span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
 						<span>My Books</span>
 					</petclinic:menuItem>

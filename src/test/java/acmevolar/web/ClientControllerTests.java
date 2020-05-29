@@ -1,13 +1,19 @@
-
 package acmevolar.web;
 
 import java.time.LocalDate;
+
+import static org.mockito.BDDMockito.given;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
-import org.mockito.BDDMockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -15,10 +21,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
 import org.springframework.security.config.annotation.web.WebSecurityConfigurer;
 import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import acmevolar.configuration.SecurityConfiguration;
 import acmevolar.model.Authorities;
@@ -29,25 +32,24 @@ import acmevolar.service.ClientService;
 import acmevolar.service.UserService;
 
 @WebMvcTest(value = ClientController.class, excludeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = WebSecurityConfigurer.class), excludeAutoConfiguration = SecurityConfiguration.class)
-class ClientControllerTests {
+public class ClientControllerTests {
 
-	private static final int		TEST_CLIENT_ID	= 1;
+	private static final int TEST_CLIENT_ID = 1;
+	
+	@Autowired
+	protected ClientController clientController;
+
+	@MockBean
+	private ClientService clientService;
+
+	@MockBean
+	protected UserService userService;
+
+	@MockBean
+	protected AuthoritiesService authoritiesService;
 
 	@Autowired
-	protected ClientController		clientController;
-
-	@MockBean
-	private ClientService			clientService;
-
-	@MockBean
-	protected UserService			userService;
-
-	@MockBean
-	protected AuthoritiesService	authoritiesService;
-
-	@Autowired
-	private MockMvc					mockMvc;
-
+	private MockMvc mockMvc;
 
 	@BeforeEach
 	void setup() {
@@ -71,50 +73,67 @@ class ClientControllerTests {
 		client.setUser(user);
 		client.setIdentification("53933123X");
 
-		BDDMockito.given(this.clientService.findClientById(ClientControllerTests.TEST_CLIENT_ID)).willReturn(client);
+		given(this.clientService.findClientById(ClientControllerTests.TEST_CLIENT_ID)).willReturn(client);
 
 	}
 
 	@WithMockUser(value = "spring")
 	@Test
 	void testShowClientList() throws Exception {
-		this.mockMvc.perform(MockMvcRequestBuilders.get("/clients")).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.model().attributeExists("clients")).andExpect(MockMvcResultMatchers.view().name("clients/clientsList"));
+		this.mockMvc.perform(get("/clients")).andExpect(status().isOk()).andExpect(model().attributeExists("clients"))
+				.andExpect(view().name("clients/clientsList"));
 	}
 
 	@WithMockUser(value = "spring")
 	@Test
 	void testShowClient() throws Exception {
-		this.mockMvc.perform(MockMvcRequestBuilders.get("/clients/{clientId}", ClientControllerTests.TEST_CLIENT_ID)).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.model().attributeExists("client"))
-			.andExpect(MockMvcResultMatchers.view().name("clients/clientDetails"));
+		this.mockMvc.perform(get("/clients/{clientId}", ClientControllerTests.TEST_CLIENT_ID))
+				.andExpect(status().isOk()).andExpect(model().attributeExists("client"))
+				.andExpect(view().name("clients/clientDetails"));
 	}
 
 	@WithMockUser(value = "spring")
 	@Test
 	void testInitCreationForm() throws Exception {
-		this.mockMvc.perform(MockMvcRequestBuilders.get("/clients/new")).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.view().name("clients/createClientForm"));
+		this.mockMvc.perform(get("/clients/new"))
+			.andExpect(status().isOk())
+			.andExpect(view().name("clients/createClientForm"));
 	}
 
 	@WithMockUser(value = "spring")
 	@ParameterizedTest
 	@CsvSource({
-		"Pepito Pinotes, 123456789X, 1997/10/10, 987654321, pepitopinotes@alum.us.es", "JU4N N06UER01, 666999666T, 1925/11/10, 634964979, jnogtir@alum.us.es", "DIOS DANNY, 4458X, 1997/10/10, 4458, diosDanny4458@dany.god",
+		"Pepito Pinotes, 123456789X, 1997/10/10, 987654321, pepitopinotes@alum.us.es",
+		"JU4N N06UER01, 666999666T, 1925/11/10, 634964979, jnogtir@alum.us.es",
+		"DIOS DANNY, 4458X, 1997/10/10, 4458, diosDanny4458@dany.god",
 	})
-	void testProcessCreationFormSuccess(final String name, final String identification, final String birthDate, final String phone, final String email) throws Exception {
-		this.mockMvc
-			.perform(MockMvcRequestBuilders.post("/clients/new").with(SecurityMockMvcRequestPostProcessors.csrf()).param("name", name).param("identification", identification).param("birthDate", birthDate).param("phone", phone).param("email", email))
-			.andExpect(MockMvcResultMatchers.status().is3xxRedirection());
+	void testProcessCreationFormSuccess(String name, String identification, String birthDate, String phone, String email) throws Exception {
+		this.mockMvc.perform(post("/clients/new").with(csrf())
+				.param("name", name)
+				.param("identification", identification)
+				.param("birthDate", birthDate)
+				.param("phone", phone)
+				.param("email", email))
+				.andExpect(status().is3xxRedirection());
 	}
-
+	
 	@WithMockUser(value = "spring")
 	@ParameterizedTest
 	@CsvSource({
-		"Pepito Pinotes, 123456789X, 2050/10/10, 987654321, pepitopinotes@alum.us.es", "JU4N N06UER01, 666999666T, 1925/11/10, notanumber, jnogtir@alum.us.es", "DIOS DANNY, 4458X, 1997/10/10, 4458, diosDanny4458.dany.god",
+		"Pepito Pinotes, 123456789X, 2050/10/10, 987654321, pepitopinotes@alum.us.es",
+		"JU4N N06UER01, 666999666T, 1925/11/10, notanumber, jnogtir@alum.us.es",
+		"DIOS DANNY, 4458X, 1997/10/10, 4458, diosDanny4458.dany.god",
 	})
-	void testProcessCreateFormHasErrors(final String name, final String identification, final String birthDate, final String phone, final String email) throws Exception {
-		this.mockMvc
-			.perform(MockMvcRequestBuilders.post("/clients/new").with(SecurityMockMvcRequestPostProcessors.csrf()).param("name", name).param("identification", identification).param("birthDate", birthDate).param("phone", phone).param("email", email))
-			.andExpect(MockMvcResultMatchers.model().attributeHasErrors("client")).andExpect(MockMvcResultMatchers.view().name("clients/createClientForm"));
-
+	void testProcessCreateFormHasErrors(String name, String identification, String birthDate, String phone, String email) throws Exception {
+		this.mockMvc.perform(post("/clients/new").with(csrf())
+				.param("name", name)
+				.param("identification", identification)
+				.param("birthDate", birthDate)
+				.param("phone", phone)
+				.param("email", email))
+				.andExpect(model().attributeHasErrors("client"))
+				.andExpect(view().name("clients/createClientForm"));
+		
 	}
 
 }

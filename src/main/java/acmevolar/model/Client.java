@@ -71,9 +71,11 @@ public class Client extends NamedEntity {
 	@DateTimeFormat(pattern = "yyyy/MM/dd")
 	private LocalDate	creationDate;
 
+	//
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "username", referencedColumnName = "username")
 	private User		user;
+	//
 
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "client")
 	private Set<Book>	books;

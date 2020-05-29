@@ -76,7 +76,7 @@ class AirlineServiceTests {
 	public void shouldFindAirlines() {
 		Collection<Airline> airlines = this.airlineService.findAirlines();
 
-		assertThat(!airlines.isEmpty()).isTrue();
+		assertThat(!airlines.isEmpty());
 		assertThat(airlines).asList();
 	}
 
@@ -84,19 +84,19 @@ class AirlineServiceTests {
 	public void shouldFindAirlineById() {
 		Airline airline = this.airlineService.findAirlineById(1);
 
-		assertThat(airline.getName().equals("Sevilla Este Airways")).isTrue();
-		assertThat(airline.getIdentification().equals("61333744-N")).isTrue();
-		assertThat(airline.getCountry().equals("Spain")).isTrue();
-		assertThat(airline.getPhone().equals("644584458")).isTrue();
-		assertThat(airline.getEmail().equals("minardi@gmail.com")).isTrue();
-		assertThat(airline.getCreationDate().equals(LocalDate.parse("2010-11-07"))).isTrue();
-		assertThat(airline.getReference().equals("SEA-001")).isTrue();
+		assertThat(airline.getName().equals("Sevilla Este Airways"));
+		assertThat(airline.getIdentification().equals("61333744-N"));
+		assertThat(airline.getCountry().equals("Spain"));
+		assertThat(airline.getPhone().equals("644584458"));
+		assertThat(airline.getEmail().equals("minardi@gmail.com"));
+		assertThat(airline.getCreationDate().equals(LocalDate.parse("2010-11-07")));
+		assertThat(airline.getReference().equals("SEA-001"));
 	}
 
 	@Test
 	public void shouldNotFindAirlineById() {
 		Airline airline = this.airlineService.findAirlineById(200);
 
-		assertThat(airline == null).isTrue();
+		assertThat(airline == null);
 	}
 }

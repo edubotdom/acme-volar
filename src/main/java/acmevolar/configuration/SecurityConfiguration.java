@@ -30,10 +30,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
 	@Autowired
-	DataSource		dataSource;
-
-	private String	airlineString	= "airline";
-	private String	clientString	= "client";
+	DataSource dataSource;
 
 
 	@Override
@@ -42,23 +39,22 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
 			.antMatchers("/resources/**", "/webjars/**", "/h2-console/**").permitAll().antMatchers(HttpMethod.GET, "/", "/oups").permitAll().antMatchers("/users/new").permitAll()
 			/* Clients */
-			.antMatchers("/clients").hasAuthority(this.airlineString).antMatchers("/clients/new").anonymous().antMatchers("/clients/{^[\\d]$}").hasAnyAuthority(this.airlineString)
+			.antMatchers("/clients").hasAuthority("airline").antMatchers("/clients/new").anonymous().antMatchers("/clients/{^[\\d]$}").hasAnyAuthority("airline")
 			/* Airlines */
 			.antMatchers("/airlines").permitAll().antMatchers("/airlines/{^[\\d]$}").permitAll().antMatchers("/airlines/new/").anonymous()
 			/* Airports */
-			.antMatchers("/airports").hasAnyAuthority(this.airlineString, this.clientString).antMatchers("/airports/{^[\\d]$}").hasAnyAuthority(this.airlineString, this.clientString).antMatchers("/airports/new").hasAuthority(this.airlineString)
-			.antMatchers("/airports/{^[\\d]$}/edit").hasAuthority(this.airlineString).antMatchers("/airports/{^[\\d]$}/delete").hasAuthority(this.airlineString)
+			.antMatchers("/airports").hasAnyAuthority("airline", "client").antMatchers("/airports/{^[\\d]$}").hasAnyAuthority("airline", "client").antMatchers("/airports/new").hasAuthority("airline").antMatchers("/airports/{^[\\d]$}/edit")
+			.hasAuthority("airline").antMatchers("/airports/{^[\\d]$}/delete").hasAuthority("airline")
 			/* Runways */
-			.antMatchers("/airports/{^[\\d]$}/runways").hasAnyAuthority(this.airlineString, this.clientString).antMatchers("/airports/{^[\\d]$}/runways/new").hasAuthority(this.airlineString).antMatchers("/airports/{^[\\d]$}/runways/{^[\\d]$}/edit")
-			.hasAuthority(this.airlineString).antMatchers("/airports/{^[\\d]$}/runways/{^[\\d]$}/delete").hasAuthority(this.airlineString)
+			.antMatchers("/airports/{^[\\d]$}/runways").hasAnyAuthority("airline", "client").antMatchers("/airports/{^[\\d]$}/runways/new").hasAuthority("airline").antMatchers("/airports/{^[\\d]$}/runways/{^[\\d]$}/edit").hasAuthority("airline")
+			.antMatchers("/airports/{^[\\d]$}/runways/{^[\\d]$}/delete").hasAuthority("airline")
 			/* Flights */
-			.antMatchers("/flights").permitAll().antMatchers("/my_flights").hasAuthority(this.airlineString).antMatchers("/flights/{^[\\d]$}").permitAll().antMatchers("/flights/new").hasAuthority(this.airlineString).antMatchers("/flights/{^[\\d]$}/edit")
-			.hasAuthority(this.airlineString).antMatchers("/flights/{^[\\d]$}/delete").hasAuthority(this.airlineString)
+			.antMatchers("/flights").permitAll().antMatchers("/my_flights").hasAuthority("airline").antMatchers("/flights/{^[\\d]$}").permitAll().antMatchers("/flights/new").hasAuthority("airline").antMatchers("/flights/{^[\\d]$}/edit")
+			.hasAuthority("airline").antMatchers("/flights/{^[\\d]$}/delete").hasAuthority("airline")
 			/* Planes */
-			.antMatchers("/my_planes").hasAuthority(this.airlineString).antMatchers("/planes/new").hasAuthority(this.airlineString).antMatchers("/planes/{^[\\d]$}").hasAnyAuthority(this.clientString, this.airlineString)
-			.antMatchers("/planes/{^[\\d]$}/edit").hasAuthority(this.airlineString)
+			.antMatchers("/my_planes").hasAuthority("airline").antMatchers("/planes/new").hasAuthority("airline").antMatchers("/planes/{^[\\d]$}").hasAnyAuthority("client", "airline").antMatchers("/planes/{^[\\d]$}/edit").hasAuthority("airline")
 			/* Books */
-			.antMatchers("/books/{^[\\\\d]$}/new").hasAuthority(this.clientString).antMatchers("/books/{^[\\\\d]$}").hasAnyAuthority(this.clientString, this.airlineString).antMatchers("/books/{^[\\\\d]$}/edit").hasAnyAuthority(this.airlineString)
+			.antMatchers("/books/{^[\\\\d]$}/new").hasAuthority("client").antMatchers("/books/{^[\\\\d]$}").hasAnyAuthority("client", "airline").antMatchers("/books/{^[\\\\d]$}/edit").hasAnyAuthority("airline")
 
 			.antMatchers("/admin/**").hasAnyAuthority("admin").antMatchers("/owners/**").hasAnyAuthority("owner", "admin").antMatchers("/vets/**").authenticated().anyRequest().denyAll().and().formLogin()
 			/* .loginPage("/login") */

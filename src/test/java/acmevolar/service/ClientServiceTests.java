@@ -25,7 +25,7 @@ import acmevolar.service.exceptions.BirthDateIsAfterCreationDateException;
 
 @DataJpaTest(includeFilters = @ComponentScan.Filter(Service.class))
 @AutoConfigureTestDatabase(replace=Replace.NONE)
-class ClientServiceTests {
+public class ClientServiceTests {
 	
 	@Autowired
 	protected ClientService clientService;
@@ -40,7 +40,7 @@ class ClientServiceTests {
 	@Transactional
 	void shouldFindClientWithCorrectId() {
 		Client client1 = this.clientService.findClientById(1);
-		assertThat(client1.getName().length()>0).isTrue();
+		assertThat(client1.getName().length()>0);
 		assertThat(client1.getIdentification()).isEqualTo("53933261-P");
 		assertThat(client1.getBirthDate()).isEqualTo(LocalDate.of(1994, 9, 7));
 		assertThat(client1.getPhone()).isEqualTo("644584458");
@@ -74,8 +74,6 @@ class ClientServiceTests {
 		client.setUser(user);
 		client.setIdentification("53933123X");
 		this.clientService.saveClient(client);
-		
-		assertThat(client.getId()).isNotNull();
 		
 	}
 	

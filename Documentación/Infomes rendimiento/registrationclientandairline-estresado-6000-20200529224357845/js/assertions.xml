@@ -1,0 +1,26 @@
+<testsuite name="simulations.RegistrationClientAndAirline" tests="8" errors="0" failures="7" time="0">
+<testcase name="Global: max of response time is less than 5000.0" status="false" time="0">
+  <failure type="Global">Actual value: 60812.0</failure>
+</testcase>
+<testcase name="Home: percentage of failed events is less than or equal to 5.0" status="false" time="0">
+  <failure type="Home">Actual value: 31.733333333333334</failure>
+</testcase>
+<testcase name="ClientRegistration: percentage of failed events is less than or equal to 5.0" status="false" time="0">
+  <failure type="ClientRegistration">Actual value: 32.016666666666666</failure>
+</testcase>
+<testcase name="AirlineRegistration: percentage of failed events is less than or equal to 5.0" status="false" time="0">
+  <failure type="AirlineRegistration">Actual value: 31.716666666666665</failure>
+</testcase>
+<testcase name="AirlineRegistered: percentage of failed events is less than or equal to 5.0" status="false" time="0">
+  <failure type="AirlineRegistered">Actual value: 19.819380034171346</failure>
+</testcase>
+<testcase name="ClientRegistered: percentage of failed events is less than or equal to 5.0" status="false" time="0">
+  <failure type="ClientRegistered">Actual value: 31.33120862956607</failure>
+</testcase>
+<testcase name="ClientRegistered Redirect 1: percentage of failed events is less than or equal to 5.0" status="true" time="0">
+  <system-out>ClientRegistered Redirect 1: percentage of failed events is less than or equal to 5.0</system-out>
+</testcase>
+<testcase name="Global: percentage of successful events is greater than 90.0" status="false" time="0">
+  <failure type="Global">Actual value: 72.20459158875833</failure>
+</testcase>
+</testsuite>

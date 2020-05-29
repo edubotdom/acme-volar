@@ -1,0 +1,36 @@
+{
+  "simulation": "simulations.AerolineaCreaAvionCSV",
+  "simulationId": "aerolineacreaavioncsv",
+  "start": 1590711334090,
+  "description": "",
+  "scenarios": ["Airlines"],
+  "assertions": [
+{
+  "path": "Global",
+  "target": "max of response time",
+  "condition": "is less than",
+  "expectedValues": [500.0],
+  "result": true,
+  "message": "Global: max of response time is less than 500.0",
+  "actualValue": [350.0]
+},
+{
+  "path": "Global",
+  "target": "mean of response time",
+  "condition": "is less than",
+  "expectedValues": [500.0],
+  "result": true,
+  "message": "Global: mean of response time is less than 500.0",
+  "actualValue": [13.0]
+},
+{
+  "path": "Global",
+  "target": "percentage of successful events",
+  "condition": "is greater than",
+  "expectedValues": [95.0],
+  "result": true,
+  "message": "Global: percentage of successful events is greater than 95.0",
+  "actualValue": [100.0]
+}
+  ]
+}

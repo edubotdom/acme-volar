@@ -20,8 +20,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
 @AutoConfigureMockMvc
 @TestPropertySource(locations = "classpath:application-mysql.properties")
-
-public class ClientControllerTestsE2E {
+class ClientControllerTestsE2E {
 
 	private static final int	TEST_CLIENT_ID	= 1;
 

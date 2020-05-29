@@ -21,7 +21,6 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
 @AutoConfigureMockMvc
 @TestPropertySource(locations = "classpath:application-mysql.properties")
-
 class PlaneControllerTestsE2E {
 
 	private static final int	TEST_PLANE_ID	= 1;

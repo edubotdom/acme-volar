@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -13,16 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package acmevolar.web;
 
-import java.time.Instant;
-import java.util.Date;
-
-import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
-import acmevolar.model.Plane;
 import acmevolar.model.Runway;
 
 /**
@@ -37,17 +33,15 @@ import acmevolar.model.Runway;
  */
 public class RunwayValidator implements Validator {
 
-	//private static final String REQUIRED = "required";
-	//private FlightService flightService;
-
 	@Override
-	public void validate(Object obj, Errors errors) {		
+	public void validate(final Object obj, final Errors errors) {
 		Runway runway = (Runway) obj;
-		
-		if(runway.getRunwayType()==null||runway.getName().isEmpty()) {
-			if(runway.getRunwayType()==null) {
+
+		if (runway.getRunwayType() == null || runway.getName().isEmpty()) {
+			if (runway.getRunwayType() == null) {
 				errors.rejectValue("runwayType", "NullRunwayType", "You must fill all information");
-			} if(runway.getName().isEmpty()) {
+			}
+			if (runway.getName().isEmpty()) {
 				errors.rejectValue("name", "NullName", "You must fill all information");
 			}
 		} else {
@@ -59,7 +53,7 @@ public class RunwayValidator implements Validator {
 	 * This Validator validates *just* Runway instances
 	 */
 	@Override
-	public boolean supports(Class<?> clazz) {
+	public boolean supports(final Class<?> clazz) {
 		return Runway.class.isAssignableFrom(clazz);
 	}
 

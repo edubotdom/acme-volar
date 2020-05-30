@@ -64,7 +64,7 @@ public class Airport extends NamedEntity {
 
 	public Set<Runway> getRunwaysInternal() {
 		if (this.runways == null) {
-			this.runways = new HashSet<Runway>();
+			this.runways = new HashSet<>();
 		}
 		return this.runways;
 	}
@@ -83,7 +83,7 @@ public class Airport extends NamedEntity {
 		this.getRunwaysInternal().add(runway);
 		runway.setAirport(this);
 	}
-	
+
 	public void removeRunway(final Runway runway) {
 		this.getRunwaysInternal().remove(runway);
 	}

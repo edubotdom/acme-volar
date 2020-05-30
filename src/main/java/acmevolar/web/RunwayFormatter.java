@@ -18,7 +18,6 @@ package acmevolar.web;
 
 import java.text.ParseException;
 import java.util.Collection;
-import java.util.List;
 import java.util.Locale;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,28 +46,28 @@ import acmevolar.service.RunwayService;
 @Component
 public class RunwayFormatter implements Formatter<Runway> {
 
-    private final RunwayService runwayService;
+	private final RunwayService runwayService;
 
 
-    @Autowired
-    public RunwayFormatter(final RunwayService runwayService) {
-        this.runwayService = runwayService;
-    }
+	@Autowired
+	public RunwayFormatter(final RunwayService runwayService) {
+		this.runwayService = runwayService;
+	}
 
-    @Override
-    public String print(final Runway runwayService, final Locale locale) {
-        return runwayService.getName() + ", airport: " + runwayService.getAirport().getName() + ", city: " + runwayService.getAirport().getCity();
-    }
+	@Override
+	public String print(final Runway runwayService, final Locale locale) {
+		return runwayService.getName() + ", airport: " + runwayService.getAirport().getName() + ", city: " + runwayService.getAirport().getCity();
+	}
 
-    @Override
-    public Runway parse(final String text, final Locale locale) throws ParseException {
-    	String[] textW = text.split(",");
-        Collection<Runway> findRunways = this.runwayService.findAllRunway();
-        for (Runway runway : findRunways) {
-            if (runway.getName().equals(textW[0])) {
-                return runway;
-            }
-        }
-        throw new ParseException("type not found: " + text, 0);
-    }
+	@Override
+	public Runway parse(final String text, final Locale locale) throws ParseException {
+		String[] textW = text.split(",");
+		Collection<Runway> findRunways = this.runwayService.findAllRunway();
+		for (Runway runway : findRunways) {
+			if (runway.getName().equals(textW[0])) {
+				return runway;
+			}
+		}
+		throw new ParseException("type not found: " + text, 0);
+	}
 }

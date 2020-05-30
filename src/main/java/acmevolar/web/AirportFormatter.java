@@ -25,11 +25,7 @@ import org.springframework.format.Formatter;
 import org.springframework.stereotype.Component;
 
 import acmevolar.model.Airport;
-import acmevolar.model.FlightStatusType;
-import acmevolar.model.RunwayType;
 import acmevolar.service.AirportService;
-import acmevolar.service.FlightService;
-import acmevolar.service.RunwayService;
 
 /**
  * Instructs Spring MVC on how to parse and print elements of type 'PetType'. Starting

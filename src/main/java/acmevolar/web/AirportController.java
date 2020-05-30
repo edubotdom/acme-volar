@@ -36,6 +36,7 @@ public class AirportController {
 	private final ForecastService	forecastService;
 	private final FlightService		flightService;
 
+	private static final String		AIRPORT_CONSTANT			= "airport";
 	private static final String		VIEWS_AIRPORT_CREATE_FORM	= "airports/createAirportForm";
 
 
@@ -52,7 +53,7 @@ public class AirportController {
 	@PreAuthorize("hasAuthority('airline') || hasAuthority('client')")
 	public String showAirportsList(final Map<String, Object> model) {
 
-		Collection<AirportListAttributes> airports = new ArrayList<AirportListAttributes>();
+		Collection<AirportListAttributes> airports = new ArrayList<>();
 		airports.addAll(this.airportService.findAirportListAttributes());
 		model.put("airports", airports);
 		return "airports/airportList";
@@ -74,7 +75,7 @@ public class AirportController {
 	public String initCreationForm(final Map<String, Object> model) {
 		Airport airport = new Airport();
 
-		model.put("airport", airport);
+		model.put(AirportController.AIRPORT_CONSTANT, airport);
 
 		return AirportController.VIEWS_AIRPORT_CREATE_FORM;
 	}
@@ -85,7 +86,7 @@ public class AirportController {
 
 		if (result.hasErrors()) {
 			return AirportController.VIEWS_AIRPORT_CREATE_FORM;
-		} else if (this.airportService.findAirportsByName(airport.getName()).size() != 0) {
+		} else if (!this.airportService.findAirportsByName(airport.getName()).isEmpty()) {
 			result.rejectValue("name", "duplicate", "Already exists");
 			return AirportController.VIEWS_AIRPORT_CREATE_FORM;
 		} else {
@@ -105,7 +106,7 @@ public class AirportController {
 	public String initUpdateForm(@PathVariable("airportId") final int airportId, final ModelMap model) {
 		Airport airport = this.airportService.findAirportById(airportId);
 
-		model.put("airport", airport);
+		model.put(AirportController.AIRPORT_CONSTANT, airport);
 		return AirportController.VIEWS_AIRPORT_CREATE_FORM;
 	}
 
@@ -115,13 +116,12 @@ public class AirportController {
 		Airport airportToUpdate = this.airportService.findAirportById(airportId);
 
 		if (result.hasErrors()) {
-			model.put("airport", airport);
+			model.put(AirportController.AIRPORT_CONSTANT, airport);
 			return AirportController.VIEWS_AIRPORT_CREATE_FORM;
 		} else if (this.airportService.findAirportsByName(airport.getName()).size() != 0 && !airport.getName().equalsIgnoreCase(airportToUpdate.getName())) {
 			result.rejectValue("name", "duplicate", "Already exists");
 			return AirportController.VIEWS_AIRPORT_CREATE_FORM;
 		} else {
-			//Airport airportToUpdate = this.airportService.findAirportById(airportId);
 			BeanUtils.copyProperties(airportToUpdate, airport, "name", "maxNumberOfPlanes", "maxNumberOfClients", "latitude", "longitude", "code", "city");
 
 			try {
@@ -139,8 +139,8 @@ public class AirportController {
 	@GetMapping(value = "/airports/{airportId}/delete")
 	public String deleteAirport(@PathVariable("airportId") final int airportId) throws NonDeletableException {
 		Optional<Airport> airport = this.airportService.findById(airportId);
-		boolean deletable = !this.flightService.findFlights().stream().anyMatch(f -> f.getDepartes().getAirport().equals(airport.get()) || f.getLands().getAirport().equals(airport.get()));
-		if (deletable) {
+		boolean deletable = this.flightService.findFlights().stream().noneMatch(f -> f.getDepartes().getAirport().equals(airport.get()) || f.getLands().getAirport().equals(airport.get()));
+		if (deletable && airport.isPresent()) {
 			this.airportService.deleteAirport(airport.get());
 		} else {
 			throw new NonDeletableException();

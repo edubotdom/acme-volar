@@ -24,9 +24,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.Formatter;
 import org.springframework.stereotype.Component;
 
-import acmevolar.model.FlightStatusType;
 import acmevolar.model.RunwayType;
-import acmevolar.service.FlightService;
 import acmevolar.service.RunwayService;
 
 /**

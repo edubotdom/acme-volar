@@ -34,14 +34,13 @@ import acmevolar.repository.RunwayRepository;
 @Service
 public class RunwayService {
 
-	private RunwayRepository	runwayRepository;
-	private AirportRepository	airportRepository;
+	private RunwayRepository runwayRepository;
 
 
 	@Autowired
 	public RunwayService(final RunwayRepository runwayRepository, final AirportRepository airportRepository) {
 		this.runwayRepository = runwayRepository;
-		this.airportRepository = airportRepository;
+
 	}
 
 	@Transactional(readOnly = true)
@@ -80,8 +79,8 @@ public class RunwayService {
 
 	@Transactional(readOnly = true)
 	public Airport findAirportById(final Integer airportId) throws DataAccessException {
-		Airport airport = this.runwayRepository.findAirportById(airportId);
-		return airport;
+		return this.runwayRepository.findAirportById(airportId);
+
 	}
 
 	@CacheEvict(cacheNames = "listRunwaysByAirpotId", allEntries = true)

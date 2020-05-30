@@ -33,12 +33,12 @@ class RegistrationClientAndAirline extends Simulation {
 	}
 
 	object RegistrationAndRegisteredClient {
-		val regist = exec(http("Registration")
+		val regist = exec(http("ClientRegistration")
 			.get("/clients/new")
 			.headers(headers_0)
 			.check(css("input[name=_csrf]", "value").saveAs("stoken")))
 		.pause(92)
-		.exec(http("Registered")
+		.exec(http("ClientRegistered")
 			.post("/clients/new")
 			.headers(headers_2)
 			.formParam("name", "Pepito Camotes Areto")
@@ -54,13 +54,13 @@ class RegistrationClientAndAirline extends Simulation {
 	}
 
 	object RegistrationAndRegisteredAirline {
-		var regist = exec(http("request_1")
+		var regist = exec(http("AirlineRegistration")
 			.get("/airlines/new")
 			.headers(headers_0)
 			.check(css("input[name=_csrf]", "value").saveAs("stoken")))
 		.pause(40)
 		// RegistrationForm
-		.exec(http("request_2")
+		.exec(http("AirlineRegistered")
 			.post("/airlines/new")
 			.headers(headers_2)
 			.formParam("name", "Airlinetest")
@@ -84,5 +84,9 @@ class RegistrationClientAndAirline extends Simulation {
 		RegistrationAndRegisteredClient.regist)
 		
 
-	setUp(airlineScn.inject(atOnceUsers(1)), clientScn.inject(atOnceUsers(1))).protocols(httpProtocol)
+	setUp(
+		airlineScn.inject(rampUsers(6000) during (100 seconds)), 
+		clientScn.inject(rampUsers(6000) during (100 seconds))
+	).protocols(httpProtocol)
+	.assertions(global.responseTime.max.lt(5000),forAll.failedRequests.percent.lte(5),global.successfulRequests.percent.gt(90)).maxDuration(10 minutes)
 }

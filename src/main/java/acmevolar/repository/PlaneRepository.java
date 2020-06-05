@@ -7,14 +7,13 @@ import java.util.List;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.repository.query.Param;
 
-import acmevolar.model.Flight;
 import acmevolar.model.Plane;
+import acmevolar.projections.PlaneListAttributes;
 
+public interface PlaneRepository {
 
-public interface PlaneRepository{
-	
 	Plane findById(int id) throws DataAccessException;
-	
+
 	Collection<Plane> findAll() throws DataAccessException;
 
 	void deleteById(int id);
@@ -26,5 +25,6 @@ public interface PlaneRepository{
 	void save(Plane plane) throws DataAccessException;
 
 	Plane findByReference(String reference);
-	
+
+	List<PlaneListAttributes> findAllAirlinePlaneListAttributes(String username) throws DataAccessException;
 }

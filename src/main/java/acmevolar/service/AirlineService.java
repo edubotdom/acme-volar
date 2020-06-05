@@ -20,11 +20,14 @@ import java.time.LocalDate;
 import java.util.Collection;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import acmevolar.model.Airline;
+import acmevolar.projections.AirlineListAttributes;
 import acmevolar.repository.AirlineRepository;
 
 /**
@@ -51,8 +54,15 @@ public class AirlineService {
 	}
 
 	@Transactional(readOnly = true)
+	@Cacheable("airlines")
 	public Collection<Airline> findAirlines() throws DataAccessException {
 		return this.airlineRepository.findAll();
+	}
+	
+	@Transactional(readOnly = true)
+	@Cacheable("listAirlines")
+	public Collection<AirlineListAttributes> findAirlinesListAttributes() throws DataAccessException {
+		return this.airlineRepository.findAllAirlinesAttributes();
 	}
 
 	@Transactional(readOnly = true)
@@ -61,6 +71,7 @@ public class AirlineService {
 	}
 
 	@Transactional
+	@CacheEvict(cacheNames = "listAirlines", allEntries = true)
 	public void saveAirline(final Airline airline) throws DataAccessException {
 
 		airline.setCreationDate(LocalDate.now());

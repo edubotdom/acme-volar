@@ -120,28 +120,36 @@ public class AirportControllerTests {
 
 	}
 
-	@WithMockUser(value = "spring")
+	@WithMockUser(username = "client1", authorities = {
+			"airline"
+		})
 	@Test
 	void testShowAirportList() throws Exception {
 		this.mockMvc.perform(get("/airports")).andExpect(status().isOk()).andExpect(model().attributeExists("airports"))
 				.andExpect(view().name("airports/airportList"));
 	}
 
-	@WithMockUser(value = "spring")
+	@WithMockUser(username = "client1", authorities = {
+			"airline"
+		})
 	@Test
-	void testShowPlane() throws Exception {
+	void testShowAirport() throws Exception {
 		this.mockMvc.perform(get("/airports/{airportId}", AirportControllerTests.TEST_AIRPORT_ID))
 		.andExpect(status().isOk()).andExpect(model().attributeExists("airport")).andExpect(view().name("airports/airportDetails"));
 	}
 
-	@WithMockUser(value = "spring")
+	@WithMockUser(username = "airline1", authorities = {
+			"airline"
+		})
 	@Test
 	void testInitCreationForm() throws Exception {
 		this.mockMvc.perform(get("/airports/new")).andExpect(status().isOk())
 				.andExpect(view().name("airports/createAirportForm"));
 	}
-
-	@WithMockUser(value = "spring")
+	
+	@WithMockUser(username = "airline1", authorities = {
+			"airline"
+		})
 	@Test
 	void testProcessCreationFormSuccess() throws Exception {
 		this.mockMvc.perform(post("/airports/new").with(csrf())
@@ -151,7 +159,9 @@ public class AirportControllerTests {
 				.param("code", "SVQ").param("city", "Sevilla")).andExpect(status().is3xxRedirection());;
 	}
 	
-	@WithMockUser(value = "spring")
+	@WithMockUser(username = "airline1", authorities = {
+			"airline"
+		})
 	@ParameterizedTest 
 	@CsvSource({
 	    "Madrid Airport, 35, 500, 55.55, 49.112, MAC, Madrid",
@@ -173,7 +183,9 @@ public class AirportControllerTests {
 				.andExpect(status().is3xxRedirection());
 	} 
 
-	@WithMockUser(value = "spring")
+	@WithMockUser(username = "airline1", authorities = {
+			"airline"
+		})
 	@Test
 	void testProcessCreationFormHasErrors() throws Exception {
 		this.mockMvc.perform(post("/airports/new").with(csrf())
@@ -184,7 +196,9 @@ public class AirportControllerTests {
 				.andExpect(view().name("airports/createAirportForm"));
 	}
 	
-	@WithMockUser(value = "spring")
+	@WithMockUser(username = "airline1", authorities = {
+			"airline"
+		})
 	@ParameterizedTest 
 	@CsvSource({
 	    "Madrid Airport, 35, 500, -100.89, 49.112, MAC, Madrid",
@@ -207,14 +221,18 @@ public class AirportControllerTests {
 				.andExpect(view().name("airports/createAirportForm"));
 	} 
 
-	@WithMockUser(value = "spring")
+	@WithMockUser(username = "airline1", authorities = {
+			"airline"
+		})
 	@Test
 	void testInitUpdateForm() throws Exception {
 		mockMvc.perform(get("/airports/{airportId}/edit", TEST_AIRPORT_ID)).andExpect(status().isOk())
 				.andExpect(model().attributeExists("airport")).andExpect(view().name("airports/createAirportForm"));
 	}
 
-	@WithMockUser(value = "spring")
+	@WithMockUser(username = "airline1", authorities = {
+			"airline"
+		})
 	@Test
 	void testProcessUpdateFormSuccess() throws Exception {
 		mockMvc.perform(post("/airports/{airportId}/edit", TEST_AIRPORT_ID).with(csrf())
@@ -226,7 +244,9 @@ public class AirportControllerTests {
 				.andExpect(view().name("redirect:/airports/{airportId}"));
 	}
 	
-	@WithMockUser(value = "spring")
+	@WithMockUser(username = "airline1", authorities = {
+			"airline"
+		})
 	@ParameterizedTest 
 	@CsvSource({
 	    "Madrid Airport, 35, 500, 55.55, 49.112, MAC, Madrid",
@@ -249,7 +269,9 @@ public class AirportControllerTests {
 				.andExpect(view().name("redirect:/airports/{airportId}"));
 	} 
 
-	@WithMockUser(value = "spring")
+	@WithMockUser(username = "airline1", authorities = {
+			"airline"
+		})
 	@Test
 	void testProcessUpdateFormHasErrors() throws Exception {
 		mockMvc.perform(post("/airports/{airportId}/edit", TEST_AIRPORT_ID).with(csrf()).param("name", "Betis Airport")
@@ -257,7 +279,9 @@ public class AirportControllerTests {
 				.andExpect(status().isOk()).andExpect(view().name("airports/createAirportForm"));
 	}
 	
-	@WithMockUser(value = "spring")
+	@WithMockUser(username = "airline1", authorities = {
+			"airline"
+		})
 	@ParameterizedTest 
 	@CsvSource({
 		"123, 35, -2, 10.89, 49.112, MAC, Madrid",

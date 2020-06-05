@@ -202,10 +202,10 @@ public class FlightControllerTests {
 		Flight flight1 = new Flight();
 		flight1.setId(1);
 		flight1.setAirline(airline1);
-		flight1.setDepartDate(Date.from(Instant.now().minusSeconds(6000)));
+		flight1.setDepartDate(Date.from(Instant.now().plusSeconds(6000)));
 		flight1.setDepartes(r_depart);
 		flight1.setFlightStatus(flightStatusOnTime);
-		flight1.setLandDate(Date.from(Instant.now().plusSeconds(6000)));
+		flight1.setLandDate(Date.from(Instant.now().plusSeconds(60000)));
 		flight1.setLands(r_landing);
 		flight1.setPlane(plane1);
 		flight1.setPrice(0.);
@@ -216,22 +216,29 @@ public class FlightControllerTests {
 		Flight flight2 = new Flight();
 		flight2.setId(2);
 		flight2.setAirline(airline1);
-		flight2.setDepartDate(Date.from(Instant.now().minusSeconds(6000)));
+		flight2.setDepartDate(Date.from(Instant.now().plusSeconds(6000)));
 		flight2.setDepartes(r_depart);
 		flight2.setFlightStatus(flightStatusOnTime);
-		flight2.setLandDate(Date.from(Instant.now().plusSeconds(6000)));
+		flight2.setLandDate(Date.from(Instant.now().plusSeconds(60000)));
 		flight2.setLands(r_landing);
 		flight2.setPlane(plane1);
 		flight2.setPrice(0.);
 		flight2.setPublished(true);
 		flight2.setReference("F-02");
 		flight2.setSeats(10);
+		
+		List<Flight> flights = new ArrayList<>();
+		flights.add(flight1);
+		flights.add(flight2);
 
 		BDDMockito.given(this.flightService.findFlightById(1)).willReturn(flight1);
 
 		BDDMockito.given(this.flightService.findFlightById(2)).willReturn(flight2);
 
 		BDDMockito.given(this.planeService.findPlanes()).willReturn(planes);
+		
+		BDDMockito.given(this.flightService.findPublishedFutureFlight()).willReturn(flights);
+		
 	}
 
 	@WithMockUser(value = "airline1", authorities = {

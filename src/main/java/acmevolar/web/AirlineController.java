@@ -34,8 +34,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import acmevolar.model.Airline;
+import acmevolar.projections.AirlineListAttributes;
 import acmevolar.service.AirlineService;
-import acmevolar.service.AuthoritiesService;
 import acmevolar.service.UserService;
 
 /**
@@ -50,15 +50,11 @@ public class AirlineController {
 	private static final String		VIEWS_AIRLINE_CREATE_FORM	= "airlines/createAirlineForm";
 
 	private final AirlineService	airlineService;
-	private final UserService	userService;
-/*	private final AuthoritiesService	authoritiesService;*/
 
 
 	@Autowired
-	public AirlineController(final AirlineService airlineService, final UserService userService/*, final AuthoritiesService authoritiesService*/) {
+	public AirlineController(final AirlineService airlineService, final UserService userService/* , final AuthoritiesService authoritiesService */) {
 		this.airlineService = airlineService;
-		this.userService = userService;
-/*		this.authoritiesService = authoritiesService;*/
 	}
 
 	@InitBinder
@@ -86,14 +82,15 @@ public class AirlineController {
 			return "redirect:/airlines/" + airline.getId();
 		}
 	}
+
 	//@PreAuthorize("!hasAuthority('airline')")
 	@GetMapping(value = {
 		"/airlines"
 	})
 	public String showAirlineList(final Map<String, Object> model) {
 
-		Collection<Airline> airlines = new ArrayList<Airline>();
-		airlines.addAll(this.airlineService.findAirlines());
+		Collection<AirlineListAttributes> airlines = new ArrayList<>();
+		airlines.addAll(this.airlineService.findAirlinesListAttributes());
 		model.put("airlines", airlines);
 		return "airlines/airlinesList";
 	}
@@ -105,7 +102,6 @@ public class AirlineController {
 	 *            the ID of the owner to display
 	 * @return a ModelMap with the model attributes for the view
 	 */
-	//@PreAuthorize("!hasAuthority('airline')")
 	@GetMapping("/airlines/{airlineId}")
 	public ModelAndView showAirline(@PathVariable("airlineId") final int airlineId) {
 		ModelAndView mav = new ModelAndView("airlines/airlineDetails");

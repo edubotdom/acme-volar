@@ -14,6 +14,8 @@ import javax.validation.ConstraintViolationException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.orm.ObjectRetrievalFailureException;
@@ -26,6 +28,7 @@ import acmevolar.model.Plane;
 import acmevolar.util.EntityUtils;
 
 @DataJpaTest(includeFilters = @ComponentScan.Filter(Service.class))
+@AutoConfigureTestDatabase(replace=Replace.NONE)
 class PlaneServiceTests {
 
 	@Autowired
@@ -36,9 +39,6 @@ class PlaneServiceTests {
 	
 	@Autowired
 	protected AirlineService	airlineService;
-	
-//	@Autowired
-//	private MockMvc mockMvc;
 	
 	//Registrar un avión correctamente
 	@Test
@@ -118,7 +118,6 @@ class PlaneServiceTests {
 		plane.setNumberOfKm(34200.);
 		plane.setReference("REF1");
 		
-
 		Assertions.assertThrows(ConstraintViolationException.class, () ->{
 			f1.setPlane(plane);
 			planeService.savePlane(plane);
@@ -144,7 +143,6 @@ class PlaneServiceTests {
 		plane.setModel("Renton 737");
 		plane.setNumberOfKm(-34200.);
 		plane.setReference("REF1");
-		
 
 		Assertions.assertThrows(ConstraintViolationException.class, () ->{
 			f1.setPlane(plane);
@@ -178,36 +176,7 @@ class PlaneServiceTests {
 			planeService.savePlane(plane);
 		});
 	}
-	
-/*	@Test
-	@Transactional
-	@ParameterizedTest 
-	@CsvSource({
-	    "reference1, 200, description1, manufacturer1, model1, 100, -500",
-	    "reference2, 300, description2, manufacturer2, model2, -200, 600",
-	    "reference4, -500, description4, manufacturer4, model4, -400, -800"
-	}) 
-	public void shouldNotInsertPlanes(String reference, Integer maxSeats, String description, String manufacturer, String model, Double numberOfKm, Double maxDistance) {
 
-		Airline a1 = this.airlineService.findAirlineById(1);
-		Flight f1 = this.flightService.findFlightById(1);
-		
-		Plane plane = new Plane();
-		plane.setAirline(a1);
-		plane.setReference(reference);
-		plane.setMaxSeats(maxSeats);
-		plane.setDescription(description);
-		plane.setManufacter(manufacturer);
-		plane.setNumberOfKm(numberOfKm.doubleValue());
-		plane.setMaxDistance(maxDistance.doubleValue());
-		plane.setLastMaintenance(Date.from(Instant.now().minusSeconds(90000)));
-		
-		Assertions.assertThrows(ConstraintViolationException.class, () ->{
-			f1.setPlane(plane);
-			planeService.savePlane(plane);
-		});
-	}
-*/	
 	@Test
 	@Transactional
 	public void shouldDeletePlaneById() {
@@ -227,7 +196,7 @@ class PlaneServiceTests {
 		plane.setMaxSeats(300);
 		plane.setModel("Renton 737");
 		plane.setNumberOfKm(34200.);
-		plane.setReference("REF1");
+		plane.setReference("REF_shouldDeletePlaneById");
 		
 		
         this.planeService.savePlane(plane);
@@ -237,7 +206,7 @@ class PlaneServiceTests {
 
 		//compruebo si se ha eliminado
 		Long nActualAviones = planeService.findPlanes().stream().count();
-		assertThat(nActualAviones.equals(nPrevioAviones));
+		assertThat(nActualAviones.equals(nPrevioAviones)).isTrue();
 	}
 	
 	@Test
@@ -259,7 +228,7 @@ class PlaneServiceTests {
 		plane.setMaxSeats(300);
 		plane.setModel("Renton 737");
 		plane.setNumberOfKm(34200.);
-		plane.setReference("REF1");
+		plane.setReference("REF_shouldDeletePlane");
 		
 		
         this.planeService.savePlane(plane);
@@ -269,7 +238,7 @@ class PlaneServiceTests {
 
 		//compruebo si se ha eliminado
 		Long nActualAviones = planeService.findPlanes().stream().count();
-		assertThat(nActualAviones.equals(nPrevioAviones));
+		assertThat(nActualAviones.equals(nPrevioAviones)).isTrue();
 	}
 	
 	@Test
@@ -277,7 +246,7 @@ class PlaneServiceTests {
 		Collection<Plane> planes = this.planeService.findPlanes();
 
 		//Plane plane1 = EntityUtils.getById(planes, Plane.class, 1);
-		assertThat(!planes.isEmpty());
+		assertThat(!planes.isEmpty()).isTrue();
 		assertThat(planes).asList();
 	}
 	
@@ -287,24 +256,24 @@ class PlaneServiceTests {
 		Airline a1 = planeService.findAirlineByUsername("airline1");
 		
 		assertThat(a1).isNotNull();
-		assertThat(a1.getCountry().equals("Spain"));
+		assertThat(a1.getCountry().equals("Spain")).isTrue();
 		assertThat(a1.getCreationDate()).isInstanceOf(LocalDate.class);
-		assertThat(a1.getEmail().equals("minardi@gmail.com"));
+		assertThat(a1.getEmail().equals("minardi@gmail.com")).isTrue();
 		assertThat(a1.getFlights()).asList();
-		assertThat(a1.getIdentification().equals("61333744-N"));
-		assertThat(a1.getName().equals("Sevilla Este Airways"));
-		assertThat(a1.getPhone().equals("644584458"));
+		assertThat(a1.getIdentification().equals("61333744-N")).isTrue();
+		assertThat(a1.getName().equals("Sevilla Este Airways")).isTrue();
+		assertThat(a1.getPhone().equals("644584458")).isTrue();
 		assertThat(a1.getPlanes()).asList();
-		assertThat(a1.getReference().equals("SEA-001"));
+		assertThat(a1.getReference().equals("SEA-001")).isTrue();
 	}
 	
 	@Test
-	void shouldgetAllPlanesFromAirline() {
+	void shouldGetAllPlanesFromAirline() {
 		Airline a1 = planeService.findAirlineByUsername("airline1");
 		Collection<Plane> planes = this.planeService.getAllPlanesFromAirline(a1);
 
 		//Plane plane1 = EntityUtils.getById(planes, Plane.class, 1);
-		assertThat(!planes.isEmpty());
+		assertThat(!planes.isEmpty()).isTrue();
 		assertThat(planes).asList();
 	}
 	
@@ -314,7 +283,7 @@ class PlaneServiceTests {
 		Collection<Plane> planes = this.planeService.getAllPlanesFromAirline(a1.getUser().getUsername());
 
 		//Plane plane1 = EntityUtils.getById(planes, Plane.class, 1);
-		assertThat(!planes.isEmpty());
+		assertThat(!planes.isEmpty()).isTrue();
 		assertThat(planes).asList();
 	}
 	

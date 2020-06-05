@@ -30,46 +30,35 @@
     <h2>
         Register a flight!
     </h2>
-    <form:form modelAttribute="flight" class="form-horizontal"
-			id="add-flight-form">
+    <form:form modelAttribute="flight" class="form-horizontal" id="add-flight-form">
         <div class="form-group has-feedback">
 
-            <!--<petclinic:inputField label="Reference" name="reference" />-->
+            <petclinic:inputField label="Reference" name="reference" />
 
             <c:choose>
                     <c:when test="${flight['new']}">
-                        <petclinic:inputField label="Reference" name="reference" />
                     </c:when>
                     <c:otherwise>
-                   		<input type="hidden" name="id" value="${flight.id}"/>
-                    	<input type="hidden" name="reference" value="${flight.reference}"/>
+                   		<input type="hidden" name="id" value="${flight.id}" />
                     </c:otherwise>
             </c:choose>
 
             <petclinic:inputField label="Seats" name="seats" />
             <petclinic:inputField label="Price" name="price" />
-            <!--<petclinic:inputField label="Published" name="published" />-->
             <div class="control-group">
-            	<petclinic:selectField label="Status" name="flightStatus"
-						names="${estados}" size="3" />
+            	<petclinic:selectField label="Status" name="flightStatus" names="${estados}" size="3" />
             </div>
                     
         	<div class="control-group">
-            	<petclinic:selectField label="Visibility" name="published" 
-						names="${opciones_publicao}" size="3" />
+            	<petclinic:selectField label="Visibility" name="published" names="${opciones_publicao}" size="3" />
        		 </div>
        		 
-			<petclinic:selectField label="Plane" name="plane" size="5"
-					names="${planes}" />
-			<petclinic:selectField label="Lands" name="lands" size="5"
-					names="${landsList}" />
+			<petclinic:selectField label="Plane" name="plane" size="5" names="${planes}" />
+			<petclinic:selectField label="Lands" name="lands" size="5" names="${landsList}" />
 
 			<petclinic:inputField label="Land Date" name="landDate" />
-			<petclinic:selectField label="Departes" name="departes" size="5"
-					names="${departuresList}" />
+			<petclinic:selectField label="Departes" name="departes" size="5" names="${departuresList}" />
 			<petclinic:inputField label="Depart Date" name="departDate" />
-			<!--2020-06-06 14:05 airline1-->
-
         </div>
         <div class="form-group">
             <div class="col-sm-offset-2 col-sm-10">

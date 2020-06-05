@@ -16,23 +16,31 @@
 
 package acmevolar.model;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Index;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
-import org.hibernate.validator.constraints.UniqueElements;
+import org.springframework.beans.support.MutableSortDefinition;
+import org.springframework.beans.support.PropertyComparator;
 import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
-@Table(name = "flights"/*, uniqueConstraints = @UniqueConstraint(columnNames = { "reference" })*/)
+@Table(name = "flights", indexes = { @Index(columnList = "depart_date"), @Index(columnList="reference") })/* , uniqueConstraints = @UniqueConstraint(columnNames = { "reference" })/* , uniqueConstraints = @UniqueConstraint(columnNames = { "reference" }) */
 
 public class Flight extends BaseEntity {
 
@@ -43,12 +51,12 @@ public class Flight extends BaseEntity {
 
 	@NotNull
 	@Column(name = "seats")
-	@Min(value = 0, message = "Can't be negative" )
+	@Min(value = 0, message = "Can't be negative")
 	private Integer				seats;
 
 	@NotNull
 	@Column(name = "price")
-	@Min(value = 0, message = "Can't be negative" )
+	@Min(value = 0, message = "Can't be negative")
 	private Double				price;
 
 	@NotNull
@@ -82,12 +90,37 @@ public class Flight extends BaseEntity {
 
 	@Column(name = "land_date", nullable = false)
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
-	private Date		landDate;
+	private Date				landDate;
 
 	@Column(name = "depart_date", nullable = false)
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
-	private Date		departDate;
+	private Date				departDate;
 
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "flight")
+	private Set<Book>			books;
+
+
+	public Set<Book> getBooksInternal() {
+		if (this.books == null) {
+			this.books = new HashSet<>();
+		}
+		return this.books;
+	}
+
+	public void setBooksInternal(final Set<Book> books) {
+		this.books = books;
+	}
+
+	public List<Book> getBooks() {
+		List<Book> sortedBooks = new ArrayList<>(this.getBooksInternal());
+		PropertyComparator.sort(sortedBooks, new MutableSortDefinition("id", true, true));
+		return Collections.unmodifiableList(sortedBooks);
+	}
+
+	public void addBook(final Book book) {
+		this.getBooksInternal().add(book);
+		book.setFlight(this);
+	}
 
 	public String getReference() {
 		return this.reference;
@@ -179,8 +212,8 @@ public class Flight extends BaseEntity {
 
 	@Override
 	public String toString() {
-		return "Flight [id=" + this.id + "reference=" + this.reference + ", seats=" + this.seats + ", price=" + this.price + ", flightStatus=" + this.flightStatus + ", plane=" + this.plane + ", published=" + this.published + ", departes=" + this.departes + ", lands="
-			+ this.lands + ", airline=" + this.airline + ", landDate=" + this.landDate + ", departDate=" + this.departDate + "]";
+		return "Flight [id=" + this.id + "reference=" + this.reference + ", seats=" + this.seats + ", price=" + this.price + ", flightStatus=" + this.flightStatus + ", plane=" + this.plane + ", published=" + this.published + ", departes=" + this.departes
+			+ ", lands=" + this.lands + ", airline=" + this.airline + ", landDate=" + this.landDate + ", departDate=" + this.departDate + "]";
 	}
 
 }

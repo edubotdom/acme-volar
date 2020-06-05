@@ -21,11 +21,14 @@ import java.util.Collection;
 import javax.validation.ConstraintViolationException;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import acmevolar.model.Client;
+import acmevolar.projections.ClientListAttributes;
 import acmevolar.repository.ClientRepository;
 import acmevolar.service.exceptions.BirthDateIsAfterCreationDateException;
 
@@ -52,8 +55,15 @@ public class ClientService {
 	}	
 
 	@Transactional(readOnly = true)	
+	@Cacheable("listClients")
 	public Collection<Client> findClients() throws DataAccessException {
 		return clientRepository.findAll();
+	}
+	
+	@Transactional(readOnly = true)	
+	@Cacheable("listClients")
+	public Collection<ClientListAttributes> findClientsListAttributes() throws DataAccessException {
+		return clientRepository.findAllClientsAttributes();
 	}
 	
 	@Transactional(readOnly = true)
@@ -61,6 +71,7 @@ public class ClientService {
 		return clientRepository.findById(id);
 	}
 
+	@CacheEvict(cacheNames = "listClients", allEntries = true)
 	@Transactional
 	public void saveClient(Client client) throws DataAccessException,ConstraintViolationException,BirthDateIsAfterCreationDateException {
 		

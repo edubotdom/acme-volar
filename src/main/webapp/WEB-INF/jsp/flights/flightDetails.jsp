@@ -100,5 +100,15 @@
 			<a href="${fn:escapeXml(editUrl)}" class="btn btn-default">Edit Flight</a>
 		</sec:authorize>
 	</c:if>
+	
+	<c:if test="${flight.published==true}">
+		<sec:authorize access="hasAuthority('client')">
+			<spring:url value="/books/{flightId}/new" var="bookUrl">
+				<spring:param name="flightId" value="${flight.id}" />
+			</spring:url>
+			<a href="${fn:escapeXml(bookUrl)}" class="btn btn-default">Book Flight</a>
+		</sec:authorize>
+	</c:if>
+	
 </petclinic:layout>
 

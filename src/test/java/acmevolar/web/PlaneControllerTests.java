@@ -11,8 +11,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -76,6 +78,10 @@ class PlaneControllerTests {
 
 		given(this.planeService.findPlaneById(PlaneControllerTests.TEST_PLANE_ID)).willReturn(p1);
 		given(this.flightService.findAirlineByUsername("airline1")).willReturn(new Airline());
+		
+		List<Plane> aviones = new ArrayList<Plane>();
+		aviones.add(p1);
+		given(this.flightService.findPlanesbyAirline("airline1")).willReturn(aviones);
 	}
 
 	@WithMockUser(value = "airline1", authorities = {

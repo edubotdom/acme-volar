@@ -20,6 +20,8 @@ import java.util.Collection;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,6 +31,7 @@ import acmevolar.model.Flight;
 import acmevolar.model.FlightStatusType;
 import acmevolar.model.Plane;
 import acmevolar.model.Runway;
+import acmevolar.projections.FlightListAttributes;
 import acmevolar.repository.AirlineRepository;
 import acmevolar.repository.FlightRepository;
 import acmevolar.repository.PlaneRepository;
@@ -50,16 +53,25 @@ public class FlightService {
 		this.planeRepository = planeRepository;
 		this.runwayRepository = runwayRepository;
 	}
+	
+	@Transactional(readOnly = true)
+	@Cacheable("airlineFlights")
+	public List<FlightListAttributes> findAllAirlineFlightListAttributes(String username) throws DataAccessException{
+		return flightRepository.findAllAirlineFlightListAttributes(username);
+	}
+	
+	@Cacheable("clientFlights")
+	@Transactional(readOnly = true)
+	public List<FlightListAttributes> findAllClientFlightListAttributesPublishedFuture()  throws DataAccessException{
+		return this.flightRepository.findAllClientFlightListAttributesPublishedFuture();
+	}
 
 	@Transactional(readOnly = true)
 	public Flight findFlightById(final int id) throws DataAccessException {
 		return this.flightRepository.findById(id);
 	}
 
-	@Transactional
-	public void saveFlight(final Flight flight) throws DataAccessException {
-		this.flightRepository.save(flight);
-	}
+
 
 	@Transactional(readOnly = true)
 	public Collection<Flight> findFlights() throws DataAccessException {
@@ -77,7 +89,8 @@ public class FlightService {
 	}
 
 	@Transactional(readOnly = true)
-	public Collection<Flight> findAirlineFlight(final String username) {
+	@Cacheable("airlineFlights")
+	public Collection<Flight> findAirlineFlight(String username) {
 		return this.flightRepository.findAirlineFlight(username);
 	}
 
@@ -110,8 +123,16 @@ public class FlightService {
 		return this.runwayRepository.findDepartingRunways();
 	}
 
+	@Transactional(readOnly = true)
 	public List<Runway> findLandingRunways() throws DataAccessException {
 		return this.runwayRepository.findLandingRunways();
+	}
+	
+	
+	@Transactional
+	@CacheEvict(cacheNames= {"airlineFlights","clientFlights"}, allEntries = true)
+	public void saveFlight(Flight flight) throws DataAccessException {
+		this.flightRepository.save(flight);
 	}
 	
 }

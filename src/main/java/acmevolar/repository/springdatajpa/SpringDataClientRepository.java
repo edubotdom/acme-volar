@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -13,13 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package acmevolar.repository.springdatajpa;
+
+import java.util.List;
 
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.Repository;
 import org.springframework.data.repository.query.Param;
 
 import acmevolar.model.Client;
+import acmevolar.projections.ClientListAttributes;
 import acmevolar.repository.ClientRepository;
 import acmevolar.repository.OwnerRepository;
 
@@ -33,6 +37,10 @@ public interface SpringDataClientRepository extends ClientRepository, Repository
 
 	@Override
 	@Query("SELECT client FROM Client client WHERE client.id =:id")
-	public Client findById(@Param("id") int id);
+	Client findById(@Param("id") int id);
+
+	@Override
+	@Query("SELECT c.id AS id, c.identification AS identification, c.name AS name FROM Client c")
+	List<ClientListAttributes> findAllClientsAttributes();
 
 }

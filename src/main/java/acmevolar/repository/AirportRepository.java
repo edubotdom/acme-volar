@@ -3,15 +3,15 @@ package acmevolar.repository;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.dao.DataAccessException;
-import org.springframework.data.repository.CrudRepository;
 
 import acmevolar.model.Airport;
+import acmevolar.projections.AirportListAttributes;
 
-public interface AirportRepository extends CrudRepository<Airport, Integer> {
+public interface AirportRepository {
 
-	@Override
 	Collection<Airport> findAll() throws DataAccessException;
 
 	/**
@@ -26,4 +26,12 @@ public interface AirportRepository extends CrudRepository<Airport, Integer> {
 	Airport findAirportById(int id) throws DataAccessException;
 
 	List<Airport> findAirportsByName(String airportName) throws DataAccessException;
+
+	List<AirportListAttributes> findAllAirportAttributes() throws DataAccessException;
+
+	void delete(Airport airport);
+
+	void save(Airport airport);
+
+	Optional<Airport> findById(int airportId);
 }

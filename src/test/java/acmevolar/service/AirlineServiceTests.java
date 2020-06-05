@@ -11,6 +11,8 @@ import javax.validation.ConstraintViolationException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Service;
@@ -20,6 +22,7 @@ import acmevolar.model.Airline;
 import acmevolar.model.User;
 
 @DataJpaTest(includeFilters = @ComponentScan.Filter(Service.class))
+@AutoConfigureTestDatabase(replace=Replace.NONE)
 class AirlineServiceTests {
 
 	@Autowired
@@ -73,25 +76,27 @@ class AirlineServiceTests {
 	public void shouldFindAirlines() {
 		Collection<Airline> airlines = this.airlineService.findAirlines();
 
-		assertThat(!airlines.isEmpty());
+		assertThat(!airlines.isEmpty()).isTrue();
 		assertThat(airlines).asList();
 	}
 
+	@Test
 	public void shouldFindAirlineById() {
 		Airline airline = this.airlineService.findAirlineById(1);
 
-		assertThat(airline.getName().equals("Sevilla Este Airways"));
-		assertThat(airline.getIdentification().equals("61333744-N"));
-		assertThat(airline.getCountry().equals("Spain"));
-		assertThat(airline.getPhone().equals("644584458"));
-		assertThat(airline.getEmail().equals("minardi@gmail.com"));
-		assertThat(airline.getCreationDate().equals(LocalDate.parse("2010-11-07")));
-		assertThat(airline.getReference().equals("SEA-001"));
+		assertThat(airline.getName().equals("Sevilla Este Airways")).isTrue();
+		assertThat(airline.getIdentification().equals("61333744-N")).isTrue();
+		assertThat(airline.getCountry().equals("Spain")).isTrue();
+		assertThat(airline.getPhone().equals("644584458")).isTrue();
+		assertThat(airline.getEmail().equals("minardi@gmail.com")).isTrue();
+		assertThat(airline.getCreationDate().equals(LocalDate.parse("2010-11-07"))).isTrue();
+		assertThat(airline.getReference().equals("SEA-001")).isTrue();
 	}
 
+	@Test
 	public void shouldNotFindAirlineById() {
 		Airline airline = this.airlineService.findAirlineById(200);
 
-		assertThat(airline == null);
+		assertThat(airline == null).isTrue();
 	}
 }

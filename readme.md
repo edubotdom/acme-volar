@@ -1,16 +1,16 @@
 # Spring PetClinic Sample Application 
 
-This is a fork of https://github.com/spring-projects/spring-petclinic to be used for the DP2 course. The main changes that have been performed were:
+This is a fork of https://github.com/gii-is-DP2/spring-petclinic to be used for the DP2 course. The main changes that have been performed were:
 - Trimming several parts of the application to keep the example low
 - Reorganize some parts of the code according to best practices introduced in the course
-
+ 
 ## Understanding the Spring Petclinic application with a few diagrams
 <a href="https://speakerdeck.com/michaelisvy/spring-petclinic-sample-application">See the presentation here</a>
-
+  
 ## Running petclinic locally
 Petclinic is a [Spring Boot](https://spring.io/guides/gs/spring-boot) application built using [Maven](https://spring.io/guides/gs/maven/). You can build a jar file and run it from the command line:
 
-
+      
 ```
 git clone https://github.com/gii-is-DP2/spring-petclinic.git
 cd spring-petclinic
@@ -106,7 +106,7 @@ that could be used to implement the Pet Clinic then please join the community th
 
 # Contributing
 
-The [issue tracker](https://github.com/gii-is-DP2/spring-petclinic/issues) is the preferred channel for bug reports, features requests and submitting pull requests.
+The [issue tracker](https://github.com/edubotdom/acme-volar/issues) is the preferred channel for bug reports, features requests and submitting pull requests.
 
 For pull requests, editor preferences are available in the [editor config](.editorconfig) for easy use in common text editors. Read more and download plugins at <https://editorconfig.org>. If you have not previously done so, please fill out and submit the [Contributor License Agreement](https://cla.pivotal.io/sign/spring).
 

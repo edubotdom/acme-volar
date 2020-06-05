@@ -22,10 +22,10 @@ import org.springframework.web.servlet.ModelAndView;
 
 import acmevolar.model.Airport;
 import acmevolar.model.api.Forecast;
+import acmevolar.projections.AirportListAttributes;
 import acmevolar.service.AirportService;
 import acmevolar.service.FlightService;
 import acmevolar.service.ForecastService;
-import acmevolar.service.exceptions.DuplicatedAirportNameException;
 import acmevolar.service.exceptions.IncorrectCartesianCoordinatesException;
 import acmevolar.service.exceptions.NonDeletableException;
 
@@ -34,8 +34,9 @@ public class AirportController {
 
 	private final AirportService	airportService;
 	private final ForecastService	forecastService;
-	private final FlightService flightService;
+	private final FlightService		flightService;
 
+	private static final String		AIRPORT_CONSTANT			= "airport";
 	private static final String		VIEWS_AIRPORT_CREATE_FORM	= "airports/createAirportForm";
 
 
@@ -52,8 +53,8 @@ public class AirportController {
 	@PreAuthorize("hasAuthority('airline') || hasAuthority('client')")
 	public String showAirportsList(final Map<String, Object> model) {
 
-		Collection<Airport> airports = new ArrayList<Airport>();
-		airports.addAll(this.airportService.findAirports());
+		Collection<AirportListAttributes> airports = new ArrayList<>();
+		airports.addAll(this.airportService.findAirportListAttributes());
 		model.put("airports", airports);
 		return "airports/airportList";
 	}
@@ -62,8 +63,8 @@ public class AirportController {
 	@GetMapping("/airports/{airportId}")
 	public ModelAndView showAirport(@PathVariable("airportId") final int airportId) {
 		ModelAndView mav = new ModelAndView("airports/airportDetails");
-		Airport airport = airportService.findAirportById(airportId);
-		Forecast forecast = forecastService.searchForecastByCity(airport.getCity()).block();
+		Airport airport = this.airportService.findAirportById(airportId);
+		Forecast forecast = this.forecastService.searchForecastByCity(airport.getCity()).block();
 		mav.addObject(forecast);
 		mav.addObject(airport);
 		return mav;
@@ -74,7 +75,7 @@ public class AirportController {
 	public String initCreationForm(final Map<String, Object> model) {
 		Airport airport = new Airport();
 
-		model.put("airport", airport);
+		model.put(AirportController.AIRPORT_CONSTANT, airport);
 
 		return AirportController.VIEWS_AIRPORT_CREATE_FORM;
 	}
@@ -85,7 +86,7 @@ public class AirportController {
 
 		if (result.hasErrors()) {
 			return AirportController.VIEWS_AIRPORT_CREATE_FORM;
-		} else if (this.airportService.findAirportsByName(airport.getName()).size() != 0) {
+		} else if (!this.airportService.findAirportsByName(airport.getName()).isEmpty()) {
 			result.rejectValue("name", "duplicate", "Already exists");
 			return AirportController.VIEWS_AIRPORT_CREATE_FORM;
 		} else {
@@ -95,9 +96,6 @@ public class AirportController {
 				e.printStackTrace();
 			} catch (IncorrectCartesianCoordinatesException e) {
 				e.printStackTrace();
-			} catch (DuplicatedAirportNameException e) {
-				result.rejectValue("name", "duplicate", "Already exists");
-				return AirportController.VIEWS_AIRPORT_CREATE_FORM;
 			}
 			return "redirect:/airports/" + airport.getId();
 		}
@@ -108,22 +106,22 @@ public class AirportController {
 	public String initUpdateForm(@PathVariable("airportId") final int airportId, final ModelMap model) {
 		Airport airport = this.airportService.findAirportById(airportId);
 
-		model.put("airport", airport);
-
+		model.put(AirportController.AIRPORT_CONSTANT, airport);
 		return AirportController.VIEWS_AIRPORT_CREATE_FORM;
 	}
 
 	@PostMapping(value = "/airports/{airportId}/edit")
 	@PreAuthorize("hasAuthority('airline')")
 	public String processUpdateForm(@Valid final Airport airport, final BindingResult result, @PathVariable("airportId") final int airportId, final ModelMap model) {
+		Airport airportToUpdate = this.airportService.findAirportById(airportId);
+
 		if (result.hasErrors()) {
-			model.put("airport", airport);
+			model.put(AirportController.AIRPORT_CONSTANT, airport);
 			return AirportController.VIEWS_AIRPORT_CREATE_FORM;
-		} else if (this.airportService.findAirportsByName(airport.getName()).size() != 0) {
+		} else if (this.airportService.findAirportsByName(airport.getName()).size() != 0 && !airport.getName().equalsIgnoreCase(airportToUpdate.getName())) {
 			result.rejectValue("name", "duplicate", "Already exists");
 			return AirportController.VIEWS_AIRPORT_CREATE_FORM;
 		} else {
-			Airport airportToUpdate = this.airportService.findAirportById(airportId);
 			BeanUtils.copyProperties(airportToUpdate, airport, "name", "maxNumberOfPlanes", "maxNumberOfClients", "latitude", "longitude", "code", "city");
 
 			try {
@@ -131,8 +129,6 @@ public class AirportController {
 			} catch (DataAccessException e) {
 				e.printStackTrace();
 			} catch (IncorrectCartesianCoordinatesException e) {
-				e.printStackTrace();
-			} catch (DuplicatedAirportNameException e) {
 				e.printStackTrace();
 			}
 			return "redirect:/airports/{airportId}";
@@ -143,9 +139,9 @@ public class AirportController {
 	@GetMapping(value = "/airports/{airportId}/delete")
 	public String deleteAirport(@PathVariable("airportId") final int airportId) throws NonDeletableException {
 		Optional<Airport> airport = this.airportService.findById(airportId);
-		boolean deletable = !this.flightService.findFlights().stream().anyMatch(f->f.getDepartes().getAirport().equals(airport.get())||f.getLands().getAirport().equals(airport.get()));
-		if (deletable) {
-				this.airportService.deleteAirport(airport.get());
+		boolean deletable = this.flightService.findFlights().stream().noneMatch(f -> f.getDepartes().getAirport().equals(airport.get()) || f.getLands().getAirport().equals(airport.get()));
+		if (deletable && airport.isPresent()) {
+			this.airportService.deleteAirport(airport.get());
 		} else {
 			throw new NonDeletableException();
 		}
